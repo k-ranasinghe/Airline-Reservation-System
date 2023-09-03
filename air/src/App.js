@@ -5,6 +5,8 @@ import SearchFlightInput from './components/SearchFlightInput';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import PassengerDetailsForm from './components/PassengerDetailsForm';
+import SeatBooking from './components/seatBooking';
+import ReviewAndPay from './components/ReviewAndPay';
 
 export default function App() {
   return (
@@ -15,6 +17,11 @@ export default function App() {
 
         <Route path="/" element={<SearchFlightInput />} />
         <Route path="/passengerDetails" element={<PassengerDetailsForm />} />
+        <Route path="/seatBooking" element={<SeatBooking />} />
+        <Route path="/reviewAndPay" element={<ReviewAndPay />} />
+
+
+
 
       
          

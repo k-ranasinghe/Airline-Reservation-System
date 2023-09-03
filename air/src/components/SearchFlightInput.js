@@ -65,7 +65,7 @@ const navigate = useNavigate();
         { field: 'id:', headerName: 'desitination:', width: 70 },
 
         
-        { field: 'desitination:', headerName: 'desitination:', width: 70 },
+        
         { field: 'origin', headerName: 'origin', width: 130 },
         { field: 'airbus_id', headerName: 'FLight name', width: 130 },
         { field: 'departure', headerName: 'Departure Time', width: 130 },

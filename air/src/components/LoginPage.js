@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import img from '../image/airline.jpg';
 import { Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
 // function Copyright(props) {
@@ -33,8 +34,10 @@ import { Paper } from "@mui/material";
 
 const defaultTheme = createTheme();
 
+
+
 export default function SignIn() {
-  
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -115,6 +118,8 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={()=>{
+                navigate('/') }}
             >
               Log In
             </Button>

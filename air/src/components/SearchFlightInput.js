@@ -167,7 +167,10 @@ export default function SearchFlightInput() {
             <Button  onClick={()=>{
               navigate("/reportGeneration")
             }} color="inherit">Admin </Button>
-            <Button color="inherit">Login</Button>
+            <Button onClick={()=>{
+              navigate("/loginPage")
+            }}
+            color="inherit">Login</Button>
            
           </Toolbar>
         </AppBar>

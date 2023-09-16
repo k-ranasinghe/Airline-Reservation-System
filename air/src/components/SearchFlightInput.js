@@ -18,13 +18,12 @@ import { useNavigate } from "react-router-dom";
 export default function SearchFlightInput() {
 
   const [data, setData]=useState({});
-  
   const [from, setFrom]=useState(null);
   const [to, setTo]=useState(null);
   const [departureDate, setDepartureDate]=useState({});
   const [arrivalDate, setArrivalDate]=useState({});
-const [selected, setSelected]=useState({});
-const navigate = useNavigate();
+  const [selected, setSelected]=useState({});
+  const navigate = useNavigate();
 
     // useEffect(() => {
     //     axios.get("/airbus").then((response) => {
@@ -126,10 +125,7 @@ const navigate = useNavigate();
       
       function CustomFooter() {
         return (
-          <Button
-          
-          
-          onClick={()=>{
+          <Button onClick={()=>{
             navigate("/passengerDetails",{
               state:{
                 flight:selected
@@ -141,6 +137,7 @@ const navigate = useNavigate();
             Book and Continue
           </Button>
         )}
+
     return (
 
         <div>
@@ -161,7 +158,9 @@ const navigate = useNavigate();
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             B Airlines
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit"onClick={()=>{
+  navigate('/loginPage') 
+}} >Login</Button>
         </Toolbar>
       </AppBar>
     </Box>
@@ -267,8 +266,9 @@ pageSizeOptions={[5, 10]}
     console.log(e)}}
   label="Arrival Date" />
 
-<Button onClick={()=>{
-getFlights();  
+<Button 
+  onClick={()=>{
+  getFlights();  
 }} style={{marginLeft:450}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
    </>}
          

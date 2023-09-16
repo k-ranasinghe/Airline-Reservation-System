@@ -1,19 +1,36 @@
 import { AppBar, Box, Button, Fab, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, Paper, Radio, RadioGroup, Select, TextField, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import img from '../image/airline.jpg';
 import AddIcon from '@mui/icons-material/Add';
-import { useHistory, useNavigate } from "react-router-dom";
+import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
 
 
  export default function PassengerDetailsForm(){
 const [passengers,setPassengers]=useState([{}]);
-const[age, setAge]=useState(10);
+const [passengerDetails,setPassengerDetails]=useState({});
+const {dataOfBirth,setDateOfBirth}=useState({});
+
+const [flight,setFlight]=useState({});
 const navigate = useNavigate();
+const location =useLocation();
+
+
+function handleChange(event){
+
+  // console.log("event",event);
+
+
+  setPassengerDetails({...passengerDetails,[event.target.name]:event.target.value});
+  console.log("passenegers",passengerDetails);
+}
+
+useEffect(()=>{
+  setFlight(location.state.flight)},[]);
 
     return(
           
@@ -66,8 +83,8 @@ const navigate = useNavigate();
 </div>
 <div style={{margin:40}}>
             <div >
-                <TextField id="outlined-basic" label="first name" variant="outlined" />
-                <TextField style={{ marginLeft: 20 }} id="outlined-basic" label="last name" variant="outlined" />
+                <TextField  onChange={handleChange} id="outlined-basic" name="firstName" label="first name" variant="outlined" />
+                <TextField onChange={handleChange}  style={{ marginLeft: 20 }} name="lastName" id="outlined-basic" label="last name" variant="outlined" />
                 
                 <FormControl style={{
                     marginLeft: 20,
@@ -77,35 +94,45 @@ const navigate = useNavigate();
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    value={age}
-    label="Age"
-    // onChange={handleChange}
+    value={passengerDetails.naitionality?passengerDetails.naitionality:"sri lankan"}
+    label="naitionality"
+    onChange={handleChange}
+    name="naitionality"
   >
-    <MenuItem value={10}>Sri lankan</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
+    <MenuItem value={"sri lankan"}>Sri lankan</MenuItem>
+    <MenuItem value={"indian"}>Indian</MenuItem>
+    <MenuItem value={"british"}>Thirty</MenuItem>
   </Select>
 </FormControl>
                   <DatePicker
                 style={{ marginLeft: 20 }}
+                name="dateOfBirth"
 
                     onChange={(e) => {
                         console.log(e)
+                        // handleChange(e)
+                        // setDateOfBirth(e)
                     }}
                     label="   Date Of Birth" />  
                     </div>
             <div style={{marginTop:10}}>
 
-                <TextField id="outlined-basic" label="Email Address" variant="outlined" />
+                <TextField id="outlined-basic" onChange={handleChange}  name="emailAddress" label="Email Address" variant="outlined" />
            
 <FormControl style={{ marginLeft: 20 }} >
                     <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
                     <RadioGroup
                         row
                         aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
+                        name="gender"
+
+
+
+    value={passengerDetails.dateOfBirth}
+    onChange={handleChange}
+
                     >
-                        <FormControlLabel value="female" control={<Radio />} label="Female" />
+                        <FormControlLabel  value="female" control={<Radio  />} label="Female" />
                         <FormControlLabel value="male" control={<Radio />} label="Male" />
 
                     </RadioGroup>
@@ -118,7 +145,12 @@ const navigate = useNavigate();
           
           
           onClick={()=>{
-            navigate('/seatBooking')
+            navigate('/seatBooking',{
+              state: {
+                passengerDetails: passengerDetails,
+                flight:flight
+              }
+            })
             
           }}>
 

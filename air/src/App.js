@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import PassengerDetailsForm from './components/PassengerDetailsForm';
 import SeatBooking from './components/seatBooking';
 import ReviewAndPay from './components/ReviewAndPay';
+import ReportGeneration from './components/ReportGeneration';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Routes>
 
         <Route path="/" element={<SearchFlightInput />} />
+        <Route path="/reportGeneration" element={<ReportGeneration />} />
         <Route path="/passengerDetails" element={<PassengerDetailsForm />} />
         <Route path="/seatBooking" element={<SeatBooking />} />
         <Route path="/reviewAndPay" element={<ReviewAndPay />} />

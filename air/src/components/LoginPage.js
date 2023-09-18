@@ -14,6 +14,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import img from '../image/airline.jpg';
 import { Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 
 // function Copyright(props) {
@@ -33,8 +34,10 @@ import { Paper } from "@mui/material";
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
 
+
+export default function SignIn() {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -115,6 +118,9 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={() => {
+                  navigate('/')
+                }}
               >
                 Log In
               </Button>
@@ -139,3 +145,122 @@ export default function SignIn() {
     //</ThemeProvider>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//               <Button
+//                 type="submit"
+//                 fullWidth
+//                 variant="contained"
+//                 sx={{ mt: 3, mb: 2 }}
+//                 onClick={() => {
+//                   navigate('/')
+//                 }}
+//               >
+//                 Log In
+//               </Button>
+//               <Grid container>
+//                 <Grid item xs>
+//                   <Link href="#" variant="body2">
+//                     Forgot password?
+//                   </Link>
+//                 </Grid>
+//                 <Grid item>
+//                   <Link href="#" variant="body2">
+//                     {"Don't have an account? Sign Up"}
+//                   </Link>
+//                 </Grid>
+//               </Grid>
+//             </Box>
+//           </Box>
+//         </Container>
+//       </Paper>
+//     </Box>
+
+//     //</ThemeProvider>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+//               <Button
+//                 type="submit"
+//                 fullWidth
+//                 variant="contained"
+//                 sx={{ mt: 3, mb: 2 }}
+//                 onClick={() => {
+//                   navigate('/')
+//                 }}
+//               >
+//                 Log In
+//               </Button>
+//             </Typography>
+//             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+//               <TextField
+//                 margin="normal"
+//                 required
+//                 fullWidth
+//                 id="email"
+//                 label="Email Address"
+//                 name="email"
+//                 autoComplete="email"
+//                 autoFocus
+//               />
+//               <TextField
+//                 margin="normal"
+//                 required
+//                 fullWidth
+//                 name="password"
+//                 label="Password"
+//                 type="password"
+//                 id="password"
+//                 autoComplete="current-password"
+//               />
+//               <Button
+//                 type="submit"
+//                 fullWidth
+//                 variant="contained"
+//                 sx={{ mt: 3, mb: 2 }}
+//               >
+//                 Log In
+//               </Button>
+//               <Grid container>
+//                 <Grid item xs>
+//                   <Link href="#" variant="body2">
+//                     Forgot password?
+//                   </Link>
+//                 </Grid>
+//                 <Grid item>
+//                   <Link href="#" variant="body2">
+//                     {"Don't have an account? Sign Up"}
+//                   </Link>
+//                 </Grid>
+//               </Grid>
+//             </Box>
+//           </Box>
+//         </Container>
+//       </Paper>
+//     </Box>
+
+//     //</ThemeProvider>
+//   );
+// }

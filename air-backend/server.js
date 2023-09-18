@@ -28,3 +28,4 @@ app.get('/flight', async (req, res) => {
     const result = await getFlightsFromDB(req.query.from, req.query.to, req.query.departureDate);
     res.send(result);
 })  ;
+

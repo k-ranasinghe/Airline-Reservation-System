@@ -59,13 +59,16 @@ CREATE TABLE `passenger` (
 );
 
 CREATE TABLE `passenger` (
-  `payment_id` varchar(50),
-  `date_time` dateTIme,
-  `ticket_id` varchar(50),
+  `first_name` varchar(50),
+  `last_name` varchar (50),
+  `date_of_birth` datetime,
+    `nationality` varchar(50),
+    `email_address` varchar(30),
+  `ticket_id` int,
   `passenger_id` varchar(50),
-  PRIMARY KEY (`payment_id`),
-  FOREIGN KEY (`passenger_id`) REFERENCES `passenger`(`passenger_id`),
-  KEY `Key` (`date_time`)
+  PRIMARY KEY (`passenger_id`),
+  FOREIGN KEY (`ticket_id`) REFERENCES `ticket`(`ticket_id`)
+  
 );
 
 CREATE TABLE `airbus` (
@@ -81,7 +84,7 @@ CREATE TABLE `booking` (
 );
 
 CREATE TABLE `ticket` (
-  `ticket_id` int,
+  `ticket_id` int NOT NULL AUTO_INCREMENT,
   `flight_id` int,
   `type` varchar(10),
   PRIMARY KEY (`ticket_id`),

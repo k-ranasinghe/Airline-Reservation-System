@@ -3,14 +3,14 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 
 import { AppBar, Box, Button, Fab, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, Paper, Radio, RadioGroup, Select, TextField, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ChairIcon from '@mui/icons-material/Chair';
 import { useState } from "react";
 import MenuItem from '@mui/material/MenuItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import img from '../image/airline.jpg';
 import AddIcon from '@mui/icons-material/Add';
-import { useHistory, useNavigate } from "react-router-dom";
+import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
 
@@ -52,6 +52,21 @@ export default function SeatBooking(){
     const [seats,setSeates]=useState(init_seat);
     const [bookedSeat,seatBookedSeat]=useState('A1');
     const navigate = useNavigate();
+
+    const location = useLocation ();
+
+  const[flight,setFlight]=useState({});
+  const [passengerDetails,setPassengerDetails]=useState({});
+
+  useEffect(()=>{
+    setFlight(location.state.flight)
+    setPassengerDetails(location.state.passengerDetails)
+    console.log("flight",location.state.flight)
+    console.log("passengerDetails",location.state.passengerDetails)
+
+  },[]);
+
+
 
     return(
 
@@ -154,7 +169,14 @@ export default function SeatBooking(){
           
           
           onClick={()=>{
-            navigate('/reviewAndPay')
+            navigate('/reviewAndPay',{
+              state: {
+                passengerDetails: passengerDetails,
+                flight:flight,
+                bookedSeat:bookedSeat
+              }
+
+            })
             
           }}>
 

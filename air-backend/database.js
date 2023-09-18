@@ -32,6 +32,13 @@ export async function getFlightsFromDB (from,to,departureDate){
     return result[0];
 }
 
+
+
+export async function bookTicket(flight,passengerDetails,seat){
+
+    const result=await pool.query(`insert into ticket (flight_id,passenger_id,seat_id) values (${flight.flight_id},${passengerDetails.passenger_id},${seat.seat_id})`);
+}
+
 // const result1=await getAibusList();
 // console.log(result1);
 // const result2=await getAibusById("Bog-737-1");

@@ -9,6 +9,7 @@ import SeatBooking from './components/seatBooking';
 import ReviewAndPay from './components/ReviewAndPay';
 import ReportGeneration from './components/ReportGeneration';
 import SignIn from './components/LoginPage';
+import SignUp from './components/SignUpPage';
 
 
 export default function App() {
@@ -24,7 +25,7 @@ export default function App() {
         <Route path="/seatBooking" element={<SeatBooking />} />
         <Route path="/reviewAndPay" element={<ReviewAndPay />} />
         <Route path="/loginPage" element={<SignIn/>}/>
-
+        <Route path="/signUpPage" element={<SignUp/>}/>
 
 
       

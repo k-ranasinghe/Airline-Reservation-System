@@ -214,7 +214,7 @@ export default function ReportGeneration() {
         <MenuIcon style={{ color: 'white' }}/> {/* Display the menu icon here */}
       </Button>
       <Drawer
-        anchor="left" 
+        anchor="left" // test
         open={state['left']}
         onClose={toggleDrawer('left', false)}
       >

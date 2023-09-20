@@ -1,8 +1,12 @@
 import express from 'express';
+import booking from './routes/booking.js';
 import { getAibusList, getAibusById, createAibus, getFlightsFromDB } from './database.js';
+import router from './routes/booking.js';
 const app = express();
 const port = 5000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+app.use('/booking', router);
 // app.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin"); // update to match the domain you will make the request from
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -22,10 +26,10 @@ app.post('/airbus', async (req, res) => {
     res.send(result);
 })    
 
-app.get('/flight', async (req, res) => {   
-    console.log("request",  req.query.to);
-    console.log(req.query.from, req.query.to, req.query.departureDate); 
-    const result = await getFlightsFromDB(req.query.from, req.query.to, req.query.departureDate);
-    res.send(result);
-})  ;
+// app.get('/flight', async (req, res) => {   
+//     console.log("request",  req);
+//     console.log(req.query.from, req.query.to, req.query.departureDate); 
+//     const result = await getFlightsFromDB(req.query.from, req.query.to, req.query.departureDate);
+//     res.send(result);
+// })  ;
 

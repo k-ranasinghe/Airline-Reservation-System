@@ -105,7 +105,7 @@ export default function SearchFlightInput() {
     console.log("from ", from, "to ", to, "departureDate ", departureDate);
     let date = new Date(departureDate);
     date.setDate(date.getDate() + 1);
-    axios.get("/flight", {
+    axios.get("/booking/flight", {
       params: {
         from: from,
         to: to,

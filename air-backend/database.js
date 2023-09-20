@@ -46,7 +46,7 @@ export async function bookTicket(flight,passengerDetails,seat){
 // const result3=await createAibus(3,'A380');
 // console.log(result3);
 getFlightsFromDB('BIA','MAA','2023-09-11');
-
+export default pool;
 
 
 

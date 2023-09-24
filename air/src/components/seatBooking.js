@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
+import axios from "axios";
 
 export default function SeatBooking(){
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -50,7 +51,11 @@ export default function SeatBooking(){
 ]
 
     const [seats,setSeates]=useState(init_seat);
-    const [bookedSeat,seatBookedSeat]=useState('A1');
+    const[platinumSeats,setPlatinumSeats]= useState([]);
+    const[businessSeats,setBusinessSeats]= useState([]);
+    const[economySeats,setEconomySeats]= useState([]);
+    const [bookedSeat,setBookedSeat]=useState('A1');
+    const [travelClass,setTravelClass]=useState('');
     const navigate = useNavigate();
 
     const location = useLocation ();
@@ -61,13 +66,79 @@ export default function SeatBooking(){
   useEffect(()=>{
     setFlight(location.state.flight)
     setPassengerDetails(location.state.passengerDetails)
-    console.log("flight",location.state.flight)
+    // console.log("flight",location.state.flight)
     console.log("passengerDetails",location.state.passengerDetails)
+    getSeatsFromDB(location.state.flight);
 
   },[]);
 
+  function saveBooking(){
+    console.log("flight",flight)
+
+    console.log( "passengerDetails", passengerDetails)
+
+    axios.post("/booking/bookTicket", {
+      
+      flight: flight,
+      passengerDetails: passengerDetails,
+      seat: bookedSeat
+
+      
+    }).then((response) => {
+      console.log("reponse",response);
+      let data = response.data;
+      navigate('/reviewAndPay',{
+        state: {
+          passengerDetails: passengerDetails,
+          flight:flight,
+          bookedSeat:bookedSeat,
+          bookingDetails:response.data,
+          travelClass:travelClass
+
+        }
+
+      })
+      // setBusinessSeats(data.Business);
+      // setEconomySeats(data.Economy);
+      // setPlatinumSeats(data.Platinum);
+
+      // data.map((item) => {
+      //   // add key id to each object
+      //   item.id = item.seat_id;
+      //   item.is_selected=item.is_selected===1?true:false;
+      //   return item;
+      // })
+
+      // setSeates(response.data);
+    });
+  }
 
 
+
+  function getSeatsFromDB(flight){
+    console.log("flight",flight)
+    axios.get("/booking/seatList", {
+      params: {
+        flightId: flight.FlightID
+      }
+    }).then((response) => {
+      console.log(response);
+      let data = response.data;
+      setBusinessSeats(data.Business);
+      setEconomySeats(data.Economy);
+      setPlatinumSeats(data.Platinum);
+
+      // data.map((item) => {
+      //   // add key id to each object
+      //   item.id = item.seat_id;
+      //   item.is_selected=item.is_selected===1?true:false;
+      //   return item;
+      // })
+
+      // setSeates(response.data);
+    });
+
+  }
     return(
 
         
@@ -101,8 +172,8 @@ export default function SeatBooking(){
         display: 'flex',
         flexWrap: 'wrap',
         '& > :not(style)': {
-          m: 50,
-          width: "60%",
+          m: 70,
+          width: "40%",
           minHeight: 200,
           borderRadius:'1rem'
         },
@@ -124,29 +195,24 @@ export default function SeatBooking(){
                 <div style={{margin:40}}>
 
                 <FormControl component="fieldset">
-      <FormLabel component="legend">Business Class</FormLabel>
+      <FormLabel component="legend">Platinum Class -Rs . {flight.BusinessPrice}</FormLabel>
       <FormGroup aria-label="position" row>
 
 
-        <FormControlLabel
-          value="top"
-          control={<Checkbox           icon={<ChairIcon />} checkedIcon={<ChairIcon />}
-          />}
-          label="Top"
-          labelPlacement="bottom"
-        />
+       
 
-        {seats.map((seat,index)=>{
+        {platinumSeats.map((seat,index)=>{
             return(
                 <FormControlLabel
                 key={index}
                 value="top"
-                control={<Checkbox   disabled={seat.is_selected}  checked={bookedSeat===seat.seat_no?true:false}    icon={<ChairIcon />} checkedIcon={<ChairIcon />}
+                control={<Checkbox   disabled={!seat.Availability}  checked={bookedSeat===seat.SeatID?true:false}    icon={<ChairIcon />} checkedIcon={<ChairIcon />}
                 />}
 
                 onChange={(e)=>{
 
-                    seatBookedSeat(seat.seat_no);
+                    setBookedSeat(seat.SeatID);
+                    setTravelClass('Platinum');
 
 
 
@@ -163,20 +229,90 @@ export default function SeatBooking(){
     </FormControl>
 
                   </div>
+
+                  <div style={{margin:40}}>
+
+<FormControl component="fieldset">
+<FormLabel component="legend">Business Class - Rs.{flight.PlatinumPrice}</FormLabel>
+<FormGroup aria-label="position" row>
+
+
+
+
+{businessSeats.map((seat,index)=>{
+return(
+<FormControlLabel
+key={index}
+value="top"
+control={<Checkbox   disabled={!seat.Availability}  checked={bookedSeat===seat.SeatID?true:false}    icon={<ChairIcon />} checkedIcon={<ChairIcon />}
+/>}
+
+onChange={(e)=>{
+
+    setBookedSeat(seat.SeatID);
+    setTravelClass(seat.TravelClass);
+
+
+
+
+    
+    
+}}
+label={seat.seat_no}
+labelPlacement="bottom"
+/>
+)
+})}
+
+</FormGroup>
+</FormControl>
+
+  </div>
+  <div style={{margin:40}}>
+
+<FormControl component="fieldset">
+<FormLabel component="legend">Economy Class  - Rs. {flight.EconomyPrice}</FormLabel>
+<FormGroup aria-label="position" row>
+
+
+
+{economySeats.map((seat,index)=>{
+return(
+<FormControlLabel
+key={index}
+value={seat.seatID}
+control={<Checkbox   disabled={!seat.Availability}  checked={bookedSeat===seat.SeatID?true:false}    icon={<ChairIcon />} checkedIcon={<ChairIcon />}
+/>}
+
+onChange={(e)=>{
+
+
+  setBookedSeat(seat.SeatID);
+  setTravelClass(seat.TravelClass);
+
+
+
+    
+    
+}}
+label={seat.seat_no}
+labelPlacement="bottom"
+/>
+)
+})}
+
+</FormGroup>
+</FormControl>
+
+  </div>
                   <Button
         fullWidth={true}
         
           
           
           onClick={()=>{
-            navigate('/reviewAndPay',{
-              state: {
-                passengerDetails: passengerDetails,
-                flight:flight,
-                bookedSeat:bookedSeat
-              }
-
-            })
+            saveBooking();
+            
             
           }}>
 

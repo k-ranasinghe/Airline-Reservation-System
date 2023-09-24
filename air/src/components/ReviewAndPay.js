@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridSaveAltIcon } from "@mui/x-data-grid";
 import Backdrop from '@mui/material/Backdrop';
 import axios from "axios";
 export default function ReviewAndPay() {
@@ -27,14 +27,48 @@ export default function ReviewAndPay() {
   const location = useLocation();
   const [flight, setFlight] = useState({});
   const [passengerDetails, setPassengerDetails] = useState({});
-  const [seat, setSeat] = useState("");
+  const [seat, setSeat] = useState([]);
+  const[contactDeatils,setContactDetails]=useState({});
   const [details, setDetails] = useState([])
+  const [origin,setOrigin]=useState({});
+  const [destination,setDestination]=useState({});
 
+  function getAirportLocation(origin, desitination) { 
+    axios.get("/booking/aiportLocation", {
+      params: {
+        origin: origin,
+        destination: desitination
+      }
+    }).then((response) => {
+      console.log("ariport ",response);
+      setOrigin(response.data.find((item) => item.airportcode === origin))
+      setDestination(response.data.find((item) => item.airportcode === desitination))
+     
+    })
+  }
+function createTicket(){
+  console.log(location.state.bookingDetails[0].BookingID)
+  axios.post("/booking/createPayment",{
+    bookingId:location.state.bookingDetails[0].BookingID
+    
+  }).then((response)=>{
+    console.log(response);
+  })
+}
+
+  useEffect(()=>{
+
+    getAirportLocation(location.state.flight.Origin,location.state.flight.Destination);
+  },[])
   useEffect(() => {
-    setFlight(location.state.flight)
-    setPassengerDetails(location.state.passengerDetails)
-    setSeat(location.state.seat)
-    setDetails([{
+console.log(location.state)
+
+    setFlight([{id:1, ...location.state.flight}])
+    setPassengerDetails([{id:1,...location.state.passengerDetails}])
+    setContactDetails({emailAddress: location.state.passengerDetails.emailAddress,
+                        contactNumber: location.state.passengerDetails.contactNumber});
+    setSeat([{seatNO: location.state.bookedSeat,travelClass : location.state.travelClass,id:1}])
+    setDetails([{ 
       id: "1",
       desitination: location.state.flight.desitination,
       origin: location.state.flight.origin,
@@ -59,15 +93,56 @@ export default function ReviewAndPay() {
     p: 4,
   };
 
+  const passengerColumn = [
+    { field: 'id:', headerName: '', width: 70 },
 
+
+    { field: 'firstName', headerName: 'First Name', width: 200 },
+    { field: 'lastName', headerName: 'Last Name', width: 130 },
+    { field: 'gender', headerName: 'Male /Female', width: 130 },
+
+    { field: 'contactNumber', headerName: 'Contact Number', width: 130 },
+    { field: 'emailAddress', headerName: 'Email Address', width: 300 }
+
+
+  ];
+
+  const flightColumn = [
+    { field: 'id:', headerName: '', width: 70 },
+    
+
+
+
+    { field: 'FlightNumber', headerName: 'Flight Number', width: 100 },
+    { field: 'AircraftID', headerName: 'Air Bus', width: 100 },
+
+    { field: 'DepartureDateTime', headerName: 'Departure Time' , width: 250},
+    { field: 'ArrivalDateTime', headerName: 'Expected Arrival', width: 300},
+
+    { field: 'Duration', headerName: 'Duration', width: 100 }
+
+
+  ];
+
+
+  const seatColumn = [
+    { field: 'id:', headerName: '', width: 70 },
+
+
+    { field: 'travelClass', headerName: 'Travel Class', width: 200 },
+    { field: 'seatNO', headerName: 'Seat no', width: 130 }
+    
+
+
+  ];
+
+ 
   const columns = [
-    { field: 'id:', headerName: 'id:', width: 70 },
+    { field: 'id:', headerName: 'id:', width: 0 },
 
 
-    { field: 'desitination:', headerName: 'desitination', width: 200 },
-    { field: 'origin', headerName: 'origin', width: 130 },
-    { field: 'airbus_id', headerName: 'FLight name', width: 130 },
-    { field: 'departure', headerName: 'Departure Time', width: 130 },
+    { field: 'airbus_id', headerName: 'FLight name', width: 100 },
+    { field: 'departure', headerName: 'Departure Time', width: 100 },
 
     { field: 'arrival', headerName: 'Arrival Time', width: 130 },
     { field: 'passengerName', headerName: 'Passenger Name', width: 130 }
@@ -161,21 +236,42 @@ export default function ReviewAndPay() {
             <div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
 
 
-              <h1 >Review And Pay</h1>
+              <h1 >Booking Summary</h1>
             </div>
+<div style={{display:'flow', flexDirection:'row'}}>
+            
+           <div>
+            <p style={{margin:0,marginLeft:30}}> 
+            <p>
+            From                                    
+            </p>
+            
+                  <p style={{fontWeight:'bold',margin:0,marginTop:-10}}>{origin.cityname} - {origin.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{origin.airportname}   {"("+ origin.airportcode + ")"}</p></p>
+                  </div>
+                  <div>
 
-            <div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+           <p style={{margin:0,marginLeft:30,marginTop:30}}> 
+           <p>
+           To
+           </p>
+           <br/>
+                 <p style={{fontWeight:'bold',margin:0,marginTop:-30}}>{destination.cityname} - {destination.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{destination.airportname}   {"("+ destination.airportcode + ")"}</p></p>
+                 </div>
+
+                 </div>
+            <div style={{ alignSelf: 'center', marginLeft: 30,marginTop:20 ,justifyContent: 'center' }}>
 
 
 
               { details.length>0? <>
                 <DataGrid
 
-                  rows={details}
-                  columns={columns}
+                  rows={flight}
+                  columns={flightColumn}
                   style={{ border: 20 }}
                   disableRowSelectionOnClick
                   disableSelectionOnClick
+                  hideFooter
 
 
 
@@ -189,6 +285,71 @@ export default function ReviewAndPay() {
 
               </>:null}
             </div>
+            <div style={{ alignSelf: 'center', marginLeft: 30, marginTop:40,justifyContent: 'center' }}>
+
+
+<h3 >Passenger Details </h3>
+</div>
+
+<div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+
+
+
+{ details.length>0? <>
+  <DataGrid
+
+    rows={passengerDetails}
+    columns={passengerColumn}
+    style={{ border: 20 }}
+    disableRowSelectionOnClick
+    disableSelectionOnClick
+    hideFooter
+
+
+
+
+
+
+
+
+
+  />
+
+</>:null}
+</div>
+
+<div style={{ alignSelf: 'center', marginLeft: 30, marginTop:40, justifyContent: 'center' }}>
+
+
+<h3 >Selected Seat</h3>
+</div>
+
+<div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+
+
+
+{ details.length>0? <>
+  <DataGrid
+
+    rows={seat}
+    columns={seatColumn}
+    style={{ border: 20 }}
+    disableRowSelectionOnClick
+    disableSelectionOnClick
+    hideFooter
+
+
+
+
+
+
+
+
+
+  />
+
+</>:null}
+</div>
             <Button
               fullWidth={true}
 
@@ -196,6 +357,7 @@ export default function ReviewAndPay() {
 
               onClick={() => {
                 setOpen(true)
+                createTicket();
 
 
               }}>

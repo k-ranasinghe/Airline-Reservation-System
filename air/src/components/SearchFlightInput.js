@@ -19,12 +19,31 @@ export default function SearchFlightInput() {
 
   const [data, setData] = useState({});
 
+  const [countries, setCountries] = useState([]);
+
   const [from, setFrom] = useState(null);
   const [to, setTo] = useState(null);
   const [departureDate, setDepartureDate] = useState({});
   const [arrivalDate, setArrivalDate] = useState({});
   const [selected, setSelected] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get("/booking/airports").then((response) => {
+      console.log(response);
+
+      let data= response.data;
+      let countries=[];
+
+      countries= data.map((item)=>{return {value:item.airportcode,
+        label:<><p style={{margin:0}}> 
+                  <p style={{fontWeight:'bold',margin:0,marginTop:20}}>{item.cityname} - {item.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{item.airportname}   {"("+ item.airportcode + ")"}</p></p></>}})
+        
+      setCountries(countries);
+    }
+    );
+  }, [])
+
 
   // useEffect(() => {
   //     axios.get("/airbus").then((response) => {
@@ -38,39 +57,45 @@ export default function SearchFlightInput() {
 
   // },[])
 
-  const currencies = [
-    {
-      value: 'CGK(indonesia)',
-      label: 'CGK(indonesia)',
-    },
-    {
-      value: 'DPS (Indonesia),',
-      label: 'DPS (Indonesia)',
-    },
-    {
-      value: 'BIA',
-      label: 'BIA  (Sri Lanka)',
-    },
-    {
-      value: 'DEL (India)',
-      label: 'DEL (India)',
-    },
-    {
-      value: 'MAA',
-      label: 'MAA (India)',
-    },
-  ];
+  // const countries = [
+  //   {
+  //     value: 'CGK',
+  //     label: 'CGK(indonesia)',
+  //   },
+  //   {
+  //     value: 'DPS,',
+  //     label: 'DPS (Indonesia)',
+  //   },
+  //   {
+  //     value: 'BIA',
+  //     label: 'BIA  (Sri Lanka)',
+  //   },
+  //   {
+  //     value: 'DEL',
+  //     label: 'DEL (India)',
+  //   },
+  //   {
+  //     value: 'MAA',
+  //     label: 'MAA (India)',
+  //   },
+  // ];
 
   const columns = [
-    { field: 'id:', headerName: 'desitination:', width: 70 },
+
+    { field: 'FlightNumber', headerName: 'Flight Number', width: 130 },
+    { field: 'id', headerName: 'AircraftID:', width: 100 },
 
 
+    { field: 'Origin', headerName: 'origin', width: 100 },
+    { field: 'Destination', headerName: 'Destination', width: 100 },
 
-    { field: 'origin', headerName: 'origin', width: 130 },
-    { field: 'airbus_id', headerName: 'FLight name', width: 130 },
-    { field: 'departure', headerName: 'Departure Time', width: 130 },
+    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 250 },
 
-    { field: 'arrival', headerName: 'Arrival Time', width: 130 }
+    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 100 },
+    { field: 'PlatinumPrice', headerName: 'Platinum Price', width: 100 },
+    { field: 'BusinessPrice', headerName: 'Business Price', width: 100 },
+    { field: 'EconomyPrice', headerName: 'EconomyPrice', width: 250 },
+
 
     // {
     //   field: 'departure',
@@ -116,7 +141,10 @@ export default function SearchFlightInput() {
       let data = response.data;
       data.map((item) => {
         // add key id to each object
-        item.id = item.flight_id;
+        item.ArrivalDateTime= new Date(item.ArrivalDateTime).toDateString().slice(0,10)+ " - "+new Date(item.ArrivalDateTime).toLocaleTimeString() +" (IST)";
+        item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+        item.id = item.AircraftID;
+        item.Origin=item.Origin
         return item;
       })
 
@@ -183,7 +211,7 @@ export default function SearchFlightInput() {
           flexWrap: 'wrap',
           '& > :not(style)': {
             m: 50,
-            width: "60%",
+            width: "100%",
            
             
             borderRadius: '1rem'
@@ -205,7 +233,7 @@ export default function SearchFlightInput() {
 
 
               <h1 >Search Flight</h1></div>
-
+<div>
               <TextField
                 sx={{ marginLeft: 2 }}
                 id="outlined-select-currency"
@@ -218,7 +246,7 @@ export default function SearchFlightInput() {
                 defaultValue="BIA  (Sri Lanka)"
                 helperText="Please select your currency"
               >
-                {currencies.map((option) => (
+                {countries.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
@@ -237,7 +265,7 @@ export default function SearchFlightInput() {
                 defaultValue="BIA  (Sri Lanka)"
                 helperText="Please select your currency"
               >
-                {currencies.map((option) => (
+                {countries.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
@@ -251,17 +279,22 @@ export default function SearchFlightInput() {
                   console.log(e)
                 }}
                 sx={{ marginRight: 2 }} label="Departure Date" />
-              <DatePicker
+              {/* <DatePicker
 
                 onChange={(e) => {
                   setArrivalDate(e);
                   console.log(e)
                 }}
-                label="Arrival Date" />
+                label="Arrival Date" /> */}
+</div>
+<div>
+
 
               <Button onClick={() => {
                 getFlights();
-              }} style={{ marginLeft: 450 }} variant="contained" startIcon={<SearchIcon />}>Search</Button>
+              }} style={{ marginLeft: 450 ,marginTop:20,marginBottom:20}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
+
+</div>
               </>
 
 </Paper>

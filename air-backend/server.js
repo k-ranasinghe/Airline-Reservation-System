@@ -5,6 +5,7 @@ import router from './routes/booking.js';
 const app = express();
 const port = 5000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.use(express.json());
 
 app.use('/booking', router);
 // app.use(function(req, res, next) {

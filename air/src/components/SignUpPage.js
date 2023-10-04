@@ -24,22 +24,46 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import dayjs from 'dayjs';
 
 const defaultTheme = createTheme();
 
 
-// export default function SignUp() {
-
 
 export default function SignUp() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+    const [registrationDetails,setRegistrationDetails] = useState({});
+
+    const navigate = useNavigate();
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     axios.post()
+    //     const data = new FormData(event.currentTarget);
+    //     console.log({
+    //         email: data.get('email'),
+    //         password: data.get('password'),
+    //     });
+    // };
+    function handleChange(event){
+        setRegistrationDetails({...registrationDetails,[event.target.name]:event.target.value});
+        console.log("passenegers",registrationDetails);
+
+    }
+    function saveSignUpDetails(){
+        try{
+            console.log("registrationDetails", registrationDetails);
+            axios.post("/signUp/insertSignUp",{
+                registrationDetails: registrationDetails,
+            }).then((response) => {
+                console.log("response", response);
+            
+            })
+        }catch{
+            
+        }
+        
     };
 
     return (
@@ -85,10 +109,11 @@ export default function SignUp() {
                             <Typography component="h1" variant="h5">
                                 Sign up
                             </Typography>
-                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                            <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 3 }}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
+                                        onChange = {handleChange}
                                             autoComplete="given-name"
                                             name="firstName"
                                             required
@@ -100,6 +125,7 @@ export default function SignUp() {
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
+                                        onChange={handleChange}
                                             required
                                             fullWidth
                                             id="lastName"
@@ -108,22 +134,36 @@ export default function SignUp() {
                                             autoComplete="family-name"
                                         />
                                     </Grid>
-
+                                    <Grid item xs={12} sm={4}>
+                                        <TextField
+                                        onChange={handleChange}
+                                            required
+                                            fullWidth
+                                            id="userName"
+                                            name = "userName"
+                                            label="User Name"
+                                            autoFocus
+                                        />
+                                    </Grid>
 
                                     <Grid item xs={12} sm={4}>
                                         <TextField
+                                        onChange={handleChange}
                                             required
                                             fullWidth
                                             id="country"
+                                            name = "country"
                                             label="Country"
                                             autoFocus
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={8}>
+                                    <Grid item xs={12}>
                                         <TextField
+                                        onChange={handleChange}
                                             required
                                             fullWidth
                                             id="passportNumber"
+                                            name="passportNumber"
                                             label="Passport Number"
                                         />
                                     </Grid>
@@ -133,7 +173,8 @@ export default function SignUp() {
                                     <Grid item xs={12} >
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DemoContainer components={['DatePicker']}>
-                                                <DatePicker label="Birth Day*" />
+                                                <DatePicker label="Date of Birth*" name = "dateofBirth"  defaultValue={dayjs('2022-04-17')} onChange={(e) => { console.log(e)   }} />
+
                                             </DemoContainer>
                                         </LocalizationProvider>
                                     </Grid>
@@ -141,6 +182,7 @@ export default function SignUp() {
 
                                     <Grid item xs={12}>
                                         <TextField
+                                        onChange={handleChange}
                                             required
                                             fullWidth
                                             id="number"
@@ -152,6 +194,7 @@ export default function SignUp() {
 
                                     <Grid item xs={12}>
                                         <TextField
+                                        onChange={handleChange}
                                             required
                                             fullWidth
                                             id="email"
@@ -162,6 +205,7 @@ export default function SignUp() {
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                        onChange={handleChange}
                                             required
                                             fullWidth
                                             name="password"
@@ -187,12 +231,12 @@ export default function SignUp() {
                                     </Grid>
 
 
-                                    <Grid item xs={12}>
+                                    {/* <Grid item xs={12}>
                                         <FormControlLabel
                                             control={<Checkbox value="allowExtraEmails" color="primary" />}
                                             label="I want to receive promotions and updates via email."
                                         />
-                                    </Grid>
+                                    </Grid> */}
 
                                 </Grid>
                                 <Button
@@ -200,6 +244,12 @@ export default function SignUp() {
                                     fullWidth
                                     variant="contained"
                                     sx={{ mt: 3, mb: 2 }}
+                                    onClick={()=>{
+                                        navigate('/loginPage',
+                                            
+                                        )
+                                        saveSignUpDetails();
+                                    }}
                                 >
                                     Sign Up
                                 </Button>

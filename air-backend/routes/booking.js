@@ -3,7 +3,7 @@ import { createBooking, createPassenger, createPayment, getAirportLocation, getA
 var router = express.Router();
 
 
-router.get('/flight', async (req, res) => {   
+router.get('/flight', async (req, res) => {    
     console.log("request",  req);
     console.log(req.query.from, req.query.to, req.query.departureDate); 
     const result = await getFlightsWithPricesFromDB(req.query.from, req.query.to, req.query.departureDate);

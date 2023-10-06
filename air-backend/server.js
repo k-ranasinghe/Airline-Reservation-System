@@ -1,6 +1,4 @@
 import express from 'express';
-//import booking from './routes/booking.js';
-import { getAibusList, getAibusById, createAibus, getFlightsFromDB } from './database.js';
 import router1 from './routes/booking.js';
 import router2 from './routes/signUp.js'
 
@@ -9,7 +7,7 @@ const port = 5000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(express.json());
 
-//app.use('/booking', booking);
+
 app.use('/booking', router1);
 app.use('/signUp', router2);
 // app.use(function(req, res, next) {

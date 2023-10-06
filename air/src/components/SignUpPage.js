@@ -89,8 +89,9 @@ export default function SignUp() {
 
                 < Paper elevation={3} style={{
                     paddingTop: 1,
-                    paddingBottom: 8,
-                    minWidth: 300
+                    paddingBottom: 100,
+                    minWidth: 500,
+                    borderRadius: 0,
                 }}>
 
                     <Container component="main" maxWidth="xs">
@@ -253,13 +254,13 @@ export default function SignUp() {
                                 >
                                     Sign Up
                                 </Button>
-                                <Grid container justifyContent="flex-end">
+                                {/* <Grid container justifyContent="flex-end">
                                     <Grid item>
                                         <Link href="#" variant="body2">
                                             Already have an account? Sign in
                                         </Link>
                                     </Grid>
-                                </Grid>
+                                </Grid> */}
                             </Box>
                         </Box>
                     </Container>

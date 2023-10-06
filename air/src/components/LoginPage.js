@@ -71,7 +71,8 @@ export default function SignIn() {
     >
       <Paper elevation={3} style={{
         padding: 8,
-        minWidth: 300
+        minWidth: 300,
+        borderRadius: 0,
       }}>
 
         <Container component="main" maxWidth="xs">
@@ -117,12 +118,23 @@ export default function SignIn() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 2, mb: 1 }}
                 onClick={() => {
                   navigate('/')
                 }}
               >
                 Log In
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 1, mb: 2, backgroundColor: 'green'}}
+                onClick={() => {
+                  navigate('/')
+                }}
+              >
+                Continue as Guest
               </Button>
               <Grid container>
                 <Grid item xs>
@@ -131,7 +143,7 @@ export default function SignIn() {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="http://localhost:3000/signUpPage" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

@@ -17,4 +17,14 @@ export async function createRegistrant(registrationDetails){
     console.log(result[0])
     return result[0];
 }
+
+export async function checkPasswordfromDB(loginDetails){
+    const result = await pool.query('select * from registereduser where Username = ? and Password = ?',[loginDetails.userName, loginDetails.password]);
+    if(result.length > 0){
+        return {Login:true};
+    }else{
+        return {Login: false};
+        
+    }
+}
 export default pool;

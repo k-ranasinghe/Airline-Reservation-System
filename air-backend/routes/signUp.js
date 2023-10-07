@@ -19,5 +19,22 @@ router.post('/insertSignUp', async(req,res) => {
         }
     }); 
 })
+router.post('./checkPassword', async(req, res) => {
+    bcrypt.hash(req.body.loginDetails.password.toString(), salt,async function (err, hash) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            req.body.loginDetails.password = hash;
+            const result = await checkPasswordfromDB(req.body.loginDetails);
+            res.send(result);
+
+
+        }
+    }); 
+    // console.log("request",  req.body);
+    // const result = await checkPasswordfromDB(req.body.loginDetails);
+    // res.send(result);
+})
 
 export default router;

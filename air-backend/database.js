@@ -128,7 +128,7 @@ export async function updateBooking(booking_id){
 // const result3=await createAibus(3,'A380');
 // console.log(result3);
 
-getFlightsWithPricesFromDB('DEL','CGK','2023-09-29');
+// getFlightsWithPricesFromDB('DEL','CGK','2023-09-29');
 // getSeatsFromDB(525)
 export default pool;
 

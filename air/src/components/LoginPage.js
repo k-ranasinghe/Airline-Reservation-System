@@ -35,23 +35,28 @@ import { useState } from "react";
 
 
 export default function SignIn() {
-  const [loginDetails, setLoginDetails] = useState({email:'',password:''})  
+  const [loginDetails, setLoginDetails] = useState({});
   const navigate = useNavigate();
+
   function handleChange(event){
     setLoginDetails({...loginDetails, [event.target.name]: event.target.value});
     console.log(loginDetails);
 
-  }
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
   function authenticate(){
+    console.log("Login in process");
     try{
       console.log(loginDetails);
       axios.post("/signUp/checkPassword",{
         loginDetails: loginDetails,
-      }).then((res)=>{
-        console.log(res);
-        if(res.data.Login){
+      }).then((response)=>{
+        console.log(response);
+        if(response.data.Login){
           navigate('/');
-        }else{
+        }else if(response.data.Login){
           alert("Invalid Credentials");
         }
       })
@@ -79,7 +84,6 @@ export default function SignIn() {
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPositionY: 'center',
-        display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
       }}
@@ -108,16 +112,17 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Log In
             </Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
+            <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+              
               <TextField
               onChange={handleChange}
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="User Name"
+                name="username"
+                autoComplete="username"
                 autoFocus
               />
               <TextField
@@ -137,7 +142,7 @@ export default function SignIn() {
                 variant="contained"
                 sx={{ mt: 2, mb: 1 }}
                 onClick={() => {
-                  authenticate()
+                  authenticate();
                   // navigate('/')
                 }}
               >
@@ -184,7 +189,17 @@ export default function SignIn() {
 
 
 
-
+// //{/* <TextField
+//               onChange={handleChange}
+//                 margin="normal"
+//                 required
+//                 fullWidth
+//                 id="email"
+//                 label="Email Address"
+//                 name="email"
+//                 autoComplete="email"
+//                 autoFocus
+//               /> */}
 
 
 

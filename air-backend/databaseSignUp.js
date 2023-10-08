@@ -19,12 +19,18 @@ export async function createRegistrant(registrationDetails){
 }
 
 export async function checkPasswordfromDB(loginDetails){
-    const result = await pool.query('select * from registereduser where Username = ? and Password = ?',[loginDetails.userName, loginDetails.password]);
-    if(result.length > 0){
-        return {Login:true};
-    }else{
-        return {Login: false};
+    try{
+        const result = await pool.query('select count(Username) as count from registereduser where Username = ? and Password = ?',[loginDetails.username, loginDetails.password]);
+        console.log(result[0]);
+        if(result[0].count=== 1){
+            return {Login:true};
+        }else{
+            return {Login: false};
         
+        }
+    }catch(error){
+        console.error(error);
     }
+    
 }
 export default pool;

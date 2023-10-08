@@ -53,6 +53,7 @@ export default function SignUp() {
 
     }
     function saveSignUpDetails(){
+        console.log("signin in process");
         try{
             console.log("registrationDetails", registrationDetails);
             axios.post("/signUp/insertSignUp",{

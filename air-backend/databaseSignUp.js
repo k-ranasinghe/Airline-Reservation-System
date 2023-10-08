@@ -17,4 +17,17 @@ export async function createRegistrant(registrationDetails){
     console.log(result[0])
     return result[0];
 }
+export async function checkPasswordfromDB(loginDetails){
+    try{
+        console.log("in check password");
+        const result = await pool.query('select * from registereduser where Username = ?',[loginDetails.username]);
+        console.log(result)
+        return result;
+    }catch{
+
+    }
+}
+
 export default pool;
+
+

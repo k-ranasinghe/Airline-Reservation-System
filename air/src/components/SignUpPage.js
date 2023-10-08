@@ -37,21 +37,23 @@ export default function SignUp() {
     const [registrationDetails,setRegistrationDetails] = useState({});
 
     const navigate = useNavigate();
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     axios.post()
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // .catch(err => console.log(err)))
+    //    axios.post()
     //     const data = new FormData(event.currentTarget);
     //     console.log({
     //         email: data.get('email'),
     //         password: data.get('password'),
     //     });
-    // };
+    };
     function handleChange(event){
         setRegistrationDetails({...registrationDetails,[event.target.name]:event.target.value});
         console.log("passenegers",registrationDetails);
 
     }
     function saveSignUpDetails(){
+        console.log("signin in process");
         try{
             console.log("registrationDetails", registrationDetails);
             axios.post("/signUp/insertSignUp",{
@@ -110,7 +112,7 @@ export default function SignUp() {
                             <Typography component="h1" variant="h5">
                                 Sign up
                             </Typography>
-                            <Box component="form" noValidate /*onSubmit={handleSubmit}*/ sx={{ mt: 3 }}>
+                            <Box component="form" onSubmit={handleSubmit} noValidate  sx={{ mt: 3 }}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <TextField
@@ -241,6 +243,7 @@ export default function SignUp() {
 
                                 </Grid>
                                 <Button
+                                    
                                     type="submit"
                                     fullWidth
                                     variant="contained"

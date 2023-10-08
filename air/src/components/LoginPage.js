@@ -15,22 +15,6 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useState } from "react";
 
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-
 
 
 
@@ -69,7 +53,7 @@ export default function SignIn() {
   return (
 
     
-    //<ThemeProvider theme={defaultTheme}>
+  
     <Box
       sx={{
         display: 'flex',

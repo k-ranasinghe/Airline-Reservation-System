@@ -21,24 +21,47 @@ router.post('/insertSignUp', async(req,res) => {
         }
     }); 
 });
+// router.post('/checkPassword', async(req, res) => {
+//     console.log("login in process")
+    
+//     bcrypt.hash(req.body.loginDetails.password.toString(), salt,async function (err, hash) {
+//         if(err){
+
+//             console.log(err);
+//         }
+//         else{
+//             req.body.loginDetails.password = hash;
+//             console.log("request",  req.body);
+//             const result = await checkPasswordfromDB(req.body.loginDetails);
+//             res.send(result);
+//         }
+//     }); 
+//     console.log("request",  req.body);
+//     const result = await checkPasswordfromDB(req.body.loginDetails);
+//     res.send(result);
+// });
 router.post('/checkPassword', async(req, res) => {
     console.log("login in process")
+    const result = await checkPasswordfromDB(req.body.loginDetails);
+    console.log(result[0][0].Password);
+    try{
+        bcrypt.compare(req.body.loginDetails.password.toString(), result[0][0].Password,(err,response)=>{
+            if(err){
+                console.log("not found");
+                console.log(err);
+            }
+            else{
+                if(response){
+                    res.send({Login:true});
+                }
+                else{
+                    res.send({Login:false});
+                }
+            }
+        })
+    }catch{
+        console.log("notfound");
+    }
     
-    bcrypt.hash(req.body.loginDetails.password.toString(), salt,async function (err, hash) {
-        if(err){
-
-            console.log(err);
-        }
-        else{
-            req.body.loginDetails.password = hash;
-            console.log("request",  req.body);
-            const result = await checkPasswordfromDB(req.body.loginDetails);
-            res.send(result);
-        }
-    }); 
-    // console.log("request",  req.body);
-    // const result = await checkPasswordfromDB(req.body.loginDetails);
-    // res.send(result);
 });
-
 export default router;

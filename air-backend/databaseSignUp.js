@@ -17,20 +17,31 @@ export async function createRegistrant(registrationDetails){
     console.log(result[0])
     return result[0];
 }
-
 export async function checkPasswordfromDB(loginDetails){
     try{
-        const result = await pool.query('select count(Username) as count from registereduser where Username = ? and Password = ?',[loginDetails.username, loginDetails.password]);
-        console.log(result[0]);
-        if(result[0].count=== 1){
-            return {Login:true};
-        }else{
-            return {Login: false};
-        
-        }
-    }catch(error){
-        console.error(error);
+        console.log("in check password");
+        const result = await pool.query('select * from registereduser where Username = ?',[loginDetails.username]);
+        console.log(result)
+        return result;
+    }catch{
+
     }
-    
 }
+//cant use this way because the hash password generated are different i think
+// export async function checkPasswordfromDB(loginDetails){
+//     try{
+//         const result = await pool.query('select count(Username) as count from registereduser where Username = ? and Password = ?',[loginDetails.username, loginDetails.password]);
+//         console.log(result[0]);
+//         if(result[0].count=== 1){
+//             return {Login:true};
+//         }else{
+//             return {Login: false};
+        
+//         }
+//     }catch(error){
+//         console.error(error);
+//     }
+    
+// }
+
 export default pool;

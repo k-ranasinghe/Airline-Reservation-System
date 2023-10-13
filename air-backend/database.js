@@ -164,28 +164,28 @@ export async function getDestinationTotal (Destination, fromDate, toDate){
 
 export async function getPassengerDataGold (fromDate, toDate){
     console.log(fromDate, toDate)
-    const result =await pool.query('select passenger.passengerid as passengerid, passenger.firstname as firstname, passenger.lastname as lastname, passenger.nationality as nationality, passenger.passportnumber as passportnumber from passenger join registeredpassenger on (passenger.passengerid = registeredpassenger.passengerid) join registereduser on (registeredpassenger.username = registereduser.username) join booking on (passenger.passengerid = booking.PassengerID) join payment on (payment.bookingid = booking.bookingid) where usertype like "gold" AND timestamp BETWEEN ? AND ?', [fromDate+'%', toDate+'%'])    
+    const result =await pool.query('select passenger.passengerid as passengerid, registereduser.firstname as firstname, registereduser.lastname as lastname, registereduser.nationality as nationality, registereduser.passportnumber as passportnumber from passenger join registereduser on (passenger.userid = registereduser.userid) join booking on (passenger.passengerid = booking.PassengerID) join payment on (payment.bookingid = booking.bookingid) where usertype like "gold" AND timestamp BETWEEN ? AND ?', [fromDate+'%', toDate+'%'])    
     console.log(result[0])
     return result[0];
 }
 
 export async function getPassengerDataFrequent (fromDate, toDate){
     console.log(fromDate, toDate)
-    const result =await pool.query('select passenger.passengerid as passengerid, passenger.firstname as firstname, passenger.lastname as lastname, passenger.nationality as nationality, passenger.passportnumber as passportnumber from passenger join registeredpassenger on (passenger.passengerid = registeredpassenger.passengerid) join registereduser on (registeredpassenger.username = registereduser.username) join booking on (passenger.passengerid = booking.PassengerID) join payment on (payment.bookingid = booking.bookingid) where usertype like "frequent" AND timestamp BETWEEN ? AND ?', [fromDate+'%', toDate+'%'])    
+    const result =await pool.query('select passenger.passengerid as passengerid, registereduser.firstname as firstname, registereduser.lastname as lastname, registereduser.nationality as nationality, registereduser.passportnumber as passportnumber from passenger join registereduser on (passenger.userid = registereduser.userid) join booking on (passenger.passengerid = booking.PassengerID) join payment on (payment.bookingid = booking.bookingid) where usertype like "frequent" AND timestamp BETWEEN ? AND ?', [fromDate+'%', toDate+'%'])    
     console.log(result[0])
     return result[0];
 }
 
 export async function getPassengerDataGuest (fromDate, toDate){
     console.log(fromDate, toDate)
-    const result =await pool.query('SELECT passenger.passengerid as passengerid, firstname, lastname, nationality, passportnumber FROM Passenger LEFT JOIN RegisteredPassenger ON Passenger.PassengerID = RegisteredPassenger.PassengerID join booking on (passenger.passengerid = booking.PassengerID) join payment on (payment.bookingid = booking.bookingid) WHERE RegisteredPassenger.PassengerID IS NULL AND timestamp BETWEEN ? AND ?', [fromDate+'%', toDate+'%'])    
+    const result =await pool.query('SELECT passenger.passengerid as passengerid, firstname, lastname, nationality, passportnumber FROM Passenger JOIN Guest ON (Passenger.GuestID = Guest.GuestID) join booking on (passenger.passengerid = booking.PassengerID) join payment on (payment.bookingid = booking.bookingid) WHERE timestamp BETWEEN ? AND ?', [fromDate+'%', toDate+'%'])    
     console.log(result[0])
     return result[0];
 }
 
 export async function getPassengerDataTotal (fromDate, toDate){
     console.log(fromDate, toDate)
-    const result =await pool.query('SELECT (SELECT COUNT(*) FROM (SELECT passenger.passengerid FROM passenger JOIN registeredpassenger ON passenger.passengerid = registeredpassenger.passengerid JOIN registereduser ON registeredpassenger.username = registereduser.username JOIN booking ON passenger.passengerid = booking.PassengerID JOIN payment ON payment.bookingid = booking.bookingid WHERE usertype LIKE "gold" AND timestamp BETWEEN ? AND ?) AS GoldPassengers) AS Gold, (SELECT COUNT(*) FROM (SELECT passenger.passengerid FROM passenger JOIN registeredpassenger ON passenger.passengerid = registeredpassenger.passengerid JOIN registereduser ON registeredpassenger.username = registereduser.username JOIN booking ON passenger.passengerid = booking.PassengerID JOIN payment ON payment.bookingid = booking.bookingid WHERE usertype LIKE "frequent" AND timestamp BETWEEN ? AND ?) AS FrequentPassengers) AS Frequent, (SELECT COUNT(*) FROM (SELECT passenger.passengerid FROM passenger LEFT JOIN registeredpassenger ON passenger.passengerid = registeredpassenger.passengerid JOIN booking ON passenger.passengerid = booking.PassengerID JOIN payment ON payment.bookingid = booking.bookingid WHERE registeredpassenger.passengerid IS NULL AND timestamp BETWEEN ? AND ?) AS GuestPassengers) AS Guest', [fromDate+'%', toDate+'%', fromDate+'%', toDate+'%', fromDate+'%', toDate+'%'])    
+    const result =await pool.query('SELECT (SELECT COUNT(*) FROM Passenger JOIN RegisteredUser ON (Passenger.UserID = RegisteredUser.UserID) JOIN Booking ON (Passenger.PassengerID = Booking.PassengerID) JOIN Payment ON (Payment.BookingID = Booking.BookingID) WHERE UserType LIKE "gold" AND Timestamp BETWEEN ? AND ?) AS Gold, (SELECT COUNT(*) FROM Passenger JOIN RegisteredUser ON (Passenger.UserID = RegisteredUser.UserID) JOIN Booking ON (Passenger.PassengerID = Booking.PassengerID) JOIN Payment ON (Payment.BookingID = Booking.BookingID) WHERE UserType LIKE "frequent" AND Timestamp BETWEEN ? AND ?) AS Frequent, (SELECT COUNT(*) FROM Passenger JOIN Guest ON (Passenger.GuestID = Guest.GuestID) JOIN Booking ON (Passenger.PassengerID = Booking.PassengerID) JOIN Payment ON (Payment.BookingID = Booking.BookingID) WHERE Timestamp BETWEEN ? AND ?) AS Guest', [fromDate+'%', toDate+'%', fromDate+'%', toDate+'%', fromDate+'%', toDate+'%'])
     console.log(result[0])
     return result[0];
 }
@@ -222,6 +222,7 @@ export async function getTotalRevenue (){
     console.log(result[0])
     return result[0];
 }
+
     
 // const result1=await getAibusList();
 // console.log(result1);

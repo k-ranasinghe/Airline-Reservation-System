@@ -170,7 +170,7 @@ export default function SeatBooking(){
           
             <Button  onClick={()=>{
               navigate("/reportGeneration")
-            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
+            }} color="inherit" > {!isAdmin()?"Admin":""} </Button>
             <Button onClick={()=>{
               navigate("/loginPage")
             }}

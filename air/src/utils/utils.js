@@ -1,6 +1,6 @@
 export  default function isAdmin(){
-     let userDetails= localStorage.getItem("userDetails")
-     return userDetails.UserType=='ADMIN'?true:false;
+     let userDetails=JSON.parse(localStorage.getItem("userDetails"));
+     return userDetails.UserType=='Admin'?true:false;
 }
 
 export   function isGuest(){

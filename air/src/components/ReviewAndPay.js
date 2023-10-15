@@ -16,6 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DataGrid, GridActionsCellItem, GridSaveAltIcon } from "@mui/x-data-grid";
 import Backdrop from '@mui/material/Backdrop';
 import axios from "axios";
+import isAdmin, { isGuest } from "../utils/utils";
 export default function ReviewAndPay() {
 
 
@@ -47,9 +48,10 @@ export default function ReviewAndPay() {
     })
   }
 function createTicket(){
-  console.log(location.state.bookingDetails[0].BookingID)
+  console.log(location.state.bookingDetails[0])
   axios.post("/booking/createPayment",{
-    bookingId:location.state.bookingDetails[0].BookingID
+    bookingId:location.state.bookingDetails[0].BookingID,
+    passengerID:location.state.bookingDetails[0].PassengerID
     
   }).then((response)=>{
     console.log(response);
@@ -97,12 +99,12 @@ console.log(location.state)
     { field: 'id:', headerName: '', width: 70 },
 
 
-    { field: 'firstName', headerName: 'First Name', width: 200 },
-    { field: 'lastName', headerName: 'Last Name', width: 130 },
-    { field: 'gender', headerName: 'Male /Female', width: 130 },
+    { field: 'FirstName', headerName: 'First Name', width: 200 },
+    { field: 'LastName', headerName: 'Last Name', width: 130 },
+    { field: 'Gender', headerName: 'Male /Female', width: 130 },
 
-    { field: 'contactNumber', headerName: 'Contact Number', width: 130 },
-    { field: 'emailAddress', headerName: 'Email Address', width: 300 }
+    { field: 'ContactNumber', headerName: 'Contact Number', width: 130 },
+    { field: 'EmailAddress', headerName: 'Email Address', width: 300 }
 
 
   ];
@@ -193,7 +195,7 @@ console.log(location.state)
 
       <Box sx={{ flexGrow: 1 }}>
 
-        <AppBar position="static">
+      <AppBar position="static">
           <Toolbar>
             <IconButton
               size="large"
@@ -207,7 +209,28 @@ console.log(location.state)
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
-            <Button color="inherit">Login</Button>
+            
+            <Button  onClick={()=>{
+              navigate("/reportGeneration")
+            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
+            <Button onClick={()=>{
+              navigate("/loginPage")
+            }}
+            color="inherit"> {!isGuest()?"Login":""}</Button>
+            <Button color="inherit" onClick={()=>{
+              axios.post('/signUp/logout').then((response)=>{
+                console.log(response);
+                localStorage.setItem("passengerDetails",null)
+                localStorage.setItem("userName",'')
+                navigate("/loginPage")
+              }
+              )
+            }}
+            >
+              {isGuest()?"Log Out":""}
+
+            </Button>
+           
           </Toolbar>
         </AppBar>
       </Box>

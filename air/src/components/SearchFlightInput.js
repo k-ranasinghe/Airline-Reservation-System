@@ -15,6 +15,7 @@ import { DatePicker, DateRangePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from "axios";
 import { DataGrid, GridColDef, GridToolbarContainer, GridValueGetterParams, useGridApiContext } from '@mui/x-data-grid';
 import { useNavigate } from "react-router-dom";
+import isAdmin, { isGuest } from "../utils/utils";
 export default function SearchFlightInput() {
 
   const [data, setData] = useState({});
@@ -29,6 +30,13 @@ export default function SearchFlightInput() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log(localStorage.getItem("username"));
+    if(localStorage.getItem("username")===null){
+      navigate("/loginPage");
+    }
+    
+
+
     axios.get("/booking/airports").then((response) => {
       console.log(response);
 
@@ -192,13 +200,30 @@ export default function SearchFlightInput() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
+            <Typography style={{marginLeft:500}} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Welcome { localStorage.getItem("userName")!=''? localStorage.getItem("userName"):""}
+            </Typography>
             <Button  onClick={()=>{
               navigate("/reportGeneration")
-            }} color="inherit">Admin </Button>
+            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
             <Button onClick={()=>{
               navigate("/loginPage")
             }}
-            color="inherit">Login</Button>
+            color="inherit"> {!isGuest()?"Login":""}</Button>
+            <Button color="inherit" onClick={()=>{
+              axios.post('/signUp/logout').then((response)=>{
+                console.log(response);
+                localStorage.setItem("passengerDetails",null)
+                localStorage.setItem("userName",'')
+                localStorage.setItem('guestId','')
+                navigate("/loginPage")
+              }
+              )
+            }}
+            >
+              {isGuest()?"Log Out":""}
+
+            </Button>
            
           </Toolbar>
         </AppBar>

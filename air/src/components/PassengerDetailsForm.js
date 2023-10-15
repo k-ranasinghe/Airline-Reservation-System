@@ -8,6 +8,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
+import isAdmin, { isGuest } from "../utils/utils";
+import axios from "axios";
 
 
  export default function PassengerDetailsForm(){
@@ -38,23 +40,44 @@ useEffect(()=>{
             
         <Box sx={{ flexGrow: 1 }}>
 
-  <AppBar position="static">
-    <Toolbar>
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        sx={{ mr: 2 }}
-      >
-        <MenuIcon />
-      </IconButton>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-        B Airlines
-      </Typography>
-      <Button color="inherit">Login</Button>
-    </Toolbar>
-  </AppBar>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              B Airlines
+            </Typography>
+           
+            <Button  onClick={()=>{
+              navigate("/reportGeneration")
+            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
+            <Button onClick={()=>{
+              navigate("/loginPage")
+            }}
+            color="inherit"> {!isGuest()?"Login":""}</Button>
+            <Button color="inherit" onClick={()=>{
+              axios.post('/signUp/logout').then((response)=>{
+                console.log(response);
+                localStorage.setItem("passengerDetails",null)
+                localStorage.setItem("userName",'')
+                navigate("/loginPage")
+              }
+              )
+            }}
+            >
+              {isGuest()?"Log Out":""}
+
+            </Button>
+           
+          </Toolbar>
+        </AppBar>
 </Box>
 <Box
       sx={{
@@ -79,17 +102,49 @@ useEffect(()=>{
       <div style={{  alignSelf:'center' ,marginLeft:30, justifyContent:'center'}}>
 
         
-<h1 >Fill Passenger details</h1>
+<h1 >Fill Passenger details { localStorage.getItem("userName")!=''? <Button variant="contained" color="success"   onClick={()=>{
+  setPassengers([...passengers,{}])
+  // console.log(passengers);
+  let userDetails= JSON.parse(localStorage.getItem("userDetails"));
+  console.log(userDetails);
+  setPassengerDetails(userDetails)
+}
+
+}>Auto Fill</Button>:null}</h1>
+
+
 </div>
 <div style={{margin:40}}>
             <div >
-                <TextField  onChange={handleChange} id="outlined-basic" name="firstName" label="first name" variant="outlined" />
-                <TextField onChange={handleChange}  style={{ marginLeft: 20 }} name="lastName" id="outlined-basic" label="last name" variant="outlined" />
+                <TextField  onChange={handleChange}
                 
+                InputLabelProps={{
+                  shrink: true,
+                }} 
+                value={passengerDetails.FirstName!=null ? passengerDetails.FirstName:passengerDetails.LastName} id="firstName" name="FirstName" label="first name"   variant="outlined"/>
+                <TextField
+                 InputLabelProps={{
+                  shrink: true,
+                }} 
+                onChange={handleChange}  value={passengerDetails.LastName} style={{ marginLeft: 20 }} name="LastName" id="lastName" label="last name" variant="outlined" />
+                                <TextField
+                 InputLabelProps={{
+                  shrink: true,
+                }} 
+                onChange={handleChange}  value={passengerDetails.PassportNumber} style={{ marginLeft: 20 }} name="PassportNumber" id="lastName" label="Passport Number" variant="outlined" />
+                <TextField  onChange={handleChange}
+                
+                InputLabelProps={{
+                  shrink: true,
+                }} 
+                value={passengerDetails.ContactNumber1} id="firstName" name="ContactNumber1" label="ContactNumber1"   variant="outlined"/>
                 <FormControl style={{
                     marginLeft: 20,
                     marginRight:20
                 }}>
+
+
+              
   <InputLabel id="demo-simple-select-label">Nationality</InputLabel>
   <Select
     labelId="demo-simple-select-label"
@@ -101,23 +156,27 @@ useEffect(()=>{
   >
     <MenuItem value={"sri lankan"}>Sri lankan</MenuItem>
     <MenuItem value={"indian"}>Indian</MenuItem>
-    <MenuItem value={"british"}>Thirty</MenuItem>
+    <MenuItem value={"british"}>Canadian</MenuItem>
   </Select>
 </FormControl>
                   <DatePicker
                 style={{ marginLeft: 20 }}
                 name="dateOfBirth"
+                // value={new Date(passengerDetails.DateOfBirth)}
 
                     onChange={(e) => {
                         console.log(e)
                         // handleChange(e)
                         // setDateOfBirth(e)
                     }}
-                    label="   Date Of Birth" />  
+                    label="DateOfBirth" />  
                     </div>
             <div style={{marginTop:10}}>
 
-                <TextField id="outlined-basic" onChange={handleChange}  name="emailAddress" label="Email Address" variant="outlined" />
+                <TextField id="outlined-basic"  InputLabelProps={{
+            shrink: true,
+          }} 
+          onChange={handleChange} value={passengerDetails.EmailAddress} name="EmailAddress" label="Email Address" variant="outlined" />
            
 <FormControl style={{ marginLeft: 20 }} >
                     <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>

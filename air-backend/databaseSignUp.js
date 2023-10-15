@@ -13,10 +13,12 @@ const pool=mysql.createPool({
 
 export async function createRegistrant(registrationDetails){ 
 
-    const result = await pool.query('insert into registereduser (Username, Password, FirstName, LastName, Nationality, PassportNumber, UserType, DateOfBirth, ContactNumber, EmailAddress) values (?,?,?,?,?,?,?,?,?,?);',[registrationDetails.userName,registrationDetails.password, registrationDetails.firstName, registrationDetails.lastName, registrationDetails.country, registrationDetails.passportNumber, 'Gold' , '2002-07-09' ,registrationDetails.number,registrationDetails.email])
+    const result = await pool.query('insert into registereduser (Username, Password, FirstName, LastName, Nationality, PassportNumber, UserType, DateOfBirth, ContactNumber1, EmailAddress) values (?,?,?,?,?,?,?,?,?,?);',[registrationDetails.userName,registrationDetails.password, registrationDetails.firstName, registrationDetails.lastName, registrationDetails.country, registrationDetails.passportNumber, 'Gold' , '2002-07-09' ,registrationDetails.number,registrationDetails.email])
     console.log(result[0])
     return result[0];
 }
+
+
 export async function checkPasswordfromDB(loginDetails){
     try{
         console.log("in check password");
@@ -27,6 +29,7 @@ export async function checkPasswordfromDB(loginDetails){
 
     }
 }
+
 
 export default pool;
 

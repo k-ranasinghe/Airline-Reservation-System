@@ -1,6 +1,8 @@
 import express from 'express';
 import router1 from './routes/booking.js';
 import router2 from './routes/signUp.js'
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 const port = 5000;
@@ -10,6 +12,7 @@ app.use(express.json());
 
 app.use('/booking', router1);
 app.use('/signUp', router2);
+app.use(cookieParser())
 // app.use(function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin"); // update to match the domain you will make the request from
 //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

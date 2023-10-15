@@ -14,6 +14,7 @@ import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
 import axios from "axios";
+import isAdmin, { isGuest } from "../utils/utils";
 
 export default function SeatBooking(){
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -76,8 +77,11 @@ export default function SeatBooking(){
     console.log("flight",flight)
 
     console.log( "passengerDetails", passengerDetails)
+    console.log("isGUest",!isGuest())
 
     axios.post("/booking/bookTicket", {
+      userID:  JSON.parse(localStorage.getItem("userDetails")).UserID,
+      isGuest: !isGuest(),
       
       flight: flight,
       passengerDetails: passengerDetails,
@@ -87,12 +91,14 @@ export default function SeatBooking(){
     }).then((response) => {
       console.log("reponse",response);
       let data = response.data;
+      localStorage.setItem("geustId",response.data.guest_id)
       navigate('/reviewAndPay',{
         state: {
           passengerDetails: passengerDetails,
           flight:flight,
           bookedSeat:bookedSeat,
-          bookingDetails:response.data,
+          bookingDetails:response.data.booking_id,
+
           travelClass:travelClass
 
         }
@@ -147,23 +153,44 @@ export default function SeatBooking(){
                     
         <Box sx={{ flexGrow: 1 }}>
 
-<AppBar position="static">
-  <Toolbar>
-    <IconButton
-      size="large"
-      edge="start"
-      color="inherit"
-      aria-label="menu"
-      sx={{ mr: 2 }}
-    >
-      <MenuIcon />
-    </IconButton>
-    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-      B Airlines
-    </Typography>
-    <Button color="inherit">Login</Button>
-  </Toolbar>
-</AppBar>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              B Airlines
+            </Typography>
+          
+            <Button  onClick={()=>{
+              navigate("/reportGeneration")
+            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
+            <Button onClick={()=>{
+              navigate("/loginPage")
+            }}
+            color="inherit"> {!isGuest()?"Login":""}</Button>
+            <Button color="inherit" onClick={()=>{
+              axios.post('/signUp/logout').then((response)=>{
+                console.log(response);
+                localStorage.setItem("passengerDetails",null)
+                localStorage.setItem("userName",'')
+                navigate("/loginPage")
+              }
+              )
+            }}
+            >
+              {isGuest()?"Log Out":""}
+
+            </Button>
+           
+          </Toolbar>
+        </AppBar>
 </Box>
 
 

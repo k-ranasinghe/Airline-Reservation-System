@@ -37,8 +37,10 @@ export default function SignIn() {
       axios.post("/signUp/checkPassword",{
         loginDetails: loginDetails,
       }).then((response)=>{
-        console.log(response);
+        console.log ( "login response", response);
         if(response.data.Login){
+          localStorage.setItem("userName", response.data.passengerDetails.Username);
+          localStorage.setItem("userDetails", JSON.stringify(response.data.passengerDetails));
           navigate('/');
         }else if(response.data.Login){
           alert("Invalid Credentials");

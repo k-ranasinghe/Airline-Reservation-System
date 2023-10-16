@@ -145,19 +145,18 @@ CREATE TABLE `UserType` (
 
 CREATE TABLE `RegisteredUser` (
   `Username` varchar(50),
-  `Password` varchar(50),
+  `Password` char(60),
   `FirstName` varchar(50),
   `LastName` varchar(50),
   `Nationality` varchar(50),
   `PassportNumber` varchar(50),
   `DateOfBirth` date,
   `UserType` enum('Frequent','Gold'),
-  `ContactNumber` int,
+  `ContactNumber` varChar(20),
   `EmailAddress` varchar(50),
   PRIMARY KEY (`Username`),
   KEY `Key` (`Password`, `FirstName`, `LastName`, `Nationality`, `PassportNumber`, `DateOfBirth`, `ContactNumber`, `EmailAddress`),
-  FOREIGN KEY (`UserType`) references `UserType`(`UserType`)
-		on delete set null
+ 
 );
 
 CREATE TABLE `RegisteredPassenger` (

@@ -5,34 +5,14 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Container } from '@mui/material';
 import img from '../image/airline.jpg';
 import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
-import { DatePicker, DateRangePicker } from '@mui/x-date-pickers/DatePicker';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { tableCellClasses } from '@mui/material/TableCell';
-import { styled } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import axios from "axios";
+import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 
 
 function CustomTabPanel(props) {
@@ -68,167 +48,337 @@ function a11yProps(index) {
   };
 }
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
   
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
   
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData('Type 1', 3, 2, 44.1, 4.3),
-    createData('Type 2', 6, 4, 42.8, 11.7),
-    createData('Type 3', 5, 5, 29.6, -2.0),
-    createData('Type 4', 8, 11, 39.0, 4.1),
-    createData('Type 5', 15, 14, 31.9, 3.9),
-  ];
-
-  
-
 export default function ReportGeneration() {
   const [value, setValue] = React.useState(0);
-
-  const [from, setFrom]=useState(null);
-  
-  
-
-  const [departureDate, setDepartureDate]=useState({});
-  const [arrivalDate, setArrivalDate]=useState({});
+  const [flightnumber, setflightnumber] = useState(null);
+  const [Origin, setOrigin] = useState(null);
+  const [Destination, setDestination]=useState(null);
+  const [fromDate, setFromDate]=useState(null);
+  const [toDate, setToDate]=useState(null);
+  const [totalPassengers, setTotalPassengers] = useState(' ');
+  const [countries, setCountries] = useState([]);
+  const [from, setFrom] = useState([]);
+  const [selected, setSelected] = useState({});
+  const navigate = useNavigate();
+  const [data1_0, setData1_0] = useState({}); const [data1_1, setData1_1] = useState({}); const [data1_2, setData1_2] = useState({});
+  const [data2_0, setData2_0] = useState({}); const [data2_1, setData2_1] = useState({});
+  const [data3_1, setData3_1] = useState({}); const [data3_2, setData3_2] = useState({}); const [data3_3, setData3_3] = useState({}); const [data3_4, setData3_4] = useState({});
+  const [data4_1, setData4_1] = useState({}); const [data4_2, setData4_2] = useState({}); const [data4_3, setData4_3] = useState({});
+  const [data5_1, setData5_1] = useState({}); const [data5_2, setData5_2] = useState({}); const [data5_3, setData5_3] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const currencies = [
-    {
-      value: 'CGK(indonesia)',
-      label: 'CGK(indonesia)',
-    },
-    {
-      value: 'DPS (Indonesia),',
-      label: 'DPS (Indonesia)',
-    },
-    {
-      value: 'BIA',
-      label: 'BIA  (Sri Lanka)',
-    },
-    {
-      value: 'DEL (India)',
-      label: 'DEL (India)',
-    },
-    {
-      value: 'MAA',
-      label: 'MAA (India)',
-    },
-  ];
+  useEffect(() => {
+    axios.get("/booking/airports").then((response) => {
+      console.log(response);
 
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+      let data= response.data;
+      let countries=[];
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
+      countries= data.map((item)=>{return {value:item.airportcode,
+        label:<><p style={{margin:0}}> 
+                  <p style={{fontWeight:'bold',margin:0,marginTop:20}}>{item.cityname} - {item.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{item.airportname}   {"("+ item.airportcode + ")"}</p></p></>}})
+        
+      setCountries(countries);
     }
+    );
+  }, [])
 
-    setState({ ...state, [anchor]: open });
-  };
+  const columns1_0 = [
+    { field: 'flightid', headerName: 'FlightID', width: 80 },
+    { field: 'flightnumber', headerName: 'Flight Number', width: 120 },
+    { field: 'aircraftid', headerName: 'AircraftID', width: 100 },
+    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 250 }];
 
-  const handleListItemClick = (filePath) => {
-    // Open a local JavaScript file when a list item is clicked
-    window.location.href = filePath;
-  };
+  const columns1_1 = [
+    { field: 'ID', headerName: '#', width: 30 },
+    { field: 'seatid', headerName: 'Seat Number', width: 80 },
+    { field: 'passengerid', headerName: 'PassengerID', width: 100 },
+    { field: 'firstname', headerName: 'First Name', width: 120 },
+    { field: 'lastname', headerName: 'Last Name', width: 120 },
+    { field: 'passportnumber', headerName: 'Passport Number', width: 150 },
+    { field: 'dateofbirth', headerName: 'Date of Birth', width: 120 },
+    { field: 'contactnumber', headerName: 'Contact Number', width: 150 } ];
 
-  const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {[{text:'Explore', filePath: '/passengerDetails'}, 
-        {text:'Book', filePath: '/PassengerDetailsForm' }, 
-        {text:'Membership Privilages', filePath: '/PassengerCard' }, 
-        {text:'Admin Login', filePath: '/ReportGeneration' }].map((item, index) => (
-          <ListItem key={item.text} disablePadding onClick={() => handleListItemClick(item.filePath)}>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {[{text:'About Us', filePath: '/ReviewAndPay'}, 
-        {text:'Help', filePath: '/SeatBooking'}].map((item, index) => (
-          <ListItem key={item.text} disablePadding onClick={() => handleListItemClick(item.filePath)}>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
+  const columns2_0 = [
+    { field: 'flightid', headerName: 'FlightID', width: 120 },
+    { field: 'flightnumber', headerName: 'Flight Number', width: 130 },
+    { field: 'aircraftid', headerName: 'AircraftID', width: 100 },   
+    { field: 'passengers', headerName: 'Passengers', width: 100 },   
+    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 300 }];
+
+  const columns2_1 = [
+    { field: 'total_passengers', headerName: 'Total Passengers', width: 200}];
+
+  const columns3_0 = [
+    { field: 'passengerid', headerName: 'PassengerID', width: 100 },
+    { field: 'firstname', headerName: 'First Name', width: 130 },
+    { field: 'lastname', headerName: 'Last Name', width: 100 },   
+    { field: 'nationality', headerName: 'Nationality', width: 100 },   
+    { field: 'passportnumber', headerName: 'Passport Number', width: 300 }];
+
+  const columns3_1 = [
+    { field: 'Gold', headerName: 'Gold', width: 100},
+    { field: 'Frequent', headerName: 'Frequent', width: 100},
+    { field: 'Guest', headerName: 'Guest', width: 100}];
+
+  const columns4_1 = [
+    { field: 'flightid', headerName: 'FlightID', width: 100 },
+    { field: 'aircraftid', headerName: 'AircraftID', width: 100 },   
+    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 300 },   
+    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 300 },
+    { field: 'PassengerCount', headerName: 'Passenger Count', width: 130 }];
+
+  const columns4_2 = [
+    { field: 'flightnumber', headerName: 'Flight Nummber', width: 200},
+    { field: 'duration', headerName: 'Duration', width: 200}];
+
+  const columns4_3 = [
+    { field: 'totalcount', headerName: 'Total Passenger Count', width: 200}];
+
+  const columns5_1 = [
+    { field: 'Model', headerName: 'Model', width: 100 },
+    { field: 'FleetSize', headerName: 'Fleet Size', width: 100 },   
+    { field: 'TotalFlights', headerName: 'Total Flights', width: 150 },   
+    { field: 'Revenue', headerName: 'Revenue', width: 100 }];
+
+  const columns5_2 = [
+    { field: 'TotalFleetSize', headerName: 'Total Fleet Size', width: 150},
+    { field: 'TotalFlights', headerName: 'Total Flights', width: 150},
+    { field: 'TotalRevenue', headerName: 'Total Revenue', width: 150}];
+
+  function getFlightData() {
+      console.log("flightnumber ", flightnumber);
+      
+      axios.get("/admin1.0", {
+        params: {
+          flightnumber: flightnumber
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        let data1_0 = response.data;
+        data1_0.map((item) => {
+          item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+          return item;
+        })
+  
+        setData1_0(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });;
+      axios.get("/admin1.1", {
+        params: {
+          flightnumber: flightnumber
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        let data1_1 = response.data;
+        data1_1.map((item) => {
+          item.dateofbirth= new Date(item.dateofbirth).toDateString().slice(4,15);
+          item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+          return item;
+        })
+  
+        setData1_1(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });;
+      axios.get("/admin1.2", {
+        params: {
+          flightnumber: flightnumber
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        let data1_2 = response.data;
+        data1_2.map((item) => {
+          item.dateofbirth= new Date(item.dateofbirth).toDateString().slice(4,15);
+          item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+          return item;
+        })
+  
+        setData1_2(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });;
+  }
+
+  function getDestinationData() {
+      console.log("Destination ", Destination, "FromDate", fromDate, "toDate", toDate);
+      let date1 = new Date(fromDate);
+      date1.setDate(date1.getDate() + 1);
+      let date2 = new Date(toDate);
+      date2.setDate(date2.getDate() + 1);
+      axios.get("/admin2", {
+        params: {
+          Destination: Destination,
+          fromDate: date1.toISOString().slice(0, 10),
+          toDate: date2.toISOString().slice(0, 10),
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        let data2_0 = response.data;
+        data2_0.map((item) => {
+          item.ArrivalDateTime= new Date(item.ArrivalDateTime).toDateString().slice(0,10)+ " - "+new Date(item.ArrivalDateTime).toLocaleTimeString() +" (IST)";
+          return item;
+        })
+  
+        setData2_0(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });;
+      axios.get("/admin2.1", {
+        params: {
+          Destination: Destination,
+          fromDate: date1.toISOString().slice(0, 10),
+          toDate: date2.toISOString().slice(0, 10),
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        setData2_1(response.data);
+        setTotalPassengers(response.data.total_passengers);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });;
+  }
+
+  function getPassengerData() {
+    console.log("FromDate", fromDate, "toDate", toDate);
+    let date1 = new Date(fromDate);
+    date1.setDate(date1.getDate() + 1);
+    let date2 = new Date(toDate);
+    date2.setDate(date2.getDate() + 1);
+    axios.get("/admin3.1", {
+      params: {
+        fromDate: date1.toISOString().slice(0, 10),
+        toDate: date2.toISOString().slice(0, 10),
+      }
+    }).then((response) => {
+      console.log("API Response:", response);
+      setData3_1(response.data);
+    }).catch((error) => {
+      console.error("API Error:", error);
+    });
+    axios.get("/admin3.2", {
+        params: {
+          fromDate: date1.toISOString().slice(0, 10),
+          toDate: date2.toISOString().slice(0, 10),
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        setData3_2(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });
+      axios.get("/admin3.3", {
+        params: {
+          fromDate: date1.toISOString().slice(0, 10),
+          toDate: date2.toISOString().slice(0, 10),
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        setData3_3(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });
+      axios.get("/admin3.4", {
+        params: {
+          fromDate: date1.toISOString().slice(0, 10),
+          toDate: date2.toISOString().slice(0, 10),
+        }
+      }).then((response) => {
+        console.log("API Response:", response);         
+        setData3_4(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });
+  }
+
+  function getRouteData() {
+    console.log("Origin", Origin, "Destination ", Destination);
+    axios.get("/admin4.1", {
+      params: {
+        Origin: Origin,
+        Destination: Destination
+      }
+    }).then((response) => {
+      console.log("API Response:", response);
+      let data4_1 = response.data;
+      data4_1.map((item) => {
+        item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+        item.ArrivalDateTime= new Date(item.ArrivalDateTime).toDateString().slice(0,10)+ " - "+new Date(item.ArrivalDateTime).toLocaleTimeString() +" (IST)";
+        return item;
+      })
+
+      setData4_1(response.data);
+    }).catch((error) => {
+      console.error("API Error:", error);
+    });
+    axios.get("/admin4.2", {
+        params: {
+          Origin: Origin,
+          Destination: Destination
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        setData4_2(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });
+      axios.get("/admin4.3", {
+        params: {
+          Origin: Origin,
+          Destination: Destination
+        }
+      }).then((response) => {
+        console.log("API Response:", response);
+        setData4_3(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });
+  }
+
+  function getRevenue() {
+    console.log("Origin", Origin, "Destination ", Destination);
+    axios.get("/admin5.1").then((response) => {
+      console.log("API Response:", response);
+      setData5_1(response.data);
+    }).catch((error) => {
+      console.error("API Error:", error);
+    });
+    axios.get("/admin5.2").then((response) => {
+        console.log("API Response:", response);
+        setData5_2(response.data);
+      }).catch((error) => {
+        console.error("API Error:", error);
+      });
+  }
+
+    function CustomFooter() {
+      return ( null
+        // <Button
+        
+  
+  
+        //   onClick={() => {
+        //     navigate("/reportgeneration", {
+        //       state: {
+        //         flight: selected
+        //       }
+        //     })
+        //   }}>
+  
+  
+        //   Book and Continue
+        // </Button>
+      )
+    }
 
   return (
     <div>
-    <Box sx={{ flexGrow: 1 }}>
-    <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <Button onClick={toggleDrawer('left', true)}>
-        <MenuIcon style={{ color: 'white' }}/> {/* Display the menu icon here */}
-      </Button>
-      <Drawer
-        anchor="left" // test
-        open={state['left']}
-        onClose={toggleDrawer('left', false)}
-      >
-        {list('left')}
-      </Drawer>
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            B Airlines
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-    </Box>
-
     <Box
       sx={{
         display: 'flex',
@@ -257,12 +407,15 @@ export default function ReportGeneration() {
       </Box>
 
       <CustomTabPanel value={value} index={0}>
-      
-        <div style={{marginLeft: 300}}>
+          <div style={{marginLeft: 300}}>
             <div >
-                <TextField id="outlined-basic" label="Enter Flight No." variant="outlined" /></div></div>  
+                <TextField onChange={(e) => {
+                  setflightnumber(e.target.value)
+                  console.log(e.target.value)
+                }}
+                 id="outlined-select-currency" name="flightnumber" label="Enter Flight no." variant="outlined" /></div></div>  
                 <Button onClick={()=>{
-  
+                    getFlightData();
                 }} style={{marginLeft:700, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
                 <Typography
             variant="h6"
@@ -280,38 +433,52 @@ export default function ReportGeneration() {
               textDecoration: 'none',
             }}
           >
-            <div>using this feature you can analysis the statistics for the next immediate flight for the given</div> 
-            <div style={{marginTop:25, marginLeft:-1110}}>flight no.</div>
-          </Typography>
-        
+            <div>using this feature you can analysis the statistics for the next immediate flight for the given flight no.</div> 
+          </Typography> 
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        
-      <div style={{marginLeft: 20}}>
-            <div >
-                <TextField id="outlined-basic" label="Enter Destination" variant="outlined" /></div></div> 
+      <CustomTabPanel value={value} index={1}> 
+          <div style={{marginLeft: 20, marginTop: 20}}>
+                <TextField
+                sx={{ marginLeft: 2 }}
+                id="outlined-select-currency"
+                select
+                onChange={(e) => {
+                  setDestination(e.target.value)
+                  console.log(e.target.value)
+                }}
+                label="destination"
+                defaultValue="BIA  (Sri Lanka)"
+                helperText="select your country"
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+          </div> 
                 <DatePicker 
-                    value={departureDate}
+                    value={fromDate}
                     onChange={(e)=>{
-    
-                    setDepartureDate(e);
+                    setFromDate(e);
                     console.log(e)}}
-                    sx={{marginRight:10, marginLeft:40, marginTop:-7}} label="Form" />
+                    sx={{marginRight:10, marginLeft:50, marginTop:-10}} label="Form" />
                 <DatePicker
+                    value={toDate}
                     onChange={(e)=>{
-                    setArrivalDate(e);
+                    setToDate(e);
                     console.log(e)}}
-                    sx={{marginTop:-7}} label="Until" /> 
+                    sx={{marginTop:-10}} label="Until" /> 
                 <Button onClick={()=>{
-  
-                }} style={{marginLeft:1000, marginTop:-130}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
+                    getDestinationData();
+                }} style={{marginLeft:1100, marginTop:-160}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
                 <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            style={{marginTop:-23, marginBottom:-50}}
-            sx={{
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              style={{marginTop:-23, marginBottom:-50}}
+              sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
@@ -321,27 +488,26 @@ export default function ReportGeneration() {
               textDecoration: 'none',
             }}
           >
-            <div>using this feature you can analysis the traveling statistics for the given destination for the </div>
-            <div style={{marginTop:25, marginBottom:30, marginLeft:-1110}}>given date range.</div>
+            <div>using this feature you can analysis the traveling statistics for the given destination for the given date range</div>
           </Typography>
-
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
+            <div style={{marginLeft: 0, marginTop: 100}}>
                 <DatePicker 
-                    value={departureDate}
+                    value={fromDate}
                     onChange={(e)=>{
-    
-                    setDepartureDate(e);
+                    setFromDate(e);
                     console.log(e)}}
-                    sx={{marginRight:10, marginLeft:20}} label="Form" />
+                    sx={{marginRight:10, marginLeft:50, marginTop:-10}} label="Form" />
                 <DatePicker
+                    value={toDate}
                     onChange={(e)=>{
-                    setArrivalDate(e);
+                    setToDate(e);
                     console.log(e)}}
-                    label="Until" /> 
+                    sx={{marginTop:-10}} label="Until" /> 
                 <Button onClick={()=>{
-  
-                }} style={{marginLeft:900, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
+                    getPassengerData();
+                }} style={{marginLeft:1100, marginTop:-160}} variant="contained" startIcon={<SearchIcon />}>Search</Button></div>
                 <Typography
             variant="h6"
             noWrap
@@ -358,25 +524,56 @@ export default function ReportGeneration() {
               textDecoration: 'none',
             }}
           >
-            <div>using this feature you can analysis the booking statistics for different passenger types for the </div>
-            <div style={{marginTop:25, marginBottom:30, marginLeft:-1133}}>given date range.</div>
+            <div>using this feature you can analysis the booking statistics for different passenger types for the given date range</div>
           </Typography>
-
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        
-      <div style={{marginLeft: 200}}>
+          <div style={{marginLeft: 200}}>
             <div >
-                <TextField id="outlined-basic" label="Enter Origin" variant="outlined" />
+            <TextField
+                sx={{ marginLeft: 2 }}
+                id="outlined-select-currency"
+                select
+                onChange={(e) => {
+                  setOrigin(e.target.value)
+                  console.log(e.target.value)
+                }}
+                label="from"
+                defaultValue="BIA  (Sri Lanka)"
+                helperText="select your country"
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </div>
-      </div>  
-      <div style={{marginLeft: 500, marginTop:-55}}>
+          </div>  
+          <div style={{marginLeft: 500, marginTop:-55}}>
             <div >
-                <TextField id="outlined-basic" label="Enter Destination" variant="outlined" />
+            <TextField
+                sx={{ marginLeft: 2 }}
+                id="outlined-select-currency"
+                select
+                onChange={(e) => {
+                  setDestination(e.target.value)
+                  console.log(e.target.value)
+                }}
+                label="from"
+                defaultValue="BIA  (Sri Lanka)"
+                helperText="select your country"
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </div>
-      </div> 
+          </div> 
                 <Button onClick={()=>{
-  
+                    getRouteData();
                 }} style={{marginLeft:900, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
                 <div><Typography
             variant="h6"
@@ -393,40 +590,460 @@ export default function ReportGeneration() {
               color: 'inherit',
               textDecoration: 'none',
             }}
-          >
-            using this feature you can access in depth travel statistics for the given route.
+          >using this feature you can access in depth travel statistics for the given route.
           </Typography></div>
-
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
-      <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Flight Type</StyledTableCell>
-            <StyledTableCell align="right">Fleet Size</StyledTableCell>
-            <StyledTableCell align="right">No. of Flights&nbsp;(weekly)</StyledTableCell>
-            <StyledTableCell align="right">Revenue&nbsp;(millions)</StyledTableCell>
-            <StyledTableCell align="right">Profit&nbsp;(millions)</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          <Button onClick={()=>{
+            getRevenue();
+          }} style={{marginLeft:900, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
       </CustomTabPanel>
       </Paper>
+
+      {value === 0 && data1_0.length>0 ?  <Paper elevation={3}
+               
+               style={{marginTop:-250, width: '30%', height: '100px'}}> 
+              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>flight information</div></Typography> 
+              <DataGrid
+
+                rows={data1_0.length > 0 ? data1_0 : []}
+                columns={columns1_0}
+                getRowId={(row) => row.flightid}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                onRowClick={(e) => {
+
+                  console.log(e.row);
+                  setSelected(e.row);
+                }}
+
+                slots={{
+                  footer: CustomFooter,
+                }}
+                initialState={{
+
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+
+                pageSizeOptions={[5, 10]}
+
+              /></Paper> :null}
+              {value === 0 && data1_0.length>0 ?   <Paper elevation={3}
+               
+               style={{marginTop:-250, width: '70%', height: '300px'}}> 
+              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>passengers over 18 years</div></Typography>
+              <DataGrid
+
+                rows={data1_1.length > 0 ? data1_1 : []}
+                columns={columns1_1}
+                getRowId={(row) => row.ID}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                onRowClick={(e) => {
+
+                  console.log(e.row);
+                  setSelected(e.row);
+                }}
+
+                slots={{
+                  footer: CustomFooter
+                }}
+                initialState={{
+
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+
+                pageSizeOptions={[5, 10]}
+
+              /></Paper> :null}
+              {value === 0 && data1_0.length>0 ?  <Paper elevation={3}
+               
+               style={{marginTop:-250, width: '70%', height: '250px'}}>
+              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>passengers under 18 years</div></Typography>
+              <DataGrid
+
+                rows={data1_2.length > 0 ? data1_2 : []}
+                columns={columns1_1}
+                getRowId={(row) => row.ID}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                onRowClick={(e) => {
+
+                  console.log(e.row);
+                  setSelected(e.row);
+                }}
+
+                slots={{
+                  footer: CustomFooter,
+                }}
+                initialState={{
+
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+
+                pageSizeOptions={[5, 10]}
+
+                /></Paper> :null}
+
+      {value === 1 && data2_0.length>0 ?                
+              
+              <Paper elevation={3}
+              
+              style={{marginTop:-250, width: '40%', height: '350px'}}> 
+              
+              <DataGrid
+
+                rows={data2_0.length > 0 ? data2_0 : []}
+                columns={columns2_0}
+                getRowId={(row) => row.flightid}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                onRowClick={(e) => {
+
+                  console.log(e.row);
+                  setSelected(e.row);
+                }}
+
+                slots={{
+                  footer: CustomFooter,
+                }}
+                initialState={{
+
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+
+                pageSizeOptions={[5, 10]}
+
+              />
+              </Paper>
+          :null} 
+      {value === 1 && data2_1.length>0 ?                
+
+                <Paper elevation={3}
+
+                style={{ marginTop: 250, marginLeft: -1000, width: '15%', height: '80px' }}> 
+
+                <DataGrid
+
+                rows={data2_1.length > 0 ? data2_1 : []}
+                columns={columns2_1}
+                getRowId={(row) => row.total_passengers}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                onRowClick={(e) => {
+
+                  console.log(e.row);
+                  setSelected(e.row);
+                }}
+
+                slots={{
+                  footer: CustomFooter,
+                }}
+                initialState={{
+
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+
+                pageSizeOptions={[5, 10]}
+
+                />
+                </Paper>
+                :null}
+          {value === 2 && data3_1.length>0 ?                
+              
+              <Paper elevation={3}
+              
+              style={{marginTop:-250, width: '40%', height: '250px'}}> 
+              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Gold</div></Typography> 
+              <DataGrid
+
+                rows={data3_1.length > 0 ? data3_1 : []}
+                columns={columns3_0}
+                getRowId={(row) => row.passengerid}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                onRowClick={(e) => {
+
+                  console.log(e.row);
+                  setSelected(e.row);
+                }}
+
+                slots={{
+                  footer: CustomFooter,
+                }}
+                initialState={{
+
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+
+                pageSizeOptions={[5, 10]}
+
+              />
+              </Paper>
+          :null} 
+          {value === 2 && data3_2.length>0 ?                
+
+        <Paper elevation={3}
+
+        style={{ marginTop: -250, marginLeft: 400, width: '40%', height: '300px' }}> 
+        <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Frequent</div></Typography> 
+        <DataGrid
+
+        rows={data3_2.length > 0 ? data3_2 : []}
+        columns={columns3_0}
+        getRowId={(row) => row.passengerid}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        onRowClick={(e) => {
+
+          console.log(e.row);
+          setSelected(e.row);
+        }}
+
+        slots={{
+          footer: CustomFooter,
+        }}
+        initialState={{
+
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+
+        pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+        :null}
+        {value === 2 && data3_3.length>0 ?                
+
+        <Paper elevation={3}
+
+        style={{ marginTop: -250, marginLeft: 400, width: '40%', height: '80px' }}> 
+        <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Guest</div></Typography> 
+        <DataGrid
+
+        rows={data3_3.length > 0 ? data3_3 : []}
+        columns={columns3_0}
+        getRowId={(row) => row.passengerid}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        onRowClick={(e) => {
+
+          console.log(e.row);
+          setSelected(e.row);
+        }}
+
+        slots={{
+          footer: CustomFooter,
+        }}
+        initialState={{
+
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+
+        pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+        :null}
+        {value === 2 && data3_4.length>0 ?                
+
+        <Paper elevation={3}
+
+        style={{ marginTop: -250, marginLeft: 400, width: '20%', height: '80px' }}> 
+        <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Summary</div></Typography> 
+        <DataGrid
+
+        rows={data3_4.length > 0 ? data3_4 : []}
+        columns={columns3_1}
+        getRowId={(row) => row.Gold}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        onRowClick={(e) => {
+
+          console.log(e.row);
+          setSelected(e.row);
+        }}
+
+        slots={{
+          footer: CustomFooter,
+        }}
+        initialState={{
+
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+
+        pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+        :null}
+    {value === 3 && data4_1.length>0 ?                
+        
+        <Paper elevation={3}
+        
+        style={{marginTop:-250, width: '60%', height: '350px'}}> 
+        
+        <DataGrid
+
+          rows={data4_1.length > 0 ? data4_1 : []}
+          columns={columns4_1}
+          getRowId={(row) => row.flightid}
+          style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+          onRowClick={(e) => {
+
+            console.log(e.row);
+            setSelected(e.row);
+          }}
+
+          slots={{
+            footer: CustomFooter,
+          }}
+          initialState={{
+
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+
+          pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+    :null} 
+    {value === 3 && data4_2.length>0 ?                
+
+        <Paper elevation={3}
+
+        style={{ marginTop: -250, marginLeft: 400, width: '25%', height: '80px' }}> 
+
+        <DataGrid
+
+        rows={data4_2.length > 0 ? data4_2 : []}
+        columns={columns4_2}
+        getRowId={(row) => row.flightnumber}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        onRowClick={(e) => {
+
+          console.log(e.row);
+          setSelected(e.row);
+        }}
+
+        slots={{
+          footer: CustomFooter,
+        }}
+        initialState={{
+
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+
+        pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+        :null}
+    {value === 3 && data4_3.length>0 ?                
+
+        <Paper elevation={3}
+
+        style={{ marginTop: -250, marginLeft: 400, width: '15%', height: '80px' }}> 
+
+        <DataGrid
+
+        rows={data4_3.length > 0 ? data4_3 : []}
+        columns={columns4_3}
+        getRowId={(row) => row.totalcount}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        onRowClick={(e) => {
+
+          console.log(e.row);
+          setSelected(e.row);
+        }}
+
+        slots={{
+          footer: CustomFooter,
+        }}
+        initialState={{
+
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+
+        pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+        :null}
+    {value === 4 && data5_1.length>0 ?                
+       
+        <Paper elevation={3}
+        
+        style={{marginTop:-250, width: '60%', height: '550px'}}> 
+        
+        <DataGrid
+
+          rows={data5_1.length > 0 ? data5_1 : []}
+          columns={columns5_1}
+          getRowId={(row) => row.Model}
+          style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+          onRowClick={(e) => {
+
+            console.log(e.row);
+            setSelected(e.row);
+          }}
+
+          slots={{
+            footer: CustomFooter,
+          }}
+          pagination={false}
+
+        />
+        </Paper>
+        :null} 
+    {value === 4 && data5_2.length>0 ?                
+
+        <Paper elevation={3}
+
+        style={{ marginTop: -250, marginLeft: 400, width: '40%', height: '80px' }}> 
+
+        <DataGrid
+
+        rows={data5_2.length > 0 ? data5_2 : []}
+        columns={columns5_2}
+        getRowId={(row) => row.TotalFleetSize}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        onRowClick={(e) => {
+
+          console.log(e.row);
+          setSelected(e.row);
+        }}
+
+        slots={{
+          footer: CustomFooter,
+        }}
+        initialState={{
+
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+
+        pageSizeOptions={[5, 10]}
+
+        />
+        </Paper>
+        :null}
     </Box>
 </div>
   );

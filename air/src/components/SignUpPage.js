@@ -73,21 +73,18 @@ export default function SignUp() {
             <Box
                 sx={{
                     display: 'flex',
-                    flexWrap: 'wrap',
-                    '& > :not(style)': {
-                        m: 50,
-                        width: "60%",
-                        minHeight: 200,
-                        borderRadius: '1rem'
-                    },
+                    flexDirection: 'column',
+          alignItems: 'center',
+          padding: '20px',
+          minHeight : '100vh',
                     backgroundImage: `url(${img})`,
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPositionY: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
+              
+                }}
+                
+                >
 
                 < Paper elevation={3} style={{
                     paddingTop: 1,

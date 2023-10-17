@@ -57,22 +57,18 @@ export default function SignIn() {
     
   
     <Box
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        '& > :not(style)': {
-          m: 50,
-          width: "60%",
-          minHeight: 200,
-          borderRadius: '1rem'
-        },
-        backgroundImage: `url(${img})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPositionY: 'center',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+alignItems: 'center',
+padding: '20px',
+minHeight : '100vh',
+      backgroundImage: `url(${img})`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundPositionY: 'center',
+
+  }}
     >
       <Paper elevation={3} style={{
         padding: 8,

@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import img from '../image/airline.jpg';
-import { Paper } from "@mui/material";
+import { InputLabel, MenuItem, Paper, Select } from "@mui/material";
 
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -110,8 +110,19 @@ export default function SignUp() {
                                 Sign up
                             </Typography>
                             <Box component="form" onSubmit={handleSubmit} noValidate  sx={{ mt: 3 }}>
+                            <Grid item  xs={12} sm={4}>
+                                        <TextField
+                                        onChange={handleChange}
+                                            required
+                                            fullWidth
+                                            id="userName"
+                                            name = "userName"
+                                            label="User Name"
+                                            autoFocus
+                                        />
+                                    </Grid>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item style ={{marginTop:10}} xs={12} sm={6}>
                                         <TextField
                                         onChange = {handleChange}
                                             autoComplete="given-name"
@@ -123,7 +134,7 @@ export default function SignUp() {
                                             autoFocus
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid style ={{marginTop:10}} item xs={12} sm={6}>
                                         <TextField
                                         onChange={handleChange}
                                             required
@@ -134,29 +145,9 @@ export default function SignUp() {
                                             autoComplete="family-name"
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={4}>
-                                        <TextField
-                                        onChange={handleChange}
-                                            required
-                                            fullWidth
-                                            id="userName"
-                                            name = "userName"
-                                            label="User Name"
-                                            autoFocus
-                                        />
-                                    </Grid>
+                                 
 
-                                    <Grid item xs={12} sm={4}>
-                                        <TextField
-                                        onChange={handleChange}
-                                            required
-                                            fullWidth
-                                            id="country"
-                                            name = "country"
-                                            label="Country"
-                                            autoFocus
-                                        />
-                                    </Grid>
+                                   
                                     <Grid item xs={12}>
                                         <TextField
                                         onChange={handleChange}
@@ -239,6 +230,25 @@ export default function SignUp() {
                                     </Grid> */}
 
                                 </Grid>
+                                <Grid item xs={12} sm={4}>
+
+<InputLabel id="demo-simple-select-label">Nationality</InputLabel>
+<Select
+
+labelId="demo-simple-select-label"
+id="demo-simple-select"
+label="Nationality"
+value="Sri Lankan"
+onChange={handleChange}
+name="Nationality"
+
+>
+<MenuItem value={"Sri Lankan"}>Sri Lankan</MenuItem>
+<MenuItem value={"Indian"}>Indian</MenuItem>
+<MenuItem value={"British"}>Canadian</MenuItem>
+</Select>
+   
+</Grid>
                                 <Button
                                     
                                     type="submit"

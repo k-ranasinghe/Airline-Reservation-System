@@ -126,6 +126,8 @@ minHeight : '100vh',
                 onClick={() => {
                   authenticate();
                   // navigate('/')
+                  localStorage.setItem("isGuest", false)
+
                 }}
               >
                 Log In
@@ -138,6 +140,7 @@ minHeight : '100vh',
                 onClick={() => {
                   // authenticate()
                   navigate('/')
+                  localStorage.setItem("isGuest", true)
                 }}
               >
                 Continue as Guest

@@ -15,7 +15,7 @@ import { DatePicker, DateRangePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from "axios";
 import { DataGrid, GridColDef, GridToolbarContainer, GridValueGetterParams, useGridApiContext } from '@mui/x-data-grid';
 import { useNavigate } from "react-router-dom";
-import isAdmin, { isGuest } from "../utils/utils";
+import isAdmin, { isGuest, logout } from "../utils/utils";
 export default function SearchFlightInput() {
 
   const [data, setData] = useState({});
@@ -32,9 +32,11 @@ export default function SearchFlightInput() {
 
   useEffect(() => {
     console.log(localStorage.getItem("username"));
-    if(localStorage.getItem("userName")===''){
+
+    if(  !localStorage.getItem("userDetails") && !isGuest()){
       navigate("/loginPage");
     }
+
     
 
 
@@ -227,42 +229,33 @@ export default function SearchFlightInput() {
 
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+           
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
             <Typography style={{marginLeft:500}} variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Welcome { localStorage.getItem("userName")!=''? localStorage.getItem("userName"):""}
             </Typography>
-            <Button  onClick={()=>{
+           {isAdmin()? <Button  onClick={()=>{
               navigate("/reportGeneration")
-            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
+            }} color="inherit" > Admin</Button>:null}
             <Button onClick={()=>{
               navigate("/loginPage")
             }}
             color="inherit"> {isGuest()?"Login":""}</Button>
-            <Button color="inherit" onClick={()=>{
+            {!isGuest()?<Button color="inherit" onClick={()=>{
               axios.post('/signUp/logout').then((response)=>{
                 console.log(response);
-                localStorage.setItem("passengerDetails",null)
-                localStorage.setItem("userName",'')
-                localStorage.setItem('guestId','')
+                logout();
+                
                 navigate("/loginPage")
               }
               )
             }}
             >
-              {!isGuest()?"Log Out":""}
+              Log Out
 
-            </Button>
+            </Button>:null}
            
           </Toolbar>
         </AppBar>

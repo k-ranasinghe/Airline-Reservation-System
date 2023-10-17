@@ -14,7 +14,7 @@ import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
 import axios from "axios";
-import isAdmin, { isGuest } from "../utils/utils";
+import isAdmin, { isGuest, logout } from "../utils/utils";
 
 export default function SeatBooking() {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -174,18 +174,18 @@ export default function SeatBooking() {
             <Button onClick={() => {
               navigate("/loginPage")
             }}
-              color="inherit"> {!isGuest() ? "Login" : ""}</Button>
+              color="inherit">{isGuest() ? "Login" : ""}</Button>
             <Button color="inherit" onClick={() => {
               axios.post('/signUp/logout').then((response) => {
-                console.log(response);
-                localStorage.setItem("passengerDetails", null)
-                localStorage.setItem("userName", '')
+                logout();
+
+
                 navigate("/loginPage")
               }
               )
             }}
             >
-              {isGuest() ? "Log Out" : ""}
+              {!isGuest() ? "Log Out" : ""}
 
             </Button>
 

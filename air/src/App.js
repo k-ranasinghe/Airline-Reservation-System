@@ -10,6 +10,7 @@ import ReviewAndPay from './components/ReviewAndPay';
 import ReportGeneration from './components/ReportGeneration';
 import SignIn from './components/LoginPage';
 import SignUp from './components/SignUpPage';
+import FlightStatus from './components/FlightStatus';
 
 
 export default function App() {
@@ -26,7 +27,7 @@ export default function App() {
         <Route path="/reviewAndPay" element={<ReviewAndPay />} />
         <Route path="/loginPage" element={<SignIn/>}/>
         <Route path="/signUpPage" element={<SignUp/>}/>
-
+        <Route path="/flightStatus" element={<FlightStatus/>}/>
 
       
          

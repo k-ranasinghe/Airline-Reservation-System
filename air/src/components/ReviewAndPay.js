@@ -101,9 +101,8 @@ console.log(location.state)
 
     { field: 'FirstName', headerName: 'First Name', width: 200 },
     { field: 'LastName', headerName: 'Last Name', width: 130 },
-    { field: 'Gender', headerName: 'Male /Female', width: 130 },
 
-    { field: 'ContactNumber', headerName: 'Contact Number', width: 130 },
+    { field: 'ContactNumber1', headerName: 'Contact Number 1', width: 130 },
     { field: 'EmailAddress', headerName: 'Email Address', width: 300 }
 
 
@@ -237,19 +236,16 @@ console.log(location.state)
 
 
       <Box
-        sx={{
+         sx={{
           display: 'flex',
-          flexWrap: 'wrap',
-          '& > :not(style)': {
-            m: 50,
-            width: "60%",
-            minHeight: 200,
-            borderRadius: '1rem'
-          },
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '20px',
+          minHeight : '100vh',
           backgroundImage: `url(${img})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPositionY: 'center'
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPositionY: 'center',
         }}
       >
 

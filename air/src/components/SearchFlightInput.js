@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-
+import dayjs from "dayjs";
 import MenuIcon from '@mui/icons-material/Menu';
 import img from '../image/airline.jpg';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,12 +26,13 @@ export default function SearchFlightInput() {
   const [to, setTo] = useState(null);
   const [departureDate, setDepartureDate] = useState({});
   const [arrivalDate, setArrivalDate] = useState({});
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState(null);
+  const [error, setError] = useState({origin:false,destination:false,departureDate:false});
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log(localStorage.getItem("username"));
-    if(localStorage.getItem("username")===null){
+    if(localStorage.getItem("userName")===''){
       navigate("/loginPage");
     }
     
@@ -133,10 +134,37 @@ export default function SearchFlightInput() {
     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
   ];
+    function validateInput(){
+    let error={origin:false,destination:false,departureDate:false};
+    if(from===null){
+      error.origin=true;
+      
+    }
+    if(to===null){
+      error.destination=true;
+      
+    }
+    if(departureDate===null){
+      error.departureDate=true;
+      
+    }
+    setError(error);
+
+    if(error.origin || error.destination || error.departureDate){
+      return false;
+    }
+    else{
+      return true;
+    }
+    
+
+  }
+
 
   function getFlights() {
     console.log("from ", from, "to ", to, "departureDate ", departureDate);
     let date = new Date(departureDate);
+    console.log( "date", date)
     date.setDate(date.getDate() + 1);
     axios.get("/booking/flight", {
       params: {
@@ -162,13 +190,24 @@ export default function SearchFlightInput() {
   }
 
   function CustomFooter() {
+    if(selected!==null){
     return (
+     
       <Button
       
 
 
-        onClick={() => {
+        onClick={() => {''
+
+        if (selected === null) {
+          return
+        }
+        
+        localStorage.setItem("passengerDetails",null)
+
           navigate("/passengerDetails", {
+            
+            
             state: {
               flight: selected
             }
@@ -176,9 +215,9 @@ export default function SearchFlightInput() {
         }}>
 
 
-        Book and Continue
+        Continue
       </Button>
-    )
+    )}
   }
   return (
 
@@ -209,7 +248,7 @@ export default function SearchFlightInput() {
             <Button onClick={()=>{
               navigate("/loginPage")
             }}
-            color="inherit"> {!isGuest()?"Login":""}</Button>
+            color="inherit"> {isGuest()?"Login":""}</Button>
             <Button color="inherit" onClick={()=>{
               axios.post('/signUp/logout').then((response)=>{
                 console.log(response);
@@ -221,7 +260,7 @@ export default function SearchFlightInput() {
               )
             }}
             >
-              {isGuest()?"Log Out":""}
+              {!isGuest()?"Log Out":""}
 
             </Button>
            
@@ -233,24 +272,20 @@ export default function SearchFlightInput() {
       <Box
         sx={{
           display: 'flex',
-          flexWrap: 'wrap',
-          '& > :not(style)': {
-            m: 50,
-            width: "100%",
-           
-            
-            borderRadius: '1rem'
-          },
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '20px',
+          minHeight : '100vh',
           backgroundImage: `url(${img})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPositionY: 'center'
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPositionY: 'center',
         }}
       >
 
         <Paper elevation={3}
         
-        style={{marginTop:window.screen.height/4}}
+        style={{marginTop:0}}
         >
           
             
@@ -262,14 +297,16 @@ export default function SearchFlightInput() {
               <TextField
                 sx={{ marginLeft: 2 }}
                 id="outlined-select-currency"
+                error={error.origin}
                 select
                 onChange={(e) => {
                   setFrom(e.target.value)
+                  setError({...error,origin:false})
                   console.log(e.target.value)
                 }}
                 label="from"
                 defaultValue="BIA  (Sri Lanka)"
-                helperText="Please select your currency"
+                helperText="Please select your origin"
               >
                 {countries.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -277,18 +314,22 @@ export default function SearchFlightInput() {
                   </MenuItem>
                 ))}
               </TextField>
+              
               <TextField
                 onChange={(e) => {
                   setTo(e.target.value)
+                  setError({...error,destination:false})
+
                   console.log(e.target.value)
                 }}
                 sx={{ marginLeft: 2, marginRight: 2 }}
                 id="outlined-select-currency"
                 select
+                error={error.destination}
 
                 label="to"
                 defaultValue="BIA  (Sri Lanka)"
-                helperText="Please select your currency"
+                helperText="Please select your destination"
               >
                 {countries.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -298,9 +339,17 @@ export default function SearchFlightInput() {
               </TextField>
               <DatePicker
                 value={departureDate}
-                onChange={(e) => {
+                error={false}
+                defaultValue={dayjs('2022-07-17')}
 
-                  setDepartureDate(e);
+
+
+                
+                
+                onChange={(e) => {
+                  setError({...error,departureDate:false})
+
+                  setDepartureDate(  e);
                   console.log(e)
                 }}
                 sx={{ marginRight: 2 }} label="Departure Date" />
@@ -316,7 +365,12 @@ export default function SearchFlightInput() {
 
 
               <Button onClick={() => {
+                if(!validateInput()){
+                  return 
+                };
+
                 getFlights();
+                
               }} style={{ marginLeft: 450 ,marginTop:20,marginBottom:20}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
 
 </div>
@@ -329,7 +383,7 @@ export default function SearchFlightInput() {
        
                <Paper elevation={3}
                
-               style={{marginTop:-250}}> 
+               style={{marginTop:50}}> 
                
               <DataGrid
 

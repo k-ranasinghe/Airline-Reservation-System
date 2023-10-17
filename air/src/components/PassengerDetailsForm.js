@@ -11,27 +11,77 @@ import { DatePicker } from "@mui/x-date-pickers";
 import isAdmin, { isGuest } from "../utils/utils";
 import axios from "axios";
 
-
+import  dayjs  from 'dayjs';
  export default function PassengerDetailsForm(){
 const [passengers,setPassengers]=useState([{}]);
-const [passengerDetails,setPassengerDetails]=useState({});
+const [passengerDetails,setPassengerDetails]=useState({FirstName:null,LastName:null,Nationality:null,ContactNumber1:null,EmailAddress:null,PassportNumber:null,ContactNumber2:null});
 const {dataOfBirth,setDateOfBirth}=useState({});
+const [error, setError] = useState({FirstName:false,LastName:false,Nationality:false,ContactNumber1:false,EmailAddress:false,PassportNumber:false});
+
 
 const [flight,setFlight]=useState({});
 const navigate = useNavigate();
 const location =useLocation();
 
+function validateInput(){
+ let e=error
+console.log("passenger name",  passengerDetails.FirstName===null ||  passengerDetails.FirstName==='');
 
+
+  if (passengerDetails.FirstName===null || passengerDetails.FirstName===''){
+    e={...e,FirstName:true}
+    console.log("erro 32",e);
+    
+  }
+ 
+  if (passengerDetails.LastName===null || passengerDetails.LastName===''){
+    e={...e,LastName:true}
+  }
+
+ 
+  if( passengerDetails.ContactNumber1===null ||  passengerDetails.ContactNumber1===''){
+    e={...e,ContactNumber1:true}
+  }
+  
+
+  
+  if( passengerDetails.EmailAddress===null ||  passengerDetails.EmailAddress===''){
+    e={...e,EmailAddress:true}
+  }
+  
+
+  if( passengerDetails.PassportNumber===null ||  passengerDetails.PassportNumber===''){
+    e={...e,PassportNumber:true}
+  }
+  
+  if( passengerDetails.DateOfBirth===null ||  passengerDetails.DateOfBirth===''){
+    setError({...error,DateOfBirth:true})
+  }
+  
+  console.log("error",e,"passengerDetails",passengerDetails);
+  setError(e);
+  if(e.ContactNumber1 || e.EmailAddress || e.Nationality || e.PassportNumber || e.FirstName || e.LastName || e.DateOfBirth){
+  
+    return false;
+  } 
+  else{
+    return true;
+  }
+
+
+}
 function handleChange(event){
 
   // console.log("event",event);
 
 
   setPassengerDetails({...passengerDetails,[event.target.name]:event.target.value});
+  setError({...error,[event.target.name]:false});
   console.log("passenegers",passengerDetails);
 }
 
 useEffect(()=>{
+  
   setFlight(location.state.flight)},[]);
 
     return(
@@ -80,20 +130,17 @@ useEffect(()=>{
         </AppBar>
 </Box>
 <Box
-      sx={{
-        display: 'flex',
-        flexWrap: 'wrap',
-        '& > :not(style)': {
-          m: 50,
-          width: "60%",
-          minHeight: 200,
-          borderRadius:'1rem'
-        },
-        backgroundImage: `url(${img})`,
-        backgroundSize:"cover" ,
-        backgroundRepeat:"no-repeat" ,
-        backgroundPositionY :'center'
-      }}
+         sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '20px',
+          minHeight : '100vh',
+          backgroundImage: `url(${img})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPositionY: 'center',
+        }}
     > 
       
       <Paper elevation={3}>
@@ -117,12 +164,14 @@ useEffect(()=>{
 <div style={{margin:40}}>
             <div >
                 <TextField  onChange={handleChange}
+                error={error.FirstName}
                 
                 InputLabelProps={{
                   shrink: true,
                 }} 
                 value={passengerDetails.FirstName!=null ? passengerDetails.FirstName:passengerDetails.LastName} id="firstName" name="FirstName" label="first name"   variant="outlined"/>
                 <TextField
+                  error={error.LastName}
                  InputLabelProps={{
                   shrink: true,
                 }} 
@@ -131,13 +180,11 @@ useEffect(()=>{
                  InputLabelProps={{
                   shrink: true,
                 }} 
+                error={error.PassportNumber}
                 onChange={handleChange}  value={passengerDetails.PassportNumber} style={{ marginLeft: 20 }} name="PassportNumber" id="lastName" label="Passport Number" variant="outlined" />
-                <TextField  onChange={handleChange}
-                
-                InputLabelProps={{
-                  shrink: true,
-                }} 
-                value={passengerDetails.ContactNumber1} id="firstName" name="ContactNumber1" label="ContactNumber1"   variant="outlined"/>
+              
+
+
                 <FormControl style={{
                     marginLeft: 20,
                     marginRight:20
@@ -149,20 +196,22 @@ useEffect(()=>{
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    value={passengerDetails.naitionality?passengerDetails.naitionality:"sri lankan"}
-    label="naitionality"
+    value={passengerDetails.Nationality?passengerDetails.Nationality:"Sri Lankan"}
+    label="Nationality"
     onChange={handleChange}
-    name="naitionality"
+    name="Nationality"
+    
   >
-    <MenuItem value={"sri lankan"}>Sri lankan</MenuItem>
-    <MenuItem value={"indian"}>Indian</MenuItem>
-    <MenuItem value={"british"}>Canadian</MenuItem>
+    <MenuItem value={"Sri Lankan"}>Sri Lankan</MenuItem>
+    <MenuItem value={"Indian"}>Indian</MenuItem>
+    <MenuItem value={"British"}>Canadian</MenuItem>
   </Select>
 </FormControl>
                   <DatePicker
                 style={{ marginLeft: 20 }}
                 name="dateOfBirth"
-                // value={new Date(passengerDetails.DateOfBirth)}
+                value={ dayjs(passengerDetails.DateOfBirth)}
+                error={error.DateOfBirth}
 
                     onChange={(e) => {
                         console.log(e)
@@ -176,34 +225,42 @@ useEffect(()=>{
                 <TextField id="outlined-basic"  InputLabelProps={{
             shrink: true,
           }} 
-          onChange={handleChange} value={passengerDetails.EmailAddress} name="EmailAddress" label="Email Address" variant="outlined" />
+          error={error.EmailAddress}
+          onChange={handleChange}  value={passengerDetails.EmailAddress} name="EmailAddress" label="Email Address" variant="outlined" />
+
+<TextField  onChange={handleChange}
+                
+                InputLabelProps={{
+                  shrink: true,
+                }} 
+                error={error.ContactNumber1}
+                value={passengerDetails.ContactNumber1}  style={{ marginLeft: 20 }}  id="firstName" name="ContactNumber1" label="ContactNumber1"   variant="outlined"/>
+                <TextField  onChange={handleChange}
+                
+                InputLabelProps={{
+                  shrink: true,
+                }} 
+                error={error.ContactNumber1}
+                value={passengerDetails.ContactNumber2} style={{ marginLeft: 20 }} id="firstName" name="ContactNumber2" label="ContactNumber 2"   variant="outlined"/>
            
-<FormControl style={{ marginLeft: 20 }} >
-                    <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-                    <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="gender"
 
-
-
-    value={passengerDetails.dateOfBirth}
-    onChange={handleChange}
-
-                    >
-                        <FormControlLabel  value="female" control={<Radio  />} label="Female" />
-                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-
-                    </RadioGroup>
-                </FormControl>
             </div>
         </div>
         <Button
         fullWidth={true}
+
         
           
           
           onClick={()=>{
+           if(!validateInput()){
+              return;
+           }
+
+
+           localStorage.setItem("passengerDetails", JSON.stringify(passengerDetails))
+
+
             navigate('/seatBooking',{
               state: {
                 passengerDetails: passengerDetails,
@@ -214,7 +271,7 @@ useEffect(()=>{
           }}>
 
 
-            Book and Continue
+             Continue
           </Button>
 
 

@@ -3,7 +3,8 @@ export  default function isAdmin(){
      return true ;
 }
 
-export   function isGuest(){
+export  function isGuest(){
     let userName= localStorage.getItem("userName")
-    return userName==''?false:true;
+    console.log("userName",userName)
+    return userName===''?true:false;
 }

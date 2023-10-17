@@ -16,7 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DataGrid, GridActionsCellItem, GridSaveAltIcon } from "@mui/x-data-grid";
 import Backdrop from '@mui/material/Backdrop';
 import axios from "axios";
-import isAdmin, { isGuest } from "../utils/utils";
+import isAdmin, { isGuest, logout } from "../utils/utils";
 export default function ReviewAndPay() {
 
 
@@ -29,48 +29,55 @@ export default function ReviewAndPay() {
   const [flight, setFlight] = useState({});
   const [passengerDetails, setPassengerDetails] = useState({});
   const [seat, setSeat] = useState([]);
-  const[contactDeatils,setContactDetails]=useState({});
+  const [contactDeatils, setContactDetails] = useState({});
   const [details, setDetails] = useState([])
-  const [origin,setOrigin]=useState({});
-  const [destination,setDestination]=useState({});
+  const [origin, setOrigin] = useState({});
+  const [destination, setDestination] = useState({});
 
-  function getAirportLocation(origin, desitination) { 
+
+
+  function getAirportLocation(origin, desitination) {
     axios.get("/booking/aiportLocation", {
       params: {
         origin: origin,
         destination: desitination
       }
     }).then((response) => {
-      console.log("ariport ",response);
+      console.log("ariport ", response);
       setOrigin(response.data.find((item) => item.airportcode === origin))
       setDestination(response.data.find((item) => item.airportcode === desitination))
-     
+
     })
   }
-function createTicket(){
-  console.log(location.state.bookingDetails[0])
-  axios.post("/booking/createPayment",{
-    bookingId:location.state.bookingDetails[0].BookingID,
-    passengerID:location.state.bookingDetails[0].PassengerID
-    
-  }).then((response)=>{
-    console.log(response);
-  })
-}
+  function createTicket() {
+    console.log(location.state.bookingDetails[0])
+    axios.post("/booking/createPayment", {
+      bookingId: location.state.bookingDetails[0].BookingID,
+      passengerID: location.state.bookingDetails[0].PassengerID
 
-  useEffect(()=>{
+    }).then((response) => {
+      console.log(response);
+    })
+  }
 
-    getAirportLocation(location.state.flight.Origin,location.state.flight.Destination);
-  },[])
   useEffect(() => {
-console.log(location.state)
+    if (localStorage.getItem("seat") !== null) {
 
-    setFlight([{id:1, ...location.state.flight}])
-    setPassengerDetails([{id:1,...location.state.passengerDetails}])
-    setContactDetails({emailAddress: location.state.passengerDetails.emailAddress,
-                        contactNumber: location.state.passengerDetails.contactNumber});
-    setSeat([{seatNO: location.state.bookedSeat,travelClass : location.state.travelClass,id:1}])
-    setDetails([{ 
+      setPassengerDetails(JSON.parse(localStorage.getItem("passengerDetails")))
+    }
+    getAirportLocation(location.state.flight.Origin, location.state.flight.Destination);
+  }, [])
+  useEffect(() => {
+    console.log(location.state)
+
+    setFlight([{ id: 1, ...location.state.flight }])
+    setPassengerDetails([{ id: 1, ...location.state.passengerDetails }])
+    setContactDetails({
+      emailAddress: location.state.passengerDetails.emailAddress,
+      contactNumber: location.state.passengerDetails.contactNumber
+    });
+    setSeat([{ seatNO: location.state.bookedSeat, travelClass: location.state.travelClass, id: 1 }])
+    setDetails([{
       id: "1",
       desitination: location.state.flight.desitination,
       origin: location.state.flight.origin,
@@ -110,15 +117,15 @@ console.log(location.state)
 
   const flightColumn = [
     { field: 'id:', headerName: '', width: 70 },
-    
+
 
 
 
     { field: 'FlightNumber', headerName: 'Flight Number', width: 100 },
     { field: 'AircraftID', headerName: 'Air Bus', width: 100 },
 
-    { field: 'DepartureDateTime', headerName: 'Departure Time' , width: 250},
-    { field: 'ArrivalDateTime', headerName: 'Expected Arrival', width: 300},
+    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 250 },
+    { field: 'ArrivalDateTime', headerName: 'Expected Arrival', width: 300 },
 
     { field: 'Duration', headerName: 'Duration', width: 100 }
 
@@ -132,12 +139,12 @@ console.log(location.state)
 
     { field: 'travelClass', headerName: 'Travel Class', width: 200 },
     { field: 'seatNO', headerName: 'Seat no', width: 130 }
-    
+
 
 
   ];
 
- 
+
   const columns = [
     { field: 'id:', headerName: 'id:', width: 0 },
 
@@ -177,12 +184,12 @@ console.log(location.state)
   }]
 
 
-  function bookTicket(){
-    axios.post("/bookTicket",{
-      flight:flight,
-      passengerDetails:passengerDetails,
-      seat:seat
-    }).then((response)=>{
+  function bookTicket() {
+    axios.post("/bookTicket", {
+      flight: flight,
+      passengerDetails: passengerDetails,
+      seat: seat
+    }).then((response) => {
       console.log(response);
     })
 
@@ -194,7 +201,7 @@ console.log(location.state)
 
       <Box sx={{ flexGrow: 1 }}>
 
-      <AppBar position="static">
+        <AppBar position="static">
           <Toolbar>
             <IconButton
               size="large"
@@ -208,40 +215,39 @@ console.log(location.state)
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
-            
-            <Button  onClick={()=>{
+
+            <Button onClick={() => {
               navigate("/reportGeneration")
-            }} color="inherit" > {isAdmin()?"Admin":""} </Button>
-            <Button onClick={()=>{
+            }} color="inherit" > {isAdmin() ? "Admin" : ""} </Button>
+            <Button onClick={() => {
               navigate("/loginPage")
             }}
-            color="inherit"> {!isGuest()?"Login":""}</Button>
-            <Button color="inherit" onClick={()=>{
-              axios.post('/signUp/logout').then((response)=>{
-                console.log(response);
-                localStorage.setItem("passengerDetails",null)
-                localStorage.setItem("userName",'')
+              color="inherit"> {isGuest() ? "Login" : ""}</Button>
+            <Button color="inherit" onClick={() => {
+              axios.post('/signUp/logout').then((response) => {
+                logout();
+
                 navigate("/loginPage")
               }
               )
             }}
             >
-              {isGuest()?"Log Out":""}
+              {!isGuest() ? "Log Out" : ""}
 
             </Button>
-           
+
           </Toolbar>
         </AppBar>
       </Box>
 
 
       <Box
-         sx={{
+        sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           padding: '20px',
-          minHeight : '100vh',
+          minHeight: '100vh',
           backgroundImage: `url(${img})`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
@@ -257,32 +263,32 @@ console.log(location.state)
 
               <h1 >Booking Summary</h1>
             </div>
-<div style={{display:'flow', flexDirection:'row'}}>
-            
-           <div>
-            <p style={{margin:0,marginLeft:30}}> 
-            <p>
-            From                                    
-            </p>
-            
-                  <p style={{fontWeight:'bold',margin:0,marginTop:-10}}>{origin.cityname} - {origin.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{origin.airportname}   {"("+ origin.airportcode + ")"}</p></p>
-                  </div>
-                  <div>
+            <div style={{ display: 'flow', flexDirection: 'row' }}>
 
-           <p style={{margin:0,marginLeft:30,marginTop:30}}> 
-           <p>
-           To
-           </p>
-           <br/>
-                 <p style={{fontWeight:'bold',margin:0,marginTop:-30}}>{destination.cityname} - {destination.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{destination.airportname}   {"("+ destination.airportcode + ")"}</p></p>
-                 </div>
+              <div>
+                <p style={{ margin: 0, marginLeft: 30 }}>
+                  <p>
+                    From
+                  </p>
 
-                 </div>
-            <div style={{ alignSelf: 'center', marginLeft: 30,marginTop:20 ,justifyContent: 'center' }}>
+                  <p style={{ fontWeight: 'bold', margin: 0, marginTop: -10 }}>{origin.cityname} - {origin.countryname}</p><br /><p style={{ fontSize: 15, margin: 0, marginTop: -20 }}>{origin.airportname}   {"(" + origin.airportcode + ")"}</p></p>
+              </div>
+              <div>
+
+                <p style={{ margin: 0, marginLeft: 30, marginTop: 30 }}>
+                  <p>
+                    To
+                  </p>
+                  <br />
+                  <p style={{ fontWeight: 'bold', margin: 0, marginTop: -30 }}>{destination.cityname} - {destination.countryname}</p><br /><p style={{ fontSize: 15, margin: 0, marginTop: -20 }}>{destination.airportname}   {"(" + destination.airportcode + ")"}</p></p>
+              </div>
+
+            </div>
+            <div style={{ alignSelf: 'center', marginLeft: 30, marginTop: 20, justifyContent: 'center' }}>
 
 
 
-              { details.length>0? <>
+              {details.length > 0 ? <>
                 <DataGrid
 
                   rows={flight}
@@ -302,60 +308,27 @@ console.log(location.state)
 
                 />
 
-              </>:null}
+              </> : null}
             </div>
-            <div style={{ alignSelf: 'center', marginLeft: 30, marginTop:40,justifyContent: 'center' }}>
+            <div style={{ alignSelf: 'center', marginLeft: 30, marginTop: 40, justifyContent: 'center' }}>
 
 
-<h3 >Passenger Details </h3>
-</div>
+              <h3 >Passenger Details </h3>
+            </div>
 
-<div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
-
-
-
-{ details.length>0? <>
-  <DataGrid
-
-    rows={passengerDetails}
-    columns={passengerColumn}
-    style={{ border: 20 }}
-    disableRowSelectionOnClick
-    disableSelectionOnClick
-    hideFooter
+            <div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
 
 
 
+              {details.length > 0 ? <>
+                <DataGrid
 
-
-
-
-
-
-  />
-
-</>:null}
-</div>
-
-<div style={{ alignSelf: 'center', marginLeft: 30, marginTop:40, justifyContent: 'center' }}>
-
-
-<h3 >Selected Seat</h3>
-</div>
-
-<div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
-
-
-
-{ details.length>0? <>
-  <DataGrid
-
-    rows={seat}
-    columns={seatColumn}
-    style={{ border: 20 }}
-    disableRowSelectionOnClick
-    disableSelectionOnClick
-    hideFooter
+                  rows={passengerDetails}
+                  columns={passengerColumn}
+                  style={{ border: 20 }}
+                  disableRowSelectionOnClick
+                  disableSelectionOnClick
+                  hideFooter
 
 
 
@@ -365,10 +338,43 @@ console.log(location.state)
 
 
 
-  />
+                />
 
-</>:null}
-</div>
+              </> : null}
+            </div>
+
+            <div style={{ alignSelf: 'center', marginLeft: 30, marginTop: 40, justifyContent: 'center' }}>
+
+
+              <h3 >Selected Seat</h3>
+            </div>
+
+            <div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+
+
+
+              {details.length > 0 ? <>
+                <DataGrid
+
+                  rows={seat}
+                  columns={seatColumn}
+                  style={{ border: 20 }}
+                  disableRowSelectionOnClick
+                  disableSelectionOnClick
+                  hideFooter
+
+
+
+
+
+
+
+
+
+                />
+
+              </> : null}
+            </div>
             <Button
               fullWidth={true}
 

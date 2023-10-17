@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useHistory, useLocation, useNavigate } from "react-router-dom";
 import PassengerDetailCard from "./PassengerCard";
 import { DatePicker } from "@mui/x-date-pickers";
-import isAdmin, { isGuest } from "../utils/utils";
+import isAdmin, { isGuest, logout } from "../utils/utils";
 import axios from "axios";
 
 import  dayjs  from 'dayjs';
@@ -111,18 +111,17 @@ useEffect(()=>{
             <Button onClick={()=>{
               navigate("/loginPage")
             }}
-            color="inherit"> {!isGuest()?"Login":""}</Button>
+            color="inherit"> {isGuest()?"Login":""}</Button>
             <Button color="inherit" onClick={()=>{
               axios.post('/signUp/logout').then((response)=>{
-                console.log(response);
-                localStorage.setItem("passengerDetails",null)
-                localStorage.setItem("userName",'')
+                logout();
+
                 navigate("/loginPage")
               }
               )
             }}
             >
-              {isGuest()?"Log Out":""}
+              {!isGuest()?"Log Out":""}
 
             </Button>
            
@@ -169,7 +168,7 @@ useEffect(()=>{
                 InputLabelProps={{
                   shrink: true,
                 }} 
-                value={passengerDetails.FirstName!=null ? passengerDetails.FirstName:passengerDetails.LastName} id="firstName" name="FirstName" label="first name"   variant="outlined"/>
+                value={passengerDetails.FirstName} id="firstName" name="FirstName" label="first name"   variant="outlined"/>
                 <TextField
                   error={error.LastName}
                  InputLabelProps={{

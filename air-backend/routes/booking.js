@@ -3,6 +3,7 @@ import express from "express";
 
 import { createBooking, createGuestUser, createPassenger, createPayment, getAirportLocation, getAriports, getBookingById, getBussinessSeatsFromDB, getEconomySeatsFromDB, getFlightsFromDB, getFlightsWithPricesFromDB, getPlatinumSeatsFromDB, updateBooking } from "../../air-backend/database.js";
 import requireAuth from "../utils/authentication.js";
+import main from "../mailer.js";
 var router = express.Router();
 
 
@@ -77,6 +78,7 @@ router.post ('/bookTicket', async (req, res) => {
 )
 router.post ('/createPayment', async (req, res) => { 
     console.log("request",  req.body);
+    main()
 
     const result = await updateBooking(req.body.bookingId);
     const payment = await createPayment(req.body.bookingId,req.body.passengerID);

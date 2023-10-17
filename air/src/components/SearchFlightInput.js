@@ -27,69 +27,39 @@ export default function SearchFlightInput() {
   const [departureDate, setDepartureDate] = useState({});
   const [arrivalDate, setArrivalDate] = useState({});
   const [selected, setSelected] = useState(null);
-  const [error, setError] = useState({origin:false,destination:false,departureDate:false});
+  const [error, setError] = useState({ origin: false, destination: false, departureDate: false });
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log(localStorage.getItem("username"));
 
-    if(  !localStorage.getItem("userDetails") && !isGuest()){
+    if (!localStorage.getItem("userDetails") && !isGuest()) {
       navigate("/loginPage");
     }
 
-    
+
 
 
     axios.get("/booking/airports").then((response) => {
       console.log(response);
 
-      let data= response.data;
-      let countries=[];
+      let data = response.data;
+      let countries = [];
 
-      countries= data.map((item)=>{return {value:item.airportcode,
-        label:<><p style={{margin:0}}> 
-                  <p style={{fontWeight:'bold',margin:0,marginTop:20}}>{item.cityname} - {item.countryname}</p><br/><p style={{fontSize:15,margin:0,marginTop:-20}}>{item.airportname}   {"("+ item.airportcode + ")"}</p></p></>}})
-        
+      countries = data.map((item) => {
+        return {
+          value: item.airportcode,
+          label: <><p style={{ margin: 0 }}>
+            <p style={{ fontWeight: 'bold', margin: 0, marginTop: 20 }}>{item.cityname} - {item.countryname}</p><br /><p style={{ fontSize: 15, margin: 0, marginTop: -20 }}>{item.airportname}   {"(" + item.airportcode + ")"}</p></p></>
+        }
+      })
+
       setCountries(countries);
     }
     );
   }, [])
 
 
-  // useEffect(() => {
-  //     axios.get("/airbus").then((response) => {
-  //       console.log(response);
-  //     });
-
-  //     // fetch("/").then((response) => {
-  //     //     console.log(response);
-  //     //     }
-  //     // );
-
-  // },[])
-
-  // const countries = [
-  //   {
-  //     value: 'CGK',
-  //     label: 'CGK(indonesia)',
-  //   },
-  //   {
-  //     value: 'DPS,',
-  //     label: 'DPS (Indonesia)',
-  //   },
-  //   {
-  //     value: 'BIA',
-  //     label: 'BIA  (Sri Lanka)',
-  //   },
-  //   {
-  //     value: 'DEL',
-  //     label: 'DEL (India)',
-  //   },
-  //   {
-  //     value: 'MAA',
-  //     label: 'MAA (India)',
-  //   },
-  // ];
 
   const columns = [
 
@@ -136,29 +106,29 @@ export default function SearchFlightInput() {
     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
   ];
-    function validateInput(){
-    let error={origin:false,destination:false,departureDate:false};
-    if(from===null){
-      error.origin=true;
-      
+  function validateInput() {
+    let error = { origin: false, destination: false, departureDate: false };
+    if (from === null) {
+      error.origin = true;
+
     }
-    if(to===null){
-      error.destination=true;
-      
+    if (to === null) {
+      error.destination = true;
+
     }
-    if(departureDate===null){
-      error.departureDate=true;
-      
+    if (departureDate === null) {
+      error.departureDate = true;
+
     }
     setError(error);
 
-    if(error.origin || error.destination || error.departureDate){
+    if (error.origin || error.destination || error.departureDate) {
       return false;
     }
-    else{
+    else {
       return true;
     }
-    
+
 
   }
 
@@ -166,7 +136,7 @@ export default function SearchFlightInput() {
   function getFlights() {
     console.log("from ", from, "to ", to, "departureDate ", departureDate);
     let date = new Date(departureDate);
-    console.log( "date", date)
+    console.log("date", date)
     date.setDate(date.getDate() + 1);
     axios.get("/booking/flight", {
       params: {
@@ -179,10 +149,10 @@ export default function SearchFlightInput() {
       let data = response.data;
       data.map((item) => {
         // add key id to each object
-        item.ArrivalDateTime= new Date(item.ArrivalDateTime).toDateString().slice(0,10)+ " - "+new Date(item.ArrivalDateTime).toLocaleTimeString() +" (IST)";
-        item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+        item.ArrivalDateTime = new Date(item.ArrivalDateTime).toDateString().slice(0, 10) + " - " + new Date(item.ArrivalDateTime).toLocaleTimeString() + " (IST)";
+        item.DepartureDateTime = new Date(item.DepartureDateTime).toDateString().slice(0, 10) + " - " + new Date(item.DepartureDateTime).toLocaleTimeString() + " (IST)";
         item.id = item.AircraftID;
-        item.Origin=item.Origin
+        item.Origin = item.Origin
         return item;
       })
 
@@ -192,34 +162,36 @@ export default function SearchFlightInput() {
   }
 
   function CustomFooter() {
-    if(selected!==null){
-    return (
-     
-      <Button
-      
+    if (selected !== null) {
+      return (
+
+        <Button
 
 
-        onClick={() => {''
 
-        if (selected === null) {
-          return
-        }
-        
-        localStorage.setItem("passengerDetails",null)
+          onClick={() => {
+            ''
 
-          navigate("/passengerDetails", {
-            
-            
-            state: {
-              flight: selected
+            if (selected === null) {
+              return
             }
-          })
-        }}>
+
+            localStorage.setItem("passengerDetails", null)
+
+            navigate("/passengerDetails", {
 
 
-        Continue
-      </Button>
-    )}
+              state: {
+                flight: selected
+              }
+            })
+          }}>
+
+
+          Continue
+        </Button>
+      )
+    }
   }
   return (
 
@@ -229,25 +201,25 @@ export default function SearchFlightInput() {
 
         <AppBar position="static">
           <Toolbar>
-           
+
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
-            <Typography style={{marginLeft:500}} variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Welcome { localStorage.getItem("userName")!=''? localStorage.getItem("userName"):""}
+            <Typography style={{ marginLeft: 500 }} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Welcome {localStorage.getItem("userName") != '' ? localStorage.getItem("userName") : ""}
             </Typography>
-           {isAdmin()? <Button  onClick={()=>{
+            {isAdmin() ? <Button onClick={() => {
               navigate("/reportGeneration")
-            }} color="inherit" > Admin</Button>:null}
-            <Button onClick={()=>{
+            }} color="inherit" > Admin</Button> : null}
+            <Button onClick={() => {
               navigate("/loginPage")
             }}
-            color="inherit"> {isGuest()?"Login":""}</Button>
-            {!isGuest()?<Button color="inherit" onClick={()=>{
-              axios.post('/signUp/logout').then((response)=>{
+              color="inherit"> {isGuest() ? "Login" : ""}</Button>
+            {!isGuest() ? <Button color="inherit" onClick={() => {
+              axios.post('/signUp/logout').then((response) => {
                 console.log(response);
                 logout();
-                
+
                 navigate("/loginPage")
               }
               )
@@ -255,8 +227,8 @@ export default function SearchFlightInput() {
             >
               Log Out
 
-            </Button>:null}
-           
+            </Button> : null}
+
           </Toolbar>
         </AppBar>
       </Box>
@@ -268,7 +240,7 @@ export default function SearchFlightInput() {
           flexDirection: 'column',
           alignItems: 'center',
           padding: '20px',
-          minHeight : '100vh',
+          minHeight: '100vh',
           backgroundImage: `url(${img})`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
@@ -277,16 +249,16 @@ export default function SearchFlightInput() {
       >
 
         <Paper elevation={3}
-        
-        style={{marginTop:0}}
+
+          style={{ marginTop: 0 }}
         >
-          
-            
-            <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
 
 
-              <h1 >Search Flight</h1></div>
-<div>
+          <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+
+
+            <h1 >Search Flight</h1></div>
+            <div>
               <TextField
                 sx={{ marginLeft: 2 }}
                 id="outlined-select-currency"
@@ -294,7 +266,7 @@ export default function SearchFlightInput() {
                 select
                 onChange={(e) => {
                   setFrom(e.target.value)
-                  setError({...error,origin:false})
+                  setError({ ...error, origin: false })
                   console.log(e.target.value)
                 }}
                 label="from"
@@ -307,11 +279,11 @@ export default function SearchFlightInput() {
                   </MenuItem>
                 ))}
               </TextField>
-              
+
               <TextField
                 onChange={(e) => {
                   setTo(e.target.value)
-                  setError({...error,destination:false})
+                  setError({ ...error, destination: false })
 
                   console.log(e.target.value)
                 }}
@@ -330,6 +302,7 @@ export default function SearchFlightInput() {
                   </MenuItem>
                 ))}
               </TextField>
+              
               <DatePicker
                 value={departureDate}
                 error={false}
@@ -337,12 +310,12 @@ export default function SearchFlightInput() {
 
 
 
-                
-                
-                onChange={(e) => {
-                  setError({...error,departureDate:false})
 
-                  setDepartureDate(  e);
+
+                onChange={(e) => {
+                  setError({ ...error, departureDate: false })
+
+                  setDepartureDate(e);
                   console.log(e)
                 }}
                 sx={{ marginRight: 2 }} label="Departure Date" />
@@ -353,75 +326,62 @@ export default function SearchFlightInput() {
                   console.log(e)
                 }}
                 label="Arrival Date" /> */}
-</div>
-<div>
+            </div>
+            <div>
 
 
               <Button onClick={() => {
-                if(!validateInput()){
-                  return 
+                if (!validateInput()) {
+                  return
                 };
 
                 getFlights();
-                
-              }} style={{ marginLeft: 450 ,marginTop:20,marginBottom:20}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
 
-</div>
-              </>
+              }} style={{ marginLeft: 450, marginTop: 20, marginBottom: 20 }} variant="contained" startIcon={<SearchIcon />}>Search</Button>
 
-</Paper>
-             
-             {data.length>0 ?  
-              
-       
-               <Paper elevation={3}
-               
-               style={{marginTop:50}}> 
-               
-              <DataGrid
+            </div>
+          </>
 
-                rows={data.length > 0 ? data : []}
-                columns={columns}
-                style={{ border: 20}}
-                onRowClick={(e) => {
+        </Paper>
 
-                  console.log(e.row);
-                  setSelected(e.row);
-                }}
-
-                slots={{
-                  footer: CustomFooter,
-                }}
-                initialState={{
-
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-
-                pageSizeOptions={[5, 10]}
-
-              />
- </Paper>
-           :null}
-            {/* <Button
-              fullWidth={true}
-
-              onClick={() => {
-                navigate("/passengerDetails", {
-                  state: {
-                    flight: selected
-                  }
-                })
-              }}>
+        {data.length > 0 ?
 
 
-              Book and Continue
-            </Button> */}
-           
+          <Paper elevation={3}
+
+            style={{ marginTop: 50 }}>
+
+            <DataGrid
+
+              rows={data.length > 0 ? data : []}
+              columns={columns}
+              style={{ border: 20 }}
+              onRowClick={(e) => {
+
+                console.log(e.row);
+                setSelected(e.row);
+              }}
+
+              slots={{
+                footer: CustomFooter,
+              }}
+              initialState={{
+
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+
+              pageSizeOptions={[5, 10]}
+
+            />
+          </Paper>
+          : null}
+
+
 
       </Box>
-    
+
 
     </div>
   );

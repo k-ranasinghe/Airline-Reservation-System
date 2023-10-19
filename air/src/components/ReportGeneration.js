@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Paper, TextField } from "@mui/material";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -13,6 +17,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
+import isAdmin, { isGuest } from "../utils/utils";
 
 
 function CustomTabPanel(props) {
@@ -66,7 +71,7 @@ export default function ReportGeneration() {
   const [data2_0, setData2_0] = useState({}); const [data2_1, setData2_1] = useState({});
   const [data3_1, setData3_1] = useState({}); const [data3_2, setData3_2] = useState({}); const [data3_3, setData3_3] = useState({}); const [data3_4, setData3_4] = useState({});
   const [data4_1, setData4_1] = useState({}); const [data4_2, setData4_2] = useState({}); const [data4_3, setData4_3] = useState({});
-  const [data5_1, setData5_1] = useState({}); const [data5_2, setData5_2] = useState({}); const [data5_3, setData5_3] = useState({});
+  const [data5_1, setData5_1] = useState({}); const [data5_2, setData5_2] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -89,62 +94,65 @@ export default function ReportGeneration() {
   }, [])
 
   const columns1_0 = [
-    { field: 'flightid', headerName: 'FlightID', width: 80 },
-    { field: 'flightnumber', headerName: 'Flight Number', width: 120 },
-    { field: 'aircraftid', headerName: 'AircraftID', width: 100 },
-    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 250 }];
+    { field: 'flightid', headerName: 'FlightID', width: 180 },
+    { field: 'aircraftid', headerName: 'AircraftID', width: 180 },
+    { field: 'Origin', headerName: 'Origin', width: 150 },
+    { field: 'Destination', headerName: 'Destination', width: 200 },
+    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 500 },
+    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 450 }];
 
   const columns1_1 = [
-    { field: 'ID', headerName: '#', width: 30 },
-    { field: 'seatid', headerName: 'Seat Number', width: 80 },
-    { field: 'passengerid', headerName: 'PassengerID', width: 100 },
-    { field: 'firstname', headerName: 'First Name', width: 120 },
-    { field: 'lastname', headerName: 'Last Name', width: 120 },
-    { field: 'passportnumber', headerName: 'Passport Number', width: 150 },
-    { field: 'dateofbirth', headerName: 'Date of Birth', width: 120 },
-    { field: 'contactnumber', headerName: 'Contact Number', width: 150 } ];
+    { field: 'ID', headerName: '#', width: 70 },
+    { field: 'seatid', headerName: 'Seat Number', width: 200 },
+    { field: 'passengerid', headerName: 'PassengerID', width: 200 },
+    { field: 'firstname', headerName: 'First Name', width: 220 },
+    { field: 'lastname', headerName: 'Last Name', width: 250 },
+    { field: 'passportnumber', headerName: 'Passport Number', width: 250 },
+    { field: 'dateofbirth', headerName: 'Date of Birth', width: 220 },
+    { field: 'contactnumber1', headerName: 'Contact Number', width: 220 },
+    { field: 'ContactNumber2', headerName: 'Contact Number', width: 200 } ];
 
   const columns2_0 = [
     { field: 'flightid', headerName: 'FlightID', width: 120 },
-    { field: 'flightnumber', headerName: 'Flight Number', width: 130 },
-    { field: 'aircraftid', headerName: 'AircraftID', width: 100 },   
-    { field: 'passengers', headerName: 'Passengers', width: 100 },   
-    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 300 }];
+    { field: 'flightnumber', headerName: 'Flight Number', width: 220 },
+    { field: 'aircraftid', headerName: 'AircraftID', width: 180 },   
+    { field: 'passengers', headerName: 'Passengers', width: 180 },   
+    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 375 }];
 
   const columns2_1 = [
-    { field: 'total_passengers', headerName: 'Total Passengers', width: 200}];
+    { field: 'total_passengers', headerName: '', width: 200}];
 
   const columns3_0 = [
-    { field: 'passengerid', headerName: 'PassengerID', width: 100 },
-    { field: 'firstname', headerName: 'First Name', width: 130 },
-    { field: 'lastname', headerName: 'Last Name', width: 100 },   
-    { field: 'nationality', headerName: 'Nationality', width: 100 },   
-    { field: 'passportnumber', headerName: 'Passport Number', width: 300 }];
+    { field: 'passengerid', headerName: 'PassengerID', width: 200 },
+    { field: 'firstname', headerName: 'First Name', width: 220 },
+    { field: 'lastname', headerName: 'Last Name', width: 220 },   
+    { field: 'nationality', headerName: 'Nationality', width: 180 },   
+    { field: 'passportnumber', headerName: 'Passport Number', width: 220 }];
 
   const columns3_1 = [
-    { field: 'Gold', headerName: 'Gold', width: 100},
-    { field: 'Frequent', headerName: 'Frequent', width: 100},
-    { field: 'Guest', headerName: 'Guest', width: 100}];
+    { field: 'Gold', headerName: 'Gold', width: 150},
+    { field: 'Frequent', headerName: 'Frequent', width: 180},
+    { field: 'Guest', headerName: 'Guest', width: 150}];
 
   const columns4_1 = [
-    { field: 'flightid', headerName: 'FlightID', width: 100 },
-    { field: 'aircraftid', headerName: 'AircraftID', width: 100 },   
-    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 300 },   
-    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 300 },
-    { field: 'PassengerCount', headerName: 'Passenger Count', width: 130 }];
+    { field: 'flightid', headerName: 'FlightID', width: 140 },
+    { field: 'aircraftid', headerName: 'AircraftID', width: 150 },   
+    { field: 'DepartureDateTime', headerName: 'Departure Time', width: 400 },   
+    { field: 'ArrivalDateTime', headerName: 'Arrival Time', width: 400 },
+    { field: 'PassengerCount', headerName: 'Passenger Count', width: 220 }];
 
   const columns4_2 = [
-    { field: 'flightnumber', headerName: 'Flight Nummber', width: 200},
-    { field: 'duration', headerName: 'Duration', width: 200}];
+    { field: 'flightnumber', headerName: 'Flight Number', width: 180},
+    { field: 'duration', headerName: 'Duration', width: 100}];
 
   const columns4_3 = [
     { field: 'totalcount', headerName: 'Total Passenger Count', width: 200}];
 
   const columns5_1 = [
-    { field: 'Model', headerName: 'Model', width: 100 },
-    { field: 'FleetSize', headerName: 'Fleet Size', width: 100 },   
-    { field: 'TotalFlights', headerName: 'Total Flights', width: 150 },   
-    { field: 'Revenue', headerName: 'Revenue', width: 100 }];
+    { field: 'Model', headerName: 'Model', width: 250 },
+    { field: 'FleetSize', headerName: 'Fleet Size', width: 200 },   
+    { field: 'TotalFlights', headerName: 'Total Flights', width: 220 },   
+    { field: 'Revenue', headerName: 'Revenue (US$/Million)', width: 330 }];
 
   const columns5_2 = [
     { field: 'TotalFleetSize', headerName: 'Total Fleet Size', width: 150},
@@ -163,6 +171,7 @@ export default function ReportGeneration() {
         let data1_0 = response.data;
         data1_0.map((item) => {
           item.DepartureDateTime= new Date(item.DepartureDateTime).toDateString().slice(0,10)+ " - "+new Date(item.DepartureDateTime).toLocaleTimeString() +" (IST)";
+          item.ArrivalDateTime= new Date(item.ArrivalDateTime).toDateString().slice(0,10)+ " - "+new Date(item.ArrivalDateTime).toLocaleTimeString() +" (IST)";
           return item;
         })
   
@@ -379,6 +388,50 @@ export default function ReportGeneration() {
 
   return (
     <div>
+      <Box sx={{ flexGrow: 1 }}>
+
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            B Airlines
+          </Typography>
+          <Typography style={{marginLeft:500}} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Welcome { localStorage.getItem("userName")!=''? localStorage.getItem("userName"):""}
+          </Typography>
+          <Button  onClick={()=>{
+            navigate("/reportGeneration")
+          }} color="inherit" > {isAdmin()?"Admin":""} </Button>
+          <Button onClick={()=>{
+            navigate("/loginPage")
+          }}
+          color="inherit"> {isGuest()?"Login":""}</Button>
+          <Button color="inherit" onClick={()=>{
+            axios.post('/signUp/logout').then((response)=>{
+              console.log(response);
+              localStorage.setItem("passengerDetails",null)
+              localStorage.setItem("userName",'')
+              localStorage.setItem('guestId','')
+              navigate("/loginPage")
+            }
+            )
+          }}
+          >
+            {!isGuest()?"Log Out":""}
+
+          </Button>
+        
+        </Toolbar>
+      </AppBar>
+      </Box>
     <Box
       sx={{
         display: 'flex',
@@ -389,13 +442,13 @@ export default function ReportGeneration() {
           minHeight: 200,
           borderRadius:'1rem'
         },
-        backgroundImage: `url(${img})`,
+        // backgroundImage: `url(${img})`,
         backgroundSize:"cover" ,
         backgroundRepeat:"no-repeat" ,
         backgroundPositionY :'center'
       }}
     >
-        <Paper elevation={3}>
+        <Paper elevation={10} style={{marginTop: 100, marginLeft: '650px', marginRight: 'auto', width: 'fit-content', height: '250px'}}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Flight Analysis" {...a11yProps(0)} />
@@ -407,16 +460,9 @@ export default function ReportGeneration() {
       </Box>
 
       <CustomTabPanel value={value} index={0}>
-          <div style={{marginLeft: 300}}>
+          <div>
             <div >
-                <TextField onChange={(e) => {
-                  setflightnumber(e.target.value)
-                  console.log(e.target.value)
-                }}
-                 id="outlined-select-currency" name="flightnumber" label="Enter Flight no." variant="outlined" /></div></div>  
-                <Button onClick={()=>{
-                    getFlightData();
-                }} style={{marginLeft:700, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
+      
                 <Typography
             variant="h6"
             noWrap
@@ -426,52 +472,26 @@ export default function ReportGeneration() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              // fontFamily: 'roboto',
               fontWeight: 200,
               letterSpacing: '.05rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            <div>using this feature you can analysis the statistics for the next immediate flight for the given flight no.</div> 
+            <div>Enter Flight Number to get Passenger Statistics for the next immediate Flight for the given Flight Number.</div> 
           </Typography> 
+          <TextField style={{marginTop: 50, marginLeft: 300}} onChange={(e) => {
+                  setflightnumber(e.target.value)
+                  console.log(e.target.value)
+                }}
+                 id="outlined-select-currency" name="flightnumber" label="Enter Flight Number" variant="outlined" /></div></div>  
+                <Button onClick={()=>{
+                    getFlightData();
+                }} style={{marginLeft:700, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}> 
           <div style={{marginLeft: 20, marginTop: 20}}>
-                <TextField
-                sx={{ marginLeft: 2 }}
-                id="outlined-select-currency"
-                select
-                onChange={(e) => {
-                  setDestination(e.target.value)
-                  console.log(e.target.value)
-                }}
-                label="destination"
-                defaultValue="BIA  (Sri Lanka)"
-                helperText="select your country"
-              >
-                {countries.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-          </div> 
-                <DatePicker 
-                    value={fromDate}
-                    onChange={(e)=>{
-                    setFromDate(e);
-                    console.log(e)}}
-                    sx={{marginRight:10, marginLeft:50, marginTop:-10}} label="Form" />
-                <DatePicker
-                    value={toDate}
-                    onChange={(e)=>{
-                    setToDate(e);
-                    console.log(e)}}
-                    sx={{marginTop:-10}} label="Until" /> 
-                <Button onClick={()=>{
-                    getDestinationData();
-                }} style={{marginLeft:1100, marginTop:-160}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
                 <Typography
               variant="h6"
               noWrap
@@ -481,34 +501,53 @@ export default function ReportGeneration() {
               sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              // fontFamily: 'monospace',
               fontWeight: 200,
               letterSpacing: '.05rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            <div>using this feature you can analysis the traveling statistics for the given destination for the given date range</div>
+            <div>Enter Destination and a Date Range to get Travel Statistics for given Destination for given Date Range.</div>
           </Typography>
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-            <div style={{marginLeft: 0, marginTop: 100}}>
+          <TextField
+                sx={{ marginLeft: 2, marginTop: 8}}
+                id="outlined-select-currency"
+                select
+                onChange={(e) => {
+                  setDestination(e.target.value)
+                  console.log(e.target.value)
+                }}
+                label="destination"
+                defaultValue="BIA  (Sri Lanka)"
+                helperText="select destination"
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+           
                 <DatePicker 
                     value={fromDate}
                     onChange={(e)=>{
                     setFromDate(e);
                     console.log(e)}}
-                    sx={{marginRight:10, marginLeft:50, marginTop:-10}} label="Form" />
+                    sx={{marginLeft:'50px', marginTop:'64px'}} label="Form" />
                 <DatePicker
                     value={toDate}
                     onChange={(e)=>{
                     setToDate(e);
                     console.log(e)}}
-                    sx={{marginTop:-10}} label="Until" /> 
+                    sx={{marginLeft:5, marginTop:8}} label="Until" /> 
                 <Button onClick={()=>{
-                    getPassengerData();
-                }} style={{marginLeft:1100, marginTop:-160}} variant="contained" startIcon={<SearchIcon />}>Search</Button></div>
-                <Typography
+                    getDestinationData();
+                }} style={{marginLeft:-350, marginTop:140}} variant="contained" startIcon={<SearchIcon />}>Search</Button></div>
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+            <div>
+            <Typography
             variant="h6"
             noWrap
             component="a"
@@ -517,65 +556,35 @@ export default function ReportGeneration() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              // fontFamily: 'monospace',
               fontWeight: 200,
               letterSpacing: '.05rem',
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
-            <div>using this feature you can analysis the booking statistics for different passenger types for the given date range</div>
+            <div>Enter a Date Range to analyze Booking Statistics based on User Types for given Date Range.</div>
           </Typography>
+                <DatePicker 
+                    value={fromDate}
+                    onChange={(e)=>{
+                    setFromDate(e);
+                    console.log(e)}}
+                    sx={{marginRight:5, marginLeft:10, marginTop:10}} label="Form" />
+                <DatePicker
+                    value={toDate}
+                    onChange={(e)=>{
+                    setToDate(e);
+                    console.log(e)}}
+                    sx={{marginTop:10}} label="Until" /> 
+                <Button onClick={()=>{
+                    getPassengerData();
+                }} style={{marginLeft:50, marginTop:90}} variant="contained" startIcon={<SearchIcon />}>Search</Button></div>
+                
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-          <div style={{marginLeft: 200}}>
-            <div >
-            <TextField
-                sx={{ marginLeft: 2 }}
-                id="outlined-select-currency"
-                select
-                onChange={(e) => {
-                  setOrigin(e.target.value)
-                  console.log(e.target.value)
-                }}
-                label="from"
-                defaultValue="BIA  (Sri Lanka)"
-                helperText="select your country"
-              >
-                {countries.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </div>  
-          <div style={{marginLeft: 500, marginTop:-55}}>
-            <div >
-            <TextField
-                sx={{ marginLeft: 2 }}
-                id="outlined-select-currency"
-                select
-                onChange={(e) => {
-                  setDestination(e.target.value)
-                  console.log(e.target.value)
-                }}
-                label="from"
-                defaultValue="BIA  (Sri Lanka)"
-                helperText="select your country"
-              >
-                {countries.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
-          </div> 
-                <Button onClick={()=>{
-                    getRouteData();
-                }} style={{marginLeft:900, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
-                <div><Typography
+          <div>
+          <div><Typography
             variant="h6"
             noWrap
             component="a"
@@ -584,61 +593,128 @@ export default function ReportGeneration() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              // fontFamily: 'monospace',
               fontWeight: 200,
               letterSpacing: '.05rem',
               color: 'inherit',
               textDecoration: 'none',
-            }}
-          >using this feature you can access in depth travel statistics for the given route.
-          </Typography></div>
+            }}>Enter an Origin and a Destination to get Past Flight Statistics & Passenger Count for the given Route.
+            </Typography></div>
+            <TextField
+                sx={{ marginLeft: 10, marginTop: 5 }}
+                id="outlined-select-currency"
+                select
+                onChange={(e) => {
+                  setOrigin(e.target.value)
+                  console.log(e.target.value)
+                }}
+                label="origin"
+                defaultValue="BIA  (Sri Lanka)"
+                helperText="select origin airport"
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            <TextField
+                sx={{ marginLeft: '50px', marginTop: '40px' }}
+                id="outlined-select-currency"
+                select
+                onChange={(e) => {
+                  setDestination(e.target.value)
+                  console.log(e.target.value)
+                }}
+                label="destination"
+                defaultValue="BIA  (Sri Lanka)"
+                helperText="select destination airport"
+              >
+                {countries.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+           
+                <Button onClick={()=>{
+                    getRouteData();
+                }} style={{marginLeft:50, marginTop:50}} variant="contained" startIcon={<SearchIcon />}>Search</Button></div>
+                
       </CustomTabPanel>
       <CustomTabPanel value={value} index={4}>
+      <div><Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            style={{marginBottom:-20}}
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              // fontFamily: 'monospace',
+              fontWeight: 200,
+              letterSpacing: '.05rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}>Press Search to view Revenue Statistics. This will include a Revenue analysis based on Aircraft Type.
+            </Typography></div>
           <Button onClick={()=>{
             getRevenue();
-          }} style={{marginLeft:900, marginTop:-80}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
+          }} style={{marginLeft:'430px', marginTop:50}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
       </CustomTabPanel>
       </Paper>
 
-      {value === 0 && data1_0.length>0 ?  <Paper elevation={3}
+      {value === 0 && data1_0.length>0 ?  <Paper elevation={0}
                
-               style={{marginTop:-250, width: '30%', height: '100px'}}> 
-              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>flight information</div></Typography> 
-              <DataGrid
-
-                rows={data1_0.length > 0 ? data1_0 : []}
-                columns={columns1_0}
-                getRowId={(row) => row.flightid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
-                onRowClick={(e) => {
-
-                  console.log(e.row);
-                  setSelected(e.row);
-                }}
-
-                slots={{
-                  footer: CustomFooter,
-                }}
-                initialState={{
-
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-
-                pageSizeOptions={[5, 10]}
-
-              /></Paper> :null}
-              {value === 0 && data1_0.length>0 ?   <Paper elevation={3}
+               style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '300px'}}> 
+              <Typography variant="h4" sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'Calibri',
+              fontWeight: 'bold',
+              letterSpacing: '.05rem',
+              color: 'grey',
+              textDecoration: 'none',
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Flight Information</div>
+            <div style={{ marginTop: 80, marginLeft: '-240px', marginRight: 'auto', width: 'fit-content' }}
+      >FlightID</div>
+      <div style={{ marginTop: 200, marginLeft: '-235px', marginRight: 'auto', width: 'fit-content' }}
+      >AircraftID</div>
+      <div style={{ marginTop: 80, marginLeft: '300px', marginRight: 'auto', width: 'fit-content' }}
+      >Origin</div>
+      <div style={{ marginTop: 200, marginLeft: '-210px', marginRight: 'auto', width: 'fit-content' }}
+      >Destination</div>
+      <div style={{ marginTop: 80, marginLeft: '500px', marginRight: 'auto', width: 'fit-content' }}
+      >Departure Tiime</div>
+      <div style={{ marginTop: 200, marginLeft: '-350px', marginRight: 'auto', width: 'fit-content' }}
+      >Arrival Time</div></Typography>
+              <div style={{ marginTop: -140, marginLeft: 200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.8)'}}>{data1_0[0].flightid}</div>
+              <div style={{ marginTop: 60, marginLeft: 200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.6)'}}>{data1_0[0].aircraftid}</div>
+              <div style={{ marginTop: -190, marginLeft: 750, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.6)'}}>{data1_0[0].Origin}</div>
+              <div style={{ marginTop: 60, marginLeft: 750, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.4)'}}>{data1_0[0].Destination}</div>
+              <div style={{ marginTop: -190, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.4)'}}>{data1_0[0].DepartureDateTime}</div>
+              <div style={{ marginTop: 60, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.3)'}}>{data1_0[0].ArrivalDateTime}</div>
+              </Paper> :null} 
+              
+              {value === 0 && data1_1.length>0 ?   <Paper elevation={0}
                
-               style={{marginTop:-250, width: '70%', height: '300px'}}> 
-              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>passengers over 18 years</div></Typography>
+               style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}> 
+              <Typography variant="h4"  sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'Calibri',
+              fontWeight: 'bold',
+              letterSpacing: '.05rem',
+              color: 'grey',
+              textDecoration: 'none',
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Passengers over 18 years</div></Typography>
               <DataGrid
 
                 rows={data1_1.length > 0 ? data1_1 : []}
                 columns={columns1_1}
                 getRowId={(row) => row.ID}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 100, 150, 0.7)'}}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -658,16 +734,24 @@ export default function ReportGeneration() {
                 pageSizeOptions={[5, 10]}
 
               /></Paper> :null}
-              {value === 0 && data1_0.length>0 ?  <Paper elevation={3}
+              {value === 0 && data1_2.length>0 ?  <Paper elevation={0}
                
-               style={{marginTop:-250, width: '70%', height: '250px'}}>
-              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>passengers under 18 years</div></Typography>
+               style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Typography variant="h4"  sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'Calibri',
+              fontWeight: 'bold',
+              letterSpacing: '.05rem',
+              color: 'grey',
+              textDecoration: 'none',
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Passengers under 18 years</div></Typography>
               <DataGrid
 
                 rows={data1_2.length > 0 ? data1_2 : []}
                 columns={columns1_1}
                 getRowId={(row) => row.ID}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 150, 150, 0.7)'}}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -690,16 +774,24 @@ export default function ReportGeneration() {
 
       {value === 1 && data2_0.length>0 ?                
               
-              <Paper elevation={3}
+              <Paper elevation={0}
               
-              style={{marginTop:-250, width: '40%', height: '350px'}}> 
-              
+              style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Typography variant="h4"  sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'Calibri',
+              fontWeight: 'bold',
+              letterSpacing: '.05rem',
+              color: 'grey',
+              textDecoration: 'none',
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Flights Incoming to Destination during given Date Range</div></Typography>
               <DataGrid
 
                 rows={data2_0.length > 0 ? data2_0 : []}
                 columns={columns2_0}
                 getRowId={(row) => row.flightid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(160, 40, 120, 0.5)'}}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -721,51 +813,47 @@ export default function ReportGeneration() {
               />
               </Paper>
           :null} 
-      {value === 1 && data2_1.length>0 ?                
-
-                <Paper elevation={3}
-
-                style={{ marginTop: 250, marginLeft: -1000, width: '15%', height: '80px' }}> 
-
-                <DataGrid
-
-                rows={data2_1.length > 0 ? data2_1 : []}
-                columns={columns2_1}
-                getRowId={(row) => row.total_passengers}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
-                onRowClick={(e) => {
-
-                  console.log(e.row);
-                  setSelected(e.row);
-                }}
-
-                slots={{
-                  footer: CustomFooter,
-                }}
-                initialState={{
-
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-
-                pageSizeOptions={[5, 10]}
-
-                />
+      {value === 1 && data2_0.length>0 ?                
+                <Paper elevation={0}
+              
+                style={{marginTop:-800, marginLeft: '1500px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+                <Typography variant="h4"  sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'Calibri',
+                fontWeight: 'bold',
+                letterSpacing: '.05rem',
+                color: 'grey',
+                textDecoration: 'none',
+              }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+              >Total Passengers traveling to Destination</div>
+              <div style={{ marginTop: 50, marginLeft: '-835px', marginRight: 'auto', width: 'fit-content' }}
+              >During Given Date Range</div></Typography>
+              <div style={{ marginTop: -50, marginLeft: 520, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(160, 40, 120, 0.7)'}}>{data2_1[0].total_passengers}</div>
                 </Paper>
                 :null}
+
           {value === 2 && data3_1.length>0 ?                
               
-              <Paper elevation={3}
+              <Paper elevation={0}
               
-              style={{marginTop:-250, width: '40%', height: '250px'}}> 
-              <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Gold</div></Typography> 
+              style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Typography variant="h4"  sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'Calibri',
+                fontWeight: 'bold',
+                letterSpacing: '.05rem',
+                color: 'grey',
+                textDecoration: 'none',
+              }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+              >USER TYPE : GOLD</div></Typography>
               <DataGrid
 
                 rows={data3_1.length > 0 ? data3_1 : []}
                 columns={columns3_0}
                 getRowId={(row) => row.passengerid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(130, 120, 20, 0.5)'}}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -789,16 +877,25 @@ export default function ReportGeneration() {
           :null} 
           {value === 2 && data3_2.length>0 ?                
 
-        <Paper elevation={3}
+        <Paper elevation={0}
 
-        style={{ marginTop: -250, marginLeft: 400, width: '40%', height: '300px' }}> 
-        <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Frequent</div></Typography> 
-        <DataGrid
+        style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Typography variant="h4"  sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'Calibri',
+                fontWeight: 'bold',
+                letterSpacing: '.05rem',
+                color: 'grey',
+                textDecoration: 'none',
+              }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+              >USER TYPE : FREQUENT</div></Typography>
+              <DataGrid
 
         rows={data3_2.length > 0 ? data3_2 : []}
         columns={columns3_0}
         getRowId={(row) => row.passengerid}
-        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(80, 100, 20, 0.7)'}}
         onRowClick={(e) => {
 
           console.log(e.row);
@@ -822,16 +919,25 @@ export default function ReportGeneration() {
         :null}
         {value === 2 && data3_3.length>0 ?                
 
-        <Paper elevation={3}
+        <Paper elevation={0}
 
-        style={{ marginTop: -250, marginLeft: 400, width: '40%', height: '80px' }}> 
-        <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Guest</div></Typography> 
-        <DataGrid
+        style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Typography variant="h4"  sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'Calibri',
+                fontWeight: 'bold',
+                letterSpacing: '.05rem',
+                color: 'grey',
+                textDecoration: 'none',
+              }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+              >USER TYPE : GUEST</div></Typography>
+              <DataGrid
 
         rows={data3_3.length > 0 ? data3_3 : []}
         columns={columns3_0}
         getRowId={(row) => row.passengerid}
-        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(120, 150, 70, 0.8)'}}
         onRowClick={(e) => {
 
           console.log(e.row);
@@ -855,49 +961,52 @@ export default function ReportGeneration() {
         :null}
         {value === 2 && data3_4.length>0 ?                
 
-        <Paper elevation={3}
+          <Paper elevation={0}
 
-        style={{ marginTop: -250, marginLeft: 400, width: '20%', height: '80px' }}> 
-        <Typography variant="h5"><div style={{ marginTop: 0, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content' }}>Summary</div></Typography> 
-        <DataGrid
-
-        rows={data3_4.length > 0 ? data3_4 : []}
-        columns={columns3_1}
-        getRowId={(row) => row.Gold}
-        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
-        onRowClick={(e) => {
-
-          console.log(e.row);
-          setSelected(e.row);
-        }}
-
-        slots={{
-          footer: CustomFooter,
-        }}
-        initialState={{
-
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-
-        pageSizeOptions={[5, 10]}
-
-        />
-        </Paper>
+          style={{marginTop:-250, marginLeft: '500px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+                <Typography variant="h4"  sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'Calibri',
+                  fontWeight: 'bold',
+                  letterSpacing: '.05rem',
+                  color: 'grey',
+                  textDecoration: 'none',
+                }}><div style={{ marginTop: -100, marginLeft: '-270px', marginRight: 'auto', width: 'fit-content' }}
+                >SUMMARY</div>
+                <div style={{ marginBottom: 30, marginLeft: '-40px', marginRight: 'auto', width: 'fit-content', color: 'rgba(100, 100, 20, 0.8)' }}
+                >GOLD</div>
+                <div style={{ marginBottom: 30, marginLeft: '425px', marginRight: 'auto', width: 'fit-content', color: 'rgba(70, 100, 20, 0.8)' }}
+                >FREQUENT</div>
+                <div style={{ marginBottom: 30, marginLeft: '365px', marginRight: 'auto', width: 'fit-content', color: 'rgba(80, 150, 20, 0.5)' }}
+                >GUEST</div></Typography>
+                <div style={{ marginTop: -50, marginLeft: 50, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 20, 0.8)'}}>{data3_4[0].Gold}</div>
+                <div style={{ marginTop: -270, marginLeft: 550, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(70, 100, 20, 0.8)'}}>{data3_4[0].Frequent}</div>
+                <div style={{ marginTop: -270, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(80, 150, 20, 0.5)'}}>{data3_4[0].Guest}</div>
+          </Paper>
         :null}
+
     {value === 3 && data4_1.length>0 ?                
         
-        <Paper elevation={3}
+        <Paper elevation={0}
         
-        style={{marginTop:-250, width: '60%', height: '350px'}}> 
-        
+        style={{marginTop:-150, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+                <Typography variant="h4"  sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'Calibri',
+                  fontWeight: 'bold',
+                  letterSpacing: '.05rem',
+                  color: 'grey',
+                  textDecoration: 'none',
+                }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+                >Flights which travelled the given Route in the Past</div></Typography>
         <DataGrid
 
           rows={data4_1.length > 0 ? data4_1 : []}
           columns={columns4_1}
           getRowId={(row) => row.flightid}
-          style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+          style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(50, 95, 30, 0.7)'}}
           onRowClick={(e) => {
 
             console.log(e.row);
@@ -921,82 +1030,68 @@ export default function ReportGeneration() {
     :null} 
     {value === 3 && data4_2.length>0 ?                
 
-        <Paper elevation={3}
+        <Paper elevation={0}
 
-        style={{ marginTop: -250, marginLeft: 400, width: '25%', height: '80px' }}> 
-
-        <DataGrid
-
-        rows={data4_2.length > 0 ? data4_2 : []}
-        columns={columns4_2}
-        getRowId={(row) => row.flightnumber}
-        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
-        onRowClick={(e) => {
-
-          console.log(e.row);
-          setSelected(e.row);
-        }}
-
-        slots={{
-          footer: CustomFooter,
-        }}
-        initialState={{
-
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-
-        pageSizeOptions={[5, 10]}
-
-        />
+        style={{marginTop:-250, marginLeft: '500px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+          <Typography variant="h4"  sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'Calibri',
+                  fontWeight: 'bold',
+                  letterSpacing: '.05rem',
+                  color: 'grey',
+                  textDecoration: 'none',
+                }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+                >Flights Number</div>
+                <div style={{ marginTop: 150, marginLeft: '-330px', marginRight: 'auto', width: 'fit-content' }}
+                >Duration</div></Typography>
+                <div style={{ marginTop: -150, marginLeft: 110, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.9)'}}>{data4_2[0].flightnumber}</div>
+                <div style={{ marginTop: 80, marginLeft: 70, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.8)'}}>{data4_2[0].duration}</div>
         </Paper>
         :null}
-    {value === 3 && data4_3.length>0 ?                
 
-        <Paper elevation={3}
+    {value === 3 && data4_2.length>0 ?                
 
-        style={{ marginTop: -250, marginLeft: 400, width: '15%', height: '80px' }}> 
-
-        <DataGrid
-
-        rows={data4_3.length > 0 ? data4_3 : []}
-        columns={columns4_3}
-        getRowId={(row) => row.totalcount}
-        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
-        onRowClick={(e) => {
-
-          console.log(e.row);
-          setSelected(e.row);
-        }}
-
-        slots={{
-          footer: CustomFooter,
-        }}
-        initialState={{
-
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-
-        pageSizeOptions={[5, 10]}
-
-        />
-        </Paper>
+            <Paper elevation={0}
+ 
+              style={{marginTop:-800, marginLeft: '1000px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Typography variant="h4"  sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'Calibri',
+              fontWeight: 'bold',
+              letterSpacing: '.05rem',
+              color: 'grey',
+              textDecoration: 'none',
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+            >Total Number of Passengers who</div>
+            <div style={{ marginTop: 50, marginLeft: '-610px', marginRight: 'auto', width: 'fit-content' }}
+            >travelled the given Route</div></Typography>
+            <div style={{ marginTop: -50, marginLeft: 420, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(30, 30, 150, 0.7)'}}>{data4_3[0].totalcount}</div>
+              </Paper>
         :null}
+
     {value === 4 && data5_1.length>0 ?                
        
-        <Paper elevation={3}
+        <Paper elevation={0}
         
-        style={{marginTop:-250, width: '60%', height: '550px'}}> 
-        
+        style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '800px'}}>
+          <Typography variant="h4"  sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'Calibri',
+                  fontWeight: 'bold',
+                  letterSpacing: '.05rem',
+                  color: 'grey',
+                  textDecoration: 'none',
+                }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+                >Revenue Generated by Aircraft Types based on Past Flights</div></Typography>
         <DataGrid
 
           rows={data5_1.length > 0 ? data5_1 : []}
           columns={columns5_1}
           getRowId={(row) => row.Model}
-          style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
+          style={{ border: 20, marginLeft: '0px', marginRight: 'auto', width: 'fit-content', fontSize: '30px', fontWeight: 'bold', color: 'rgba(30, 30, 150, 0.7)'}}
           onRowClick={(e) => {
 
             console.log(e.row);
@@ -1012,36 +1107,26 @@ export default function ReportGeneration() {
         </Paper>
         :null} 
     {value === 4 && data5_2.length>0 ?                
-
-        <Paper elevation={3}
-
-        style={{ marginTop: -250, marginLeft: 400, width: '40%', height: '80px' }}> 
-
-        <DataGrid
-
-        rows={data5_2.length > 0 ? data5_2 : []}
-        columns={columns5_2}
-        getRowId={(row) => row.TotalFleetSize}
-        style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content'}}
-        onRowClick={(e) => {
-
-          console.log(e.row);
-          setSelected(e.row);
-        }}
-
-        slots={{
-          footer: CustomFooter,
-        }}
-        initialState={{
-
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-
-        pageSizeOptions={[5, 10]}
-
-        />
+        <Paper elevation={0}
+ 
+        style={{marginTop:-500, marginLeft: '200px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+        <Typography variant="h4"  sx={{
+        mr: 2,
+        display: { xs: 'none', md: 'flex' },
+        fontFamily: 'Calibri',
+        fontWeight: 'bold',
+        letterSpacing: '.05rem',
+        color: 'grey',
+        textDecoration: 'none',
+      }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+      >Total Fleet Size</div>
+      <div style={{ marginBottom: 30, marginLeft: '250px', marginRight: 'auto', width: 'fit-content' }}
+      >Total Flights</div>
+      <div style={{ marginBottom: 30, marginLeft: '400px', marginRight: 'auto', width: 'fit-content' }}
+      >Total Revenue(US$/Million)</div></Typography>
+      <div style={{ marginTop: -50, marginLeft: 10, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 100, 0.3)'}}>{data5_2[0].TotalFleetSize}</div>
+      <div style={{ marginTop: -265, marginLeft: 500, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 100, 0.5)'}}>{data5_2[0].TotalFlights}</div>
+      <div style={{ marginTop: -265, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 100, 0.8)'}}>{data5_2[0].TotalRevenue}</div>
         </Paper>
         :null}
     </Box>

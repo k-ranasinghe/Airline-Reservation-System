@@ -137,7 +137,8 @@ export async function updateBooking(booking_id){
     return result[0];
 }
 
-function getFlightData0 (flightnumber){
+// flightinfo 
+export async function getFlightData0 (flightnumber){
     console.log(flightnumber)
     const result =await pool.query('SELECT flightid, aircraftid, Origin, Destination, DepartureDateTime, ArrivalDateTime FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? limit 1', [flightnumber])   
     console.log(result[0])

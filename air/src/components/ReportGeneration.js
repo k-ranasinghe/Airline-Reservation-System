@@ -161,7 +161,6 @@ export default function ReportGeneration() {
 
   function getFlightData() {
       console.log("flightnumber ", flightnumber);
-      
       axios.get("/admin1.0", {
         params: {
           flightnumber: flightnumber

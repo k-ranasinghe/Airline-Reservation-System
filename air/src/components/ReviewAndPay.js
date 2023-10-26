@@ -53,7 +53,10 @@ export default function ReviewAndPay() {
     console.log(location.state.bookingDetails[0])
     axios.post("/booking/createPayment", {
       bookingId: location.state.bookingDetails[0].BookingID,
-      passengerID: location.state.bookingDetails[0].PassengerID
+      passengerID: location.state.bookingDetails[0].PassengerID,
+      flight:flight,
+      passengerDetails:passengerDetails,
+      seat:seat
 
     }).then((response) => {
       console.log(response);

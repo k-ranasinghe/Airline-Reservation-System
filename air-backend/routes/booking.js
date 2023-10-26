@@ -78,12 +78,13 @@ router.post ('/bookTicket', async (req, res) => {
 )
 router.post ('/createPayment', async (req, res) => { 
     console.log("request",  req.body);
-    main()
+   
 
     const result = await updateBooking(req.body.bookingId);
     const payment = await createPayment(req.body.bookingId,req.body.passengerID);
     console.log("payment",  payment);
-    
+    console.log("body",  req.body)
+    main(req.body.passengerDetails,req.body.flight, req.body.seat)
 
     res.send(payment);
 

@@ -94,21 +94,15 @@ export default function FlightStatus() {
             <Box
                 sx={{
                     display: 'flex',
-                    flexWrap: 'wrap',
-                    '& > :not(style)': {
-                        m: 50,
-                        width: "60%",
-                        minHeight: 200,
-                        borderRadius: '1rem'
-                    },
-                    backgroundImage: `url(${img})`,
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPositionY: 'center',
-                    display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
+                    padding: '20px',
+                    minHeight: '100vh',
+                    backgroundImage: `url(${img})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPositionY: 'center',
+                  }}>
 
                 {/* <div>hello</div> */}
                 <FlightStatusTable data={data} />

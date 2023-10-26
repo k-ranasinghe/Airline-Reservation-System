@@ -1,8 +1,9 @@
 export  default function isAdmin(){
-    if(localStorage.getItem("UserName")){
+    console.log("userName",localStorage.getItem("userName"))
+    if(localStorage.getItem("userName")){
 
-     let userDetails=JSON.parse(localStorage.getItem("userDetails"));
-     return userDetails.Username=='admin'?true:false;
+     let userDetails=localStorage.getItem("userName");
+     return userDetails==='admin'?true:false;
     }
      return false;
 }

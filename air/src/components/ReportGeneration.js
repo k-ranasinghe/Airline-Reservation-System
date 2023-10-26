@@ -434,20 +434,23 @@ export default function ReportGeneration() {
     <Box
       sx={{
         display: 'flex',
-        flexWrap: 'wrap',
-        '& > :not(style)': {
-          m: 50,
-          width: "60%",
-          minHeight: 200,
-          borderRadius:'1rem'
-        },
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        minHeight: '0vh',
         // backgroundImage: `url(${img})`,
-        backgroundSize:"cover" ,
-        backgroundRepeat:"no-repeat" ,
-        backgroundPositionY :'center'
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPositionY: 'center',
       }}
     >
-        <Paper elevation={10} style={{marginTop: 100, marginLeft: '650px', marginRight: 'auto', width: 'fit-content', height: '250px'}}>
+        <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Flight Analysis" {...a11yProps(0)} />
@@ -662,12 +665,31 @@ export default function ReportGeneration() {
             getRevenue();
           }} style={{marginLeft:'430px', marginTop:50}} variant="contained" startIcon={<SearchIcon />}>Search</Button>
       </CustomTabPanel>
+      </div></>
       </Paper>
+      </Box>
+      {value === 0 && data1_0.length>0 ? 
+        <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '20px',
+          minHeight: '0vh',
+          // backgroundImage: `url(${img})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPositionY: 'center',
+        }}
+      >
+      <Paper elevation={3}
 
-      {value === 0 && data1_0.length>0 ?  <Paper elevation={0}
-               
-               style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '300px'}}> 
-              <Typography variant="h4" sx={{
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>  
+<Typography variant="h4" sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'Calibri',
@@ -675,30 +697,175 @@ export default function ReportGeneration() {
               letterSpacing: '.05rem',
               color: 'grey',
               textDecoration: 'none',
-            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Flight Information</div>
-            <div style={{ marginTop: 80, marginLeft: '-240px', marginRight: 'auto', width: 'fit-content' }}
-      >FlightID</div>
-      <div style={{ marginTop: 200, marginLeft: '-235px', marginRight: 'auto', width: 'fit-content' }}
-      >AircraftID</div>
-      <div style={{ marginTop: 80, marginLeft: '300px', marginRight: 'auto', width: 'fit-content' }}
-      >Origin</div>
-      <div style={{ marginTop: 200, marginLeft: '-210px', marginRight: 'auto', width: 'fit-content' }}
-      >Destination</div>
-      <div style={{ marginTop: 80, marginLeft: '500px', marginRight: 'auto', width: 'fit-content' }}
-      >Departure Tiime</div>
-      <div style={{ marginTop: 200, marginLeft: '-350px', marginRight: 'auto', width: 'fit-content' }}
-      >Arrival Time</div></Typography>
-              <div style={{ marginTop: -140, marginLeft: 200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.8)'}}>{data1_0[0].flightid}</div>
-              <div style={{ marginTop: 60, marginLeft: 200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.6)'}}>{data1_0[0].aircraftid}</div>
-              <div style={{ marginTop: -190, marginLeft: 750, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.6)'}}>{data1_0[0].Origin}</div>
-              <div style={{ marginTop: 60, marginLeft: 750, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.4)'}}>{data1_0[0].Destination}</div>
-              <div style={{ marginTop: -190, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.4)'}}>{data1_0[0].DepartureDateTime}</div>
-              <div style={{ marginTop: 60, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(10, 100, 255, 0.3)'}}>{data1_0[0].ArrivalDateTime}</div>
-              </Paper> :null} 
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Flight Details</div></Typography>
+            <DataGrid
+
+              rows={data1_0.length > 0 ? data1_0 : []}
+              columns={columns1_0}
+              getRowId={(row) => row.flightid}
+              style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 150, 150, 0.7)' }}
+              onRowClick={(e) => {
+
+                console.log(e.row);
+                setSelected(e.row);
+              }}
+
+              slots={{
+
+                footer: CustomFooter
+              }}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+
+              pageSizeOptions={[5, 10]}
+            />
+            
+          </div></>
+        </Paper>
+
+   
+</Box>
+        : null}
+
+      {value === 0 && data1_1.length > 0 ?
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '0vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+        <Paper elevation={3}
+
+          style={{ marginTop: 0 }}
+        >
+          <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+            <Typography variant="h4" sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'Calibri',
+              fontWeight: 'bold',
+              letterSpacing: '.05rem',
+              color: 'grey',
+              textDecoration: 'none',
+            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Passengers over 18 years</div></Typography>
+            <DataGrid
+
+              rows={data1_1.length > 0 ? data1_1 : []}
+              columns={columns1_1}
+              getRowId={(row) => row.ID}
+              style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 100, 150, 0.7)' }}
+              onRowClick={(e) => {
+
+                console.log(e.row);
+                setSelected(e.row);
+              }}
+
+              slots={{
+                footer: CustomFooter
+              }}
+              initialState={{
+
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+
+              pageSizeOptions={[5, 10]}
+
+            />    </div></>
+        </Paper>
+</Box>
+       : null}
+      {value === 0 && data1_2.length > 0 ? 
+        <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          padding: '20px',
+          minHeight: '100vh',
+          // backgroundImage: `url(${img})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPositionY: 'center',
+        }}
+      >
+      <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+        <Typography variant="h4" sx={{
+          mr: 2,
+          display: { xs: 'none', md: 'flex' },
+          fontFamily: 'Calibri',
+          fontWeight: 'bold',
+          letterSpacing: '.05rem',
+          color: 'grey',
+          textDecoration: 'none',
+        }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Passengers under 18 years</div></Typography>
+        <DataGrid
+
+          rows={data1_2.length > 0 ? data1_2 : []}
+          columns={columns1_1}
+          getRowId={(row) => row.ID}
+          style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 150, 150, 0.7)' }}
+          onRowClick={(e) => {
+
+            console.log(e.row);
+            setSelected(e.row);
+          }}
+
+          slots={{
+            footer: CustomFooter,
+          }}
+          initialState={{
+
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+
+          pageSizeOptions={[5, 10]}
+
+        /> </div></> </Paper>  
+        </Box>
+         :null} 
               
-              {value === 0 && data1_1.length>0 ?   <Paper elevation={0}
-               
-               style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}> 
+              {value === 0 && data1_1.length>0 ? 
+              
+              <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: '20px',
+                minHeight: '100vh',
+                // backgroundImage: `url(${img})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPositionY: 'center',
+              }}
+            >
+               <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -732,10 +899,26 @@ export default function ReportGeneration() {
 
                 pageSizeOptions={[5, 10]}
 
-              /></Paper> :null}
-              {value === 0 && data1_2.length>0 ?  <Paper elevation={0}
-               
-               style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              />  </div></> </Paper> </Box> :null}
+              {value === 0 && data1_2.length>0 ?   <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        minHeight: '100vh',
+        // backgroundImage: `url(${img})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPositionY: 'center',
+      }}
+    >  <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -769,13 +952,29 @@ export default function ReportGeneration() {
 
                 pageSizeOptions={[5, 10]}
 
-                /></Paper> :null}
+                /></div></>  </Paper></Box> :null}
 
       {value === 1 && data2_0.length>0 ?                
-              
-              <Paper elevation={0}
-              
-              style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+                <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '20px',
+                  minHeight: '0vh',
+                  // backgroundImage: `url(${img})`,
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPositionY: 'center',
+                }}
+              >
+              <Paper elevation={3}
+
+              style={{ marginTop: 0 }}
+            >
+    
+    
+              <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -810,12 +1009,29 @@ export default function ReportGeneration() {
                 pageSizeOptions={[5, 10]}
 
               />
-              </Paper>
-          :null} 
-      {value === 1 && data2_0.length>0 ?                
-                <Paper elevation={0}
-              
-                style={{marginTop:-800, marginLeft: '1500px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+         </div></>     </Paper>
+        </Box>  :null} 
+      {value === 1 && data2_0.length>0 ?    
+       <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '20px',
+      minHeight: '100vh',
+      // backgroundImage: `url(${img})`,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPositionY: 'center',
+    }}
+  >
+                 <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
                 <Typography variant="h4"  sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -829,14 +1045,33 @@ export default function ReportGeneration() {
               <div style={{ marginTop: 50, marginLeft: '-835px', marginRight: 'auto', width: 'fit-content' }}
               >During Given Date Range</div></Typography>
               <div style={{ marginTop: -50, marginLeft: 520, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(160, 40, 120, 0.7)'}}>{data2_1[0].total_passengers}</div>
-                </Paper>
+               </div></> </Paper>
+
+                </Box>
                 :null}
 
-          {value === 2 && data3_1.length>0 ?                
+          {value === 2 && data3_1.length>0 ?   
+            <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '20px',
+              minHeight: '0vh',
+              // backgroundImage: `url(${img})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPositionY: 'center',
+            }}
+          >             
               
-              <Paper elevation={0}
-              
-              style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+              <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -871,14 +1106,31 @@ export default function ReportGeneration() {
 
                 pageSizeOptions={[5, 10]}
 
-              />
+              /></div></>
               </Paper>
+              </Box>
           :null} 
           {value === 2 && data3_2.length>0 ?                
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '0vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+<Paper elevation={3}
 
-        <Paper elevation={0}
+style={{ marginTop: 0 }}
+>
 
-        style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -914,13 +1166,31 @@ export default function ReportGeneration() {
         pageSizeOptions={[5, 10]}
 
         />
+        </div></>
         </Paper>
+        </Box>
         :null}
         {value === 2 && data3_3.length>0 ?                
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '100vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+<Paper elevation={3}
 
-        <Paper elevation={0}
+style={{ marginTop: 0 }}
+>
 
-        style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -956,13 +1226,31 @@ export default function ReportGeneration() {
         pageSizeOptions={[5, 10]}
 
         />
+        </div></>
         </Paper>
+        </Box>
         :null}
         {value === 2 && data3_4.length>0 ?                
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '10vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+<Paper elevation={3}
 
-          <Paper elevation={0}
+style={{ marginTop: 0 }}
+>
 
-          style={{marginTop:-250, marginLeft: '500px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
                 <Typography variant="h4"  sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
@@ -982,15 +1270,21 @@ export default function ReportGeneration() {
                 <div style={{ marginTop: -50, marginLeft: 50, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 20, 0.8)'}}>{data3_4[0].Gold}</div>
                 <div style={{ marginTop: -270, marginLeft: 550, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(70, 100, 20, 0.8)'}}>{data3_4[0].Frequent}</div>
                 <div style={{ marginTop: -270, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(80, 150, 20, 0.5)'}}>{data3_4[0].Guest}</div>
+          
+          </div></>
           </Paper>
+          </Box>
         :null}
 
     {value === 3 && data4_1.length>0 ?                
         
-        <Paper elevation={0}
+        <Paper elevation={3}
+
+        style={{ marginTop: 0 }}
+        >
         
-        style={{marginTop:-150, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
-                <Typography variant="h4"  sx={{
+        
+        <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>   <Typography variant="h4"  sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
                   fontFamily: 'Calibri',
@@ -1025,13 +1319,17 @@ export default function ReportGeneration() {
           pageSizeOptions={[5, 10]}
 
         />
-        </Paper>
+       </div></> </Paper>
     :null} 
     {value === 3 && data4_2.length>0 ?                
 
-        <Paper elevation={0}
+<Paper elevation={3}
 
-        style={{marginTop:-250, marginLeft: '500px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
           <Typography variant="h4"  sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
@@ -1045,15 +1343,19 @@ export default function ReportGeneration() {
                 <div style={{ marginTop: 150, marginLeft: '-330px', marginRight: 'auto', width: 'fit-content' }}
                 >Duration</div></Typography>
                 <div style={{ marginTop: -150, marginLeft: 110, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.9)'}}>{data4_2[0].flightnumber}</div>
-                <div style={{ marginTop: 80, marginLeft: 70, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.8)'}}>{data4_2[0].duration}</div>
-        </Paper>
+             <div style={{ marginTop: 80, marginLeft: 70, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.8)'}}>{data4_2[0].duration}</div>
+      </div></>  </Paper>
         :null}
 
     {value === 3 && data4_2.length>0 ?                
 
-            <Paper elevation={0}
- 
-              style={{marginTop:-800, marginLeft: '1000px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+<Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
               <Typography variant="h4"  sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -1067,14 +1369,30 @@ export default function ReportGeneration() {
             <div style={{ marginTop: 50, marginLeft: '-610px', marginRight: 'auto', width: 'fit-content' }}
             >travelled the given Route</div></Typography>
             <div style={{ marginTop: -50, marginLeft: 420, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(30, 30, 150, 0.7)'}}>{data4_3[0].totalcount}</div>
-              </Paper>
+           </div></>   </Paper>
         :null}
 
     {value === 4 && data5_1.length>0 ?                
-       
-        <Paper elevation={0}
-        
-        style={{marginTop:-250, marginLeft: '220px', marginRight: 'auto', width: 'fit-content', height: '800px'}}>
+         <Box
+         sx={{
+           display: 'flex',
+           flexDirection: 'column',
+           alignItems: 'center',
+           padding: '20px',
+           minHeight: '70vh',
+           // backgroundImage: `url(${img})`,
+           backgroundSize: 'cover',
+           backgroundRepeat: 'no-repeat',
+           backgroundPositionY: 'center',
+         }}
+       >
+       <Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
           <Typography variant="h4"  sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
@@ -1103,12 +1421,32 @@ export default function ReportGeneration() {
           pagination={false}
 
         />
+        </div></>
         </Paper>
+        </Box>
         :null} 
-    {value === 4 && data5_2.length>0 ?                
-        <Paper elevation={0}
- 
-        style={{marginTop:-500, marginLeft: '200px', marginRight: 'auto', width: 'fit-content', height: '400px'}}>
+    {value === 4 && data5_2.length>0 ?  
+      <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        minHeight: '10vh',
+        // backgroundImage: `url(${img})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPositionY: 'center',
+      }}
+    >
+
+<Paper elevation={3}
+
+style={{ marginTop: 0 }}
+>
+
+
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
         <Typography variant="h4"  sx={{
         mr: 2,
         display: { xs: 'none', md: 'flex' },
@@ -1126,9 +1464,12 @@ export default function ReportGeneration() {
       <div style={{ marginTop: -50, marginLeft: 10, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 100, 0.3)'}}>{data5_2[0].TotalFleetSize}</div>
       <div style={{ marginTop: -265, marginLeft: 500, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 100, 0.5)'}}>{data5_2[0].TotalFlights}</div>
       <div style={{ marginTop: -265, marginLeft: 1200, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(100, 100, 100, 0.8)'}}>{data5_2[0].TotalRevenue}</div>
+       
+       </div></>
         </Paper>
+        </Box>
         :null}
-    </Box>
+  
 </div>
   );
 }

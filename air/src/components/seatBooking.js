@@ -211,7 +211,7 @@ export default function SeatBooking() {
             <div style={{ margin: 40 }}>
 
               <FormControl component="fieldset">
-                <FormLabel component="legend">Platinum Class - USD $  {flight.BusinessPrice}</FormLabel>
+                <FormLabel component="legend">Platinum Class - USD $  {flight.PlatinumPrice}</FormLabel>
                 <FormGroup aria-label="position" row>
 
 
@@ -249,7 +249,7 @@ export default function SeatBooking() {
             <div style={{ margin: 40 }}>
 
               <FormControl component="fieldset">
-                <FormLabel component="legend">Business Class -  USD $ {flight.PlatinumPrice}</FormLabel>
+                <FormLabel component="legend">Business Class -  USD $ {flight.BusinessPrice}</FormLabel>
                 <FormGroup aria-label="position" row>
 
 

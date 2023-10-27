@@ -53,7 +53,10 @@ export default function ReviewAndPay() {
     console.log(location.state.bookingDetails[0])
     axios.post("/booking/createPayment", {
       bookingId: location.state.bookingDetails[0].BookingID,
-      passengerID: location.state.bookingDetails[0].PassengerID
+      passengerID: location.state.bookingDetails[0].PassengerID,
+      flight:flight,
+      passengerDetails:passengerDetails,
+      seat:seat
 
     }).then((response) => {
       console.log(response);
@@ -108,9 +111,11 @@ export default function ReviewAndPay() {
 
     { field: 'FirstName', headerName: 'First Name', width: 200 },
     { field: 'LastName', headerName: 'Last Name', width: 130 },
+    { field: 'PassportNumber', headerName: 'PassportNumber', width: 130 },
 
     { field: 'ContactNumber1', headerName: 'Contact Number 1', width: 130 },
-    { field: 'EmailAddress', headerName: 'Email Address', width: 300 }
+    { field: 'EmailAddress', headerName: 'Email Address', width: 130 },
+    { field: 'ContactNumber2', headerName: 'Contact Number 2', width: 200 },
 
 
   ];
@@ -203,15 +208,7 @@ export default function ReviewAndPay() {
 
         <AppBar position="static">
           <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+           
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>

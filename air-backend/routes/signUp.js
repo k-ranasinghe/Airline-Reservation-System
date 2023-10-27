@@ -28,6 +28,7 @@ router.post('/insertSignUp', async(req,res) => {
         else{
             req.body.registrationDetails.password = hash;
             const registration_id = await createRegistrant(req.body.registrationDetails);
+            
             var token = createToke(req.body.registrationDetails.userName);
             res.cookie('jwt',token,{httpOnly:true,maxAge:3*24*60*60*1000});
             res.send(registration_id);
@@ -48,6 +49,8 @@ router.post('/checkPassword', async(req, res) => {
             }
             else{
                 if(response){
+
+                    
                     var token = createToke(req.body.loginDetails.username);
                     res.cookie('jwt',token,{httpOnly:true,maxAge:3*24*60*60*1000});
                     res.send({Login:true,passengerDetails:result[0][0]});

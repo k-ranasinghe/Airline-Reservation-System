@@ -11,14 +11,15 @@ const pool=mysql.createPool({
 
 }).promise();
 
+//inserting into database
 export async function createRegistrant(registrationDetails){ 
     const dateofBirth = new Date(registrationDetails.dateofBirth);
-    const result = await pool.query('insert into registereduser (Username, Password, FirstName, LastName, Nationality, PassportNumber, UserType, DateOfBirth, ContactNumber1, EmailAddress) values (?,?,?,?,?,?,?,?,?,?);',[registrationDetails.userName,registrationDetails.password, registrationDetails.firstName, registrationDetails.lastName, registrationDetails.country, registrationDetails.passportNumber, 'Frequent' , dateofBirth ,registrationDetails.number,registrationDetails.email])
+    const result = await pool.query('insert into registereduser (Username, Password, FirstName, LastName, Nationality, PassportNumber, UserType, DateOfBirth, ContactNumber1, contactNumber2, EmailAddress) values (?,?,?,?,?,?,?,?,?,?,?);',[registrationDetails.userName,registrationDetails.password, registrationDetails.firstName, registrationDetails.lastName, registrationDetails.country, registrationDetails.passportNumber, 'Frequent' , dateofBirth ,registrationDetails.number1, registrationDetails.number2, registrationDetails.email])
     console.log(result[0])
     return result[0];
 }
 
-
+//authentication (password checking)
 export async function checkPasswordfromDB(loginDetails){
     try{
         console.log("in check password");

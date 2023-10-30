@@ -148,22 +148,17 @@ export async function getFlightData0 (flightnumber){
 // flightdata for passenger age > 18
 export async function getFlightData1 (flightnumber){
     console.log(flightnumber)
-    const result =await pool.query('CREATE VIEW immflight1 AS SELECT flightid, aircraftid, departuredatetime FROM flight WHERE flightnumber like ? limit 1', [flightnumber])
-    const result1 =await pool.query('SELECT @rownum:=@rownum+1 AS ID, seatid, booking.PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 FROM immflight1 JOIN booking ON immflight1.flightid = booking.flightid JOIN passenger ON booking.passengerid = passenger.passengerid JOIN registereduser ON passenger.userid = registereduser.userid , (SELECT @rownum:=0) r WHERE DateOfBirth < DATE_SUB(NOW(), INTERVAL 18 YEAR) UNION SELECT @rownum:=@rownum+1 AS ID, seatid, booking.PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 FROM immflight1 JOIN booking ON immflight1.flightid = booking.flightid JOIN passenger ON booking.passengerid = passenger.passengerid JOIN guest ON passenger.guestid = guest.guestid , (SELECT @rownum:=0) r WHERE DateOfBirth < DATE_SUB(NOW(), INTERVAL 18 YEAR);')
-    const result2 =await pool.query('drop view immflight1')    
-    console.log(result1[0])
-    return result1[0];
+    const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth < DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? and DepartureDateTime > now() limit 1);', [flightnumber])   
+    console.log(result[0])
+    return result[0];
 }
 
 // flightdata for passenger age < 18
 export async function getFlightData2 (flightnumber){
     console.log(flightnumber)
-    const result =await pool.query('CREATE VIEW immflight1 AS SELECT flightid, aircraftid, departuredatetime FROM flight WHERE flightnumber like ? limit 1', [flightnumber])
-    const result1 =await pool.query('SELECT @rownum:=@rownum+1 AS ID, seatid, booking.PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 FROM immflight1 JOIN booking ON immflight1.flightid = booking.flightid JOIN passenger ON booking.passengerid = passenger.passengerid JOIN registereduser ON passenger.userid = registereduser.userid , (SELECT @rownum:=0) r WHERE DateOfBirth > DATE_SUB(NOW(), INTERVAL 18 YEAR) UNION SELECT @rownum:=@rownum+1 AS ID, seatid, booking.PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 FROM immflight1 JOIN booking ON immflight1.flightid = booking.flightid JOIN passenger ON booking.passengerid = passenger.passengerid JOIN guest ON passenger.guestid = guest.guestid , (SELECT @rownum:=0) r WHERE DateOfBirth > DATE_SUB(NOW(), INTERVAL 18 YEAR);')
-    const result2 =await pool.query('drop view immflight1')    
-    console.log(result1[0])
-    return result1[0];
-}
+    const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth > DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? and DepartureDateTime > now() limit 1);', [flightnumber]) 
+    console.log(result[0])
+    return result[0];
 
 export async function getDestinationData (Destination, fromDate, toDate){
     console.log(Destination, fromDate, toDate)

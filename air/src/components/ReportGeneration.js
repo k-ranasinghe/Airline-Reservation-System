@@ -843,116 +843,6 @@ style={{ marginTop: 0 }}
         /> </div></> </Paper>  
         </Box>
          :null} 
-              
-              {value === 0 && data1_1.length>0 ? 
-              
-              <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '20px',
-                minHeight: '100vh',
-                // backgroundImage: `url(${img})`,
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-                backgroundPositionY: 'center',
-              }}
-            >
-               <Paper elevation={3}
-
-style={{ marginTop: 0 }}
->
-
-
-<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
-              <Typography variant="h4"  sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Calibri',
-              fontWeight: 'bold',
-              letterSpacing: '.05rem',
-              color: 'grey',
-              textDecoration: 'none',
-            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Passengers over 18 years</div></Typography>
-              <DataGrid
-
-                rows={data1_1.length > 0 ? data1_1 : []}
-                columns={columns1_1}
-                getRowId={(row) => row.ID}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 100, 150, 0.7)'}}
-                onRowClick={(e) => {
-
-                  console.log(e.row);
-                  setSelected(e.row);
-                }}
-
-                slots={{
-                  footer: CustomFooter
-                }}
-                initialState={{
-
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-
-                pageSizeOptions={[5, 10]}
-
-              />  </div></> </Paper> </Box> :null}
-              {value === 0 && data1_2.length>0 ?   <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '20px',
-        minHeight: '100vh',
-        // backgroundImage: `url(${img})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPositionY: 'center',
-      }}
-    >  <Paper elevation={3}
-
-style={{ marginTop: 0 }}
->
-
-
-<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
-              <Typography variant="h4"  sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Calibri',
-              fontWeight: 'bold',
-              letterSpacing: '.05rem',
-              color: 'grey',
-              textDecoration: 'none',
-            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}>Passengers under 18 years</div></Typography>
-              <DataGrid
-
-                rows={data1_2.length > 0 ? data1_2 : []}
-                columns={columns1_1}
-                getRowId={(row) => row.ID}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 150, 150, 0.7)'}}
-                onRowClick={(e) => {
-
-                  console.log(e.row);
-                  setSelected(e.row);
-                }}
-
-                slots={{
-                  footer: CustomFooter,
-                }}
-                initialState={{
-
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-
-                pageSizeOptions={[5, 10]}
-
-                /></div></>  </Paper></Box> :null}
 
       {value === 1 && data2_0.length>0 ?                
                 <Box
@@ -1044,7 +934,7 @@ style={{ marginTop: 0 }}
               >Total Passengers traveling to Destination</div>
               <div style={{ marginTop: 50, marginLeft: '-835px', marginRight: 'auto', width: 'fit-content' }}
               >During Given Date Range</div></Typography>
-              <div style={{ marginTop: -50, marginLeft: 520, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(160, 40, 120, 0.7)'}}>{data2_1[0].total_passengers}</div>
+              <div style={{ marginTop: -50, marginLeft: 520, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(160, 40, 120, 0.7)'}}>{data2_1[0] && data2_1[0].total_passengers !== null ? data2_1[0].total_passengers : '0'}</div>
                </div></> </Paper>
 
                 </Box>
@@ -1365,10 +1255,8 @@ style={{ marginTop: 0 }}
               color: 'grey',
               textDecoration: 'none',
             }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
-            >Total Number of Passengers who</div>
-            <div style={{ marginTop: 50, marginLeft: '-610px', marginRight: 'auto', width: 'fit-content' }}
-            >travelled the given Route</div></Typography>
-            <div style={{ marginTop: -50, marginLeft: 420, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(30, 30, 150, 0.7)'}}>{data4_3[0].totalcount}</div>
+            >Total Number of Passengers who travelled the given Route</div></Typography> 
+            <div style={{ marginTop: -50, marginLeft: 420, marginRight: 'auto', width: 'fit-content' , fontSize: '200px', color: 'rgba(30, 30, 150, 0.7)'}}>{data4_3[0] && data4_3[0].totalcount !== null ? data4_3[0].totalcount : '0'}</div>
            </div></>   </Paper>
         :null}
 

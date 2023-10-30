@@ -52,6 +52,12 @@ export default function SignUp() {
         console.log("passenegers",registrationDetails);
 
     }
+    function handleDateChange(date) {
+        // Update the dateofBirth property in the registrationDetails state
+        const isoDate = date.format();
+        setRegistrationDetails({ ...registrationDetails, dateofBirth: isoDate });
+        console.log("Selected Date:", date.toISOString());
+    }
     function saveSignUpDetails(){
         console.log("signin in process");
         try{
@@ -67,6 +73,13 @@ export default function SignUp() {
         }
         
     };
+    function App({ children }) {
+        return (
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {children}
+          </LocalizationProvider>
+        );
+      }
 
     return (
         <div>
@@ -164,7 +177,11 @@ export default function SignUp() {
                                     <Grid item xs={12} >
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DemoContainer components={['DatePicker']}>
-                                                <DatePicker label="Date of Birth*" name = "dateofBirth"  defaultValue={dayjs('2022-04-17')} onChange={(e) => { console.log(e)   }} />
+                                                <DatePicker onChange= {(date) => handleDateChange(date)}
+                                                
+                                                label="dateofBirth" 
+                                                name = "dateofBirth"  
+                                                defaultValue={dayjs('2022-04-17')}  />
 
                                             </DemoContainer>
                                         </LocalizationProvider>
@@ -287,3 +304,4 @@ name="Nationality"
 
 
 
+//onChange={(e) => { console.log(e)   }}

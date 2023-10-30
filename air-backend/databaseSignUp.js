@@ -12,8 +12,8 @@ const pool=mysql.createPool({
 }).promise();
 
 export async function createRegistrant(registrationDetails){ 
-
-    const result = await pool.query('insert into registereduser (Username, Password, FirstName, LastName, Nationality, PassportNumber, UserType, DateOfBirth, ContactNumber1, EmailAddress) values (?,?,?,?,?,?,?,?,?,?);',[registrationDetails.userName,registrationDetails.password, registrationDetails.firstName, registrationDetails.lastName, registrationDetails.country, registrationDetails.passportNumber, 'Frequent' , '2002-07-09' ,registrationDetails.number,registrationDetails.email])
+    const dateofBirth = new Date(registrationDetails.dateofBirth);
+    const result = await pool.query('insert into registereduser (Username, Password, FirstName, LastName, Nationality, PassportNumber, UserType, DateOfBirth, ContactNumber1, EmailAddress) values (?,?,?,?,?,?,?,?,?,?);',[registrationDetails.userName,registrationDetails.password, registrationDetails.firstName, registrationDetails.lastName, registrationDetails.country, registrationDetails.passportNumber, 'Frequent' , dateofBirth ,registrationDetails.number,registrationDetails.email])
     console.log(result[0])
     return result[0];
 }

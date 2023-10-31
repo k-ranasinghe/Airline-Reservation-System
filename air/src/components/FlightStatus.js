@@ -10,6 +10,9 @@ import isAdmin from '../utils/utils.js';
 
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import axios from 'axios';
+import { isGuest, logout } from "../utils/utils";
+import { AppBar, Button, Fab, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, Radio, RadioGroup, Select, Toolbar, Typography } from "@mui/material";
+
 
 
 import { useNavigate } from "react-router-dom";
@@ -157,7 +160,44 @@ export default function FlightStatus() {
     }, [currentDate]);
 
     return (
+
         <div>
+            <Box sx={{ flexGrow: 1 }}>
+
+                <AppBar position="static">
+                    <Toolbar>
+
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            B Airlines
+                        </Typography>
+
+                        <Button onClick={() => {
+                            navigate("/flightStatus")
+                        }} color="inherit" > Flight Status </Button>
+
+                        <Button onClick={() => {
+                            navigate("/reportGeneration")
+                        }} color="inherit" > {isAdmin() ? "Admin" : ""} </Button>
+                        <Button onClick={() => {
+                            navigate("/loginPage")
+                        }}
+                            color="inherit"> {isGuest() ? "Login" : ""}</Button>
+                        <Button color="inherit" onClick={() => {
+                            axios.post('/signUp/logout').then((response) => {
+                                logout();
+
+                                navigate("/loginPage")
+                            }
+                            )
+                        }}
+                        >
+                            {!isGuest() ? "Log Out" : ""}
+
+                        </Button>
+
+                    </Toolbar>
+                </AppBar>
+            </Box>
             <Box
                 sx={{
                     display: 'flex',

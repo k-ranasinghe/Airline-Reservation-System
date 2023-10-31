@@ -99,6 +99,10 @@ export default function PassengerDetailsForm() {
             </Typography>
 
             <Button onClick={() => {
+              navigate("/flightStatus")
+            }} color="inherit" > Flight Status </Button>
+
+            <Button onClick={() => {
               navigate("/reportGeneration")
             }} color="inherit" > {isAdmin() ? "Admin" : ""} </Button>
             <Button onClick={() => {

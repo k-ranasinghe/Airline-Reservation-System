@@ -78,10 +78,15 @@ export default function SeatBooking() {
 
     console.log("passengerDetails", passengerDetails)
     console.log("isGUest", !isGuest())
+    let userID = null;
+    if(!isGuest()){
+      userID= JSON.parse(localStorage.getItem("userDetails")).UserID
+    }
 
     axios.post("/booking/bookTicket", {
-      userID: JSON.parse(localStorage.getItem("userDetails")).UserID,
-      isGuest: isGuest(),
+      
+      userID: userID,
+      isGuest: isGuest() || !location.state.isAutoFill,
 
       flight: flight,
       passengerDetails: passengerDetails,

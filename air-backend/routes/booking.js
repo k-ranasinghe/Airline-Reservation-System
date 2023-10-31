@@ -50,7 +50,7 @@ router.get('/airports', async (req, res) => {
 }
 );
 router.post('/bookTicket', async (req, res) => {
-    console.log("request", req.body);
+    console.log("request isGuest", req.body.isGuest);
     let passenger_id = null
     let geust_id = null
     if (req.body.isGuest) {

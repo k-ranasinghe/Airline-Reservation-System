@@ -308,6 +308,7 @@ export default function SearchFlightInput() {
                 value={departureDate}
                 error={false}
                 defaultValue={dayjs('2022-07-17')}
+                minDate={dayjs(new Date ().toLocaleDateString())}
 
 
 

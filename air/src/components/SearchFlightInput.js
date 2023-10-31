@@ -209,6 +209,9 @@ export default function SearchFlightInput() {
             <Typography style={{ marginLeft: 500 }} variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Welcome {localStorage.getItem("userName") != '' ? localStorage.getItem("userName") : ""}
             </Typography>
+            <Button onClick={() => {
+              navigate("/flightStatus")
+            }} color="inherit" > Flight Status </Button>
             {isAdmin() ? <Button onClick={() => {
               navigate("/reportGeneration")
             }} color="inherit" > Admin</Button> : null}
@@ -303,7 +306,7 @@ export default function SearchFlightInput() {
                   </MenuItem>
                 ))}
               </TextField>
-              
+
               <DatePicker
                 value={departureDate}
                 error={false}

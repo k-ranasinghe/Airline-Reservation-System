@@ -20,6 +20,16 @@ export async function getFlightStatus(currentDate) {
     return result;
 }
 
+export async function addFlightDelay(delayDetails) {
+    delayDetails = delayDetails.delayDetails
+    console.log("delay deatails", delayDetails)
+    console.log("delayDetails.flightID", delayDetails.flightID, delayDetails.delayTime, delayDetails.isArrival)
+
+    const result = await pool.query('insert into delay (FlightID, DelayTime, isArrival) values (?,?,1);', [delayDetails.flightID, delayDetails.delayTime]);
+    console.log(result[0]);
+    return result[0];
+}
+
 
 export default pool;
 

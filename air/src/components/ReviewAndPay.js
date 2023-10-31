@@ -56,9 +56,9 @@ export default function ReviewAndPay() {
     axios.post("/booking/createPayment", {
       bookingId: location.state.bookingDetails[0].BookingID,
       passengerID: location.state.bookingDetails[0].PassengerID,
-      flight:flight,
-      passengerDetails:passengerDetails,
-      seat:seat
+      flight: flight,
+      passengerDetails: passengerDetails,
+      seat: seat
 
     }).then((response) => {
       console.log(response);
@@ -211,10 +211,19 @@ export default function ReviewAndPay() {
 
         <AppBar position="static">
           <Toolbar>
+<<<<<<< HEAD
            
             <Typography  onClick={()=>navigate('/')} variant="h6" component="div" sx={{ flexGrow: 1 }}>
+=======
+
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+>>>>>>> 01763d8fdbd9bb2e8d3658d5439992c8ae0997e3
               B Airlines
             </Typography>
+
+            <Button onClick={() => {
+              navigate("/flightStatus")
+            }} color="inherit" > Flight Status </Button>
 
             <Button onClick={() => {
               navigate("/reportGeneration")

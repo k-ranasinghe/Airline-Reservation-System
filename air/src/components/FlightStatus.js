@@ -2,14 +2,20 @@ import * as React from 'react';
 import img from '../image/airline.jpg';
 import Box from '@mui/material/Box';
 import { Paper } from "@mui/material";
+import TextField from '@mui/material/TextField';
 import { useEffect, useState } from "react";
+
+import isAdmin from '../utils/utils.js';
 
 
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import axios from 'axios';
+import { isGuest, logout } from "../utils/utils";
+import { AppBar, Button, Fab, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, Radio, RadioGroup, Select, Toolbar, Typography } from "@mui/material";
 
 
 
+import { useNavigate } from "react-router-dom";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -26,6 +32,70 @@ export default function FlightStatus() {
     // const [currentDate, setCurrentDate] = useState({});
     const [currentDate, setCurrentDate] = useState(new Date());
     const [data, setData] = useState([]);
+    const [delayDetails, setDelayDetails] = useState([]);
+
+    const [showForm, setShowForm] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isAdmin()) {
+            setShowForm(true);
+        }
+    }, []); // Run this effect only once when the component mounts
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    };
+
+    // function handleChange(event) {
+    //     setDelayDetails({ ...delayDetails, [event.target.name]: event.target.value });
+    //     // console.log("passenegers",registrationDetails);
+
+    // }
+
+    // const handleChange = (event) => {
+    //     const { name, value, type, checked } = event.target;
+    //     const newValue = type === 'checkbox' ? checked : value;
+
+    //     setDelayDetails({
+    //         ...delayDetails,
+    //         [name]: newValue,
+    //     });
+    // };
+
+    const handleChange = (event) => {
+        const { name, value, type, checked } = event.target;
+        // 
+        // Use a conditional to handle the 'flightID' field
+        const newValue =
+            name === 'flightID'
+                ? parseInt(value, 10) // Parse the value as an integer
+                : type === 'checkbox'
+                    ? checked
+                    : value;
+        console.log("int value", parseInt(value, 10))
+        setDelayDetails({
+            ...delayDetails,
+            [name]: newValue,
+        });
+    };
+
+    function saveDelay() {
+        console.log("saving delay details");
+        try {
+            console.log("delayDetails", delayDetails);
+            axios.post("/flightStatus/addFlightDelay", {
+                delayDetails: delayDetails,
+            }).then((response) => {
+                console.log("response", response);
+
+            })
+        } catch {
+
+        }
+
+    };
 
     const formatTime = (dateTimeString) => {
         if (!dateTimeString) return ''; // Handle null or missing values
@@ -57,7 +127,7 @@ export default function FlightStatus() {
                             <TableCell>{row.Origin}</TableCell>
                             <TableCell>{row.Destination}</TableCell>
                             <TableCell>
-                                <span style={{ color: row.DelayTime === null ? 'green' : 'black' }}>
+                                <span style={{ color: row.DelayTime === null ? 'green' : 'red' }}>
                                     {row.DelayTime === null ? 'On Time' : row.DelayTime}
                                 </span>
                             </TableCell>
@@ -90,7 +160,44 @@ export default function FlightStatus() {
     }, [currentDate]);
 
     return (
+
         <div>
+            <Box sx={{ flexGrow: 1 }}>
+
+                <AppBar position="static">
+                    <Toolbar>
+
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            B Airlines
+                        </Typography>
+
+                        <Button onClick={() => {
+                            navigate("/flightStatus")
+                        }} color="inherit" > Flight Status </Button>
+
+                        <Button onClick={() => {
+                            navigate("/reportGeneration")
+                        }} color="inherit" > {isAdmin() ? "Admin" : ""} </Button>
+                        <Button onClick={() => {
+                            navigate("/loginPage")
+                        }}
+                            color="inherit"> {isGuest() ? "Login" : ""}</Button>
+                        <Button color="inherit" onClick={() => {
+                            axios.post('/signUp/logout').then((response) => {
+                                logout();
+
+                                navigate("/loginPage")
+                            }
+                            )
+                        }}
+                        >
+                            {!isGuest() ? "Log Out" : ""}
+
+                        </Button>
+
+                    </Toolbar>
+                </AppBar>
+            </Box>
             <Box
                 sx={{
                     display: 'flex',
@@ -102,9 +209,62 @@ export default function FlightStatus() {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     backgroundPositionY: 'center',
-                  }}>
+                }}>
 
                 {/* <div>hello</div> */}
+                {/* <div>
+                    <TextField
+                        id="outlined-basic"
+                        label="Outlined"
+                        variant="outlined"
+                    />
+
+                </div> */}
+                <div>
+                    {showForm ? (
+                        <div>
+                            <form>
+                                <TextField
+                                    name="flightID"
+                                    label="Flight ID"
+                                    fullWidth
+                                    type='number'
+                                    value={delayDetails.flightID}
+                                    onChange={handleChange}
+                                />
+                                <TextField
+                                    name="delayTime"
+                                    label="Delay Time"
+                                    fullWidth
+                                    value={delayDetails.delayTime}
+                                    onChange={handleChange}
+                                />
+                                {/* <TextField
+                                    name="isArrival"
+                                    label="Is Arrival"
+                                    type="checkbox"
+                                    checked={delayDetails.isArrival}
+                                    onChange={handleChange}
+                                /> */}
+                            </form>
+                            <button
+                                type="submit"
+                                onClick={() => {
+                                    saveDelay();
+                                    navigate('/flightStatus',
+
+                                    )
+                                }}
+
+                            >Submit</button>
+                        </div>
+
+                    ) : (
+                        <p>You do not have permission to edit the data.</p>
+                    )}
+
+                </div>
+
                 <FlightStatusTable data={data} />
 
 

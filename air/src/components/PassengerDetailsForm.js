@@ -99,6 +99,10 @@ const [isAutoFill,setIsAutoFill]=useState(false)
             </Typography>
 
             <Button onClick={() => {
+              navigate("/flightStatus")
+            }} color="inherit" > Flight Status </Button>
+
+            <Button onClick={() => {
               navigate("/reportGeneration")
             }} color="inherit" > {isAdmin() ? "Admin" : ""} </Button>
             <Button onClick={() => {

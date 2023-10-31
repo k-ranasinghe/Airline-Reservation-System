@@ -160,10 +160,14 @@ export default function SeatBooking() {
 
         <AppBar position="static">
           <Toolbar>
-           
+
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
+
+            <Button onClick={() => {
+              navigate("/flightStatus")
+            }} color="inherit" > Flight Status </Button>
 
             <Button onClick={() => {
               navigate("/reportGeneration")

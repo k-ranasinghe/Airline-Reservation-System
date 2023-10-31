@@ -32,6 +32,7 @@ export default function SearchFlightInput() {
 
   useEffect(() => {
     console.log(localStorage.getItem("username"));
+    localStorage.removeItem("seat")
 
     if (!localStorage.getItem("userDetails") && !isGuest()) {
       navigate("/loginPage");

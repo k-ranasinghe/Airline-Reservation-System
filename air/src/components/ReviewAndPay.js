@@ -23,7 +23,9 @@ export default function ReviewAndPay() {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () =>{setOpen(false)
+  
+  };
 
   const location = useLocation();
   const [flight, setFlight] = useState({});
@@ -60,6 +62,7 @@ export default function ReviewAndPay() {
 
     }).then((response) => {
       console.log(response);
+      
     })
   }
 
@@ -209,7 +212,7 @@ export default function ReviewAndPay() {
         <AppBar position="static">
           <Toolbar>
            
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography  onClick={()=>navigate('/')} variant="h6" component="div" sx={{ flexGrow: 1 }}>
               B Airlines
             </Typography>
 

@@ -159,6 +159,7 @@ export async function getFlightData2 (flightnumber){
     const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth > DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? and DepartureDateTime > now() limit 1);', [flightnumber]) 
     console.log(result[0])
     return result[0];
+}
 
 export async function getDestinationData (Destination, fromDate, toDate){
     console.log(Destination, fromDate, toDate)

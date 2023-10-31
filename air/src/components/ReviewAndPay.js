@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Checkbox, Fade, FormGroup, Modal } from "@mui/material";
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { AppBar, Box, Button, Fab, FormControl, FormControlLabel, FormLabel, IconButton, InputLabel, Paper, Radio, RadioGroup, Select, TextField, Toolbar, Typography } from "@mui/material";
 import ChairIcon from '@mui/icons-material/Chair';
@@ -17,6 +18,7 @@ import { DataGrid, GridActionsCellItem, GridSaveAltIcon } from "@mui/x-data-grid
 import Backdrop from '@mui/material/Backdrop';
 import axios from "axios";
 import isAdmin, { isGuest, logout } from "../utils/utils";
+import { green } from '@mui/material/colors';
 export default function ReviewAndPay() {
 
 
@@ -24,6 +26,7 @@ export default function ReviewAndPay() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () =>{setOpen(false)
+    navigate('/')
   
   };
 
@@ -35,7 +38,7 @@ export default function ReviewAndPay() {
   const [details, setDetails] = useState([])
   const [origin, setOrigin] = useState({});
   const [destination, setDestination] = useState({});
-
+const [loading,setLoading]=useState(false)
 
 
   function getAirportLocation(origin, desitination) {
@@ -52,6 +55,8 @@ export default function ReviewAndPay() {
     })
   }
   function createTicket() {
+
+
     console.log(location.state.bookingDetails[0])
     axios.post("/booking/createPayment", {
       bookingId: location.state.bookingDetails[0].BookingID,
@@ -62,6 +67,10 @@ export default function ReviewAndPay() {
 
     }).then((response) => {
       console.log(response);
+      // navigate('/')
+      setLoading(false)
+      setOpen(true)
+      
       
     })
   }
@@ -379,13 +388,15 @@ export default function ReviewAndPay() {
 
               </> : null}
             </div>
+            <Box>
             <Button
               fullWidth={true}
 
 
 
               onClick={() => {
-                setOpen(true)
+                setLoading(true)
+                // setOpen(true)
                 createTicket();
 
 
@@ -394,7 +405,23 @@ export default function ReviewAndPay() {
 
               comfirm Payment
             </Button>
+            {loading && (
+          <CircularProgress
+            size={50}
+            sx={{
+              color: green[500],
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-12px',
+              marginLeft: '-12px',
+            }}
+            />
+           
+            )}
+             </Box>
           </>
+       
         </Paper>
 
       </Box>

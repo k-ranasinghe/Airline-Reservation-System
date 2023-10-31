@@ -20,7 +20,7 @@ import nodemailer from "nodemailer";
   // Define and send message inside transporter.sendEmail() and await info about send from promise:
   let info = await transporter.sendMail({
     from: 'psajeendran@gmail.com',
-    to: passengerDetails[0].EmailAddress, // List of recipients
+    to: passengerDetails.EmailAddress, // List of recipients
     subject: "Testing, testing, 123",
     html: `
     <!DOCTYPE html>
@@ -67,27 +67,27 @@ import nodemailer from "nodemailer";
                 <table>
                     <tr>
                         <th>From</th>
-                        <td>${flightDetails[0].Origin}</td>
+                        <td>${flightDetails.Origin}</td>
                     </tr>
                     <tr>
                         <th>To</th>
-                        <td>${flightDetails[0].Destination}</td>
+                        <td>${flightDetails.Destination}</td>
                     </tr>
                     <tr>
                         <th>Flight Number</th>
-                        <td>${flightDetails[0].FlightNumber}</td>
+                        <td>${flightDetails.FlightNumber}</td>
                     </tr>
                     <tr>
                         <th>Departure Time</th>
-                        <td>${flightDetails[0].DepartureDateTime}</td>
+                        <td>${flightDetails.DepartureDateTime}</td>
                     </tr>
                     <tr>
                         <th>Expected Arrival</th>
-                        <td>${flightDetails[0].ArrivalDateTime}</td>
+                        <td>${flightDetails.ArrivalDateTime}</td>
                     </tr>
                     <tr>
                         <th>Duration</th>
-                        <td>${flightDetails[0].Duration}</td>
+                        <td>${flightDetails.Duration}</td>
                     </tr>
                 </table>
             </div>
@@ -96,23 +96,23 @@ import nodemailer from "nodemailer";
                 <table>
                     <tr>
                         <th>First Name</th>
-                        <td>${passengerDetails[0].FirstName}</td>
+                        <td>${passengerDetails.FirstName}</td>
                     </tr>
                     <tr>
                         <th>Last Name</th>
-                        <td>${passengerDetails[0].LastName}</td>
+                        <td>${passengerDetails.LastName}</td>
                     </tr>
                     <tr>
                         <th>Passport Number</th>
-                        <td>${passengerDetails[0].PassportNumber}</td>
+                        <td>${passengerDetails.PassportNumber}</td>
                     </tr>
                     <tr>
                         <th>Contact Number 1</th>
-                        <td>${passengerDetails[0].ContactNumber1}</td>
+                        <td>${passengerDetails.ContactNumber1}</td>
                     </tr>
                     <tr>
                         <th>Email Address</th>
-                        <td>${passengerDetails[0].EmailAddress}</td>
+                        <td>${passengerDetails.EmailAddress}</td>
                     </tr>
                     <tr>
                         <th>Contact Number 2</th>
@@ -125,11 +125,11 @@ import nodemailer from "nodemailer";
                 <table>
                     <tr>
                         <th>Travel Class</th>
-                        <td>${seatDetails[0].travelClass}</td>
+                        <td>${seatDetails.travelClass}</td>
                     </tr>
                     <tr>
                         <th>Seat Number</th>
-                        <td>${seatDetails[0].seatNO}</td>
+                        <td>${seatDetails.seatNO}</td>
                     </tr>
                 </table>
             </div>

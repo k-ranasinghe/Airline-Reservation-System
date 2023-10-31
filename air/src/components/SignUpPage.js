@@ -4,8 +4,6 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -39,18 +37,20 @@ export default function SignUp() {
     const navigate = useNavigate();
     const handleSubmit = (event) => {
         event.preventDefault();
-        // .catch(err => console.log(err)))
-    //    axios.post()
-    //     const data = new FormData(event.currentTarget);
-    //     console.log({
-    //         email: data.get('email'),
-    //         password: data.get('password'),
-    //     });
+       
     };
+    //onclick 
     function handleChange(event){
         setRegistrationDetails({...registrationDetails,[event.target.name]:event.target.value});
         console.log("passenegers",registrationDetails);
 
+    }
+    //handle date inputs separately
+    function handleDateChange(date) {
+        // Update the dateofBirth property in the registrationDetails state
+        const isoDate = date.format();
+        setRegistrationDetails({ ...registrationDetails, dateofBirth: isoDate });
+        console.log("Selected Date:", date.toISOString());
     }
     function saveSignUpDetails(){
         console.log("signin in process");
@@ -67,6 +67,13 @@ export default function SignUp() {
         }
         
     };
+    function App({ children }) {
+        return (
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {children}
+          </LocalizationProvider>
+        );
+      }
 
     return (
         <div>
@@ -164,7 +171,11 @@ export default function SignUp() {
                                     <Grid item xs={12} >
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DemoContainer components={['DatePicker']}>
-                                                <DatePicker label="Date of Birth*" name = "dateofBirth"  defaultValue={dayjs('2022-04-17')} onChange={(e) => { console.log(e)   }} />
+                                                <DatePicker onChange= {(date) => handleDateChange(date)}
+                                                
+                                                label="Date of Birth" 
+                                                name = "dateofBirth"  
+                                                defaultValue={dayjs('2022-04-17')}  />
 
                                             </DemoContainer>
                                         </LocalizationProvider>
@@ -176,9 +187,19 @@ export default function SignUp() {
                                         onChange={handleChange}
                                             required
                                             fullWidth
-                                            id="number"
-                                            label="Telephone Number"
-                                            name="number"
+                                            id="number1"
+                                            label="Telephone Number 1"
+                                            name="number1"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                        onChange={handleChange}
+                                            required
+                                            fullWidth
+                                            id="number2"
+                                            label="Telephone Number 2"
+                                            name="number2"
                                         />
                                     </Grid>
 
@@ -206,49 +227,25 @@ export default function SignUp() {
                                             autoComplete="new-password"
                                         />
                                     </Grid>
-
-                                    <Grid item xs={12}>
-                                        <FormControl>
-                                            <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-                                            <RadioGroup
-                                                row
-                                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                            >
-                                                <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                                <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    </Grid>
-
-
-                                    {/* <Grid item xs={12}>
-                                        <FormControlLabel
-                                            control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                            label="I want to receive promotions and updates via email."
-                                        />
-                                    </Grid> */}
-
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
 
-<InputLabel id="demo-simple-select-label">Nationality</InputLabel>
-<Select
+                                    <InputLabel id="demo-simple-select-label">Nationality</InputLabel>
+                                        <Select
+                                            name = "country"
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            label="Nationality"
+                                            onChange={handleChange}
+                                            
 
-labelId="demo-simple-select-label"
-id="demo-simple-select"
-label="Nationality"
-value="Sri Lankan"
-onChange={handleChange}
-name="Nationality"
-
->
-<MenuItem value={"Sri Lankan"}>Sri Lankan</MenuItem>
-<MenuItem value={"Indian"}>Indian</MenuItem>
-<MenuItem value={"British"}>Canadian</MenuItem>
-</Select>
-   
-</Grid>
+                                            >
+                                            <MenuItem value={"Sri Lankan"}>Sri Lankan</MenuItem>
+                                            <MenuItem value={"Indian"}>Indian</MenuItem>
+                                            <MenuItem value={"British"}>Canadian</MenuItem>
+                                        </Select>
+                                    
+                                    </Grid>
                                 <Button
                                     
                                     type="submit"
@@ -264,13 +261,7 @@ name="Nationality"
                                 >
                                     Sign Up
                                 </Button>
-                                {/* <Grid container justifyContent="flex-end">
-                                    <Grid item>
-                                        <Link href="#" variant="body2">
-                                            Already have an account? Sign in
-                                        </Link>
-                                    </Grid>
-                                </Grid> */}
+                                
                             </Box>
                         </Box>
                     </Container>
@@ -287,3 +278,4 @@ name="Nationality"
 
 
 
+//onChange={(e) => { console.log(e)   }}

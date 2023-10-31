@@ -100,7 +100,9 @@ export async function createPassenger( passengerType, userID,GuestID){
 export async function createGuestUser( flight, passengerDetails){
     console.log( "flight", flight)
     console.log("passenger", passengerDetails);
-    const result =await pool.query('insert into Guest(FirstName,LastName, Nationality,PassportNumber ,DateOfBirth ,ContactNumber1,ContactNumber2, EmailAddress  ) values ( ?,?,?,?,?,?,?,?); ',[passengerDetails.FirstName,passengerDetails.LastName,passengerDetails.Nationality,passengerDetails.PassportNumber,'2001-07-12','0774077017', '0774077017',passengerDetails.emailAddress,'1'])
+    const dateofBirth = new Date(passengerDetails.DateOfBirth);
+
+    const result =await pool.query('insert into Guest(FirstName,LastName, Nationality,PassportNumber ,DateOfBirth ,ContactNumber1,ContactNumber2, EmailAddress  ) values ( ?,?,?,?,?,?,?,?); ',[passengerDetails.FirstName,passengerDetails.LastName,passengerDetails.Nationality,passengerDetails.PassportNumber,dateofBirth,passengerDetails.ContactNumber1, passengerDetails.ContactNumber2,passengerDetails.EmailAddress,'1'])
     console.log(result[0].insertId)
     return result[0].insertId;
 }

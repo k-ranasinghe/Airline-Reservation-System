@@ -70,6 +70,14 @@ const [isAutoFill,setIsAutoFill]=useState(false)
 
 
   }
+ //handle date inputs separately
+ function handleDateChange(date) {
+  // Update the dateofBirth property in the registrationDetails state
+  const isoDate = date.format();
+  setPassengerDetails({ ...passengerDetails, DateOfBirth: isoDate });
+  console.log("Selected Date:", date.toISOString());
+}
+
   function handleChange(event) {
 
     // console.log("event",event);
@@ -210,12 +218,7 @@ const [isAutoFill,setIsAutoFill]=useState(false)
                   value={dayjs(passengerDetails.DateOfBirth)}
                   error={error.DateOfBirth}
 
-                  onChange={(e) => {
-                    console.log(e)
-                    // handleChange(e)
-                    // setDateOfBirth(e)
-                  }}
-                  label="DateOfBirth" />
+                  onChange= {(date) => handleDateChange(date)}                  label="DateOfBirth" />
               </div>
               <div style={{ marginTop: 10 }}>
 

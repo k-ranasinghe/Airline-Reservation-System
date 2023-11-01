@@ -94,7 +94,29 @@ export async function createPassenger( passengerType, userID,GuestID){
     console.log(result[0].insertId)
     return result[0].insertId;
 }
+// export async function scheduleTimer(booking_id){
 
+//     let q=`
+//     delimiter ||
+//     CREATE EVENT e2
+//     ON SCHEDULE
+//       at current_timestamp + INTERVAL 1 second
+//     DO
+//       BEGIN
+//       call ValidateBooking( 33);       
+//     END ||
+//     delimiter  
+//     `
+//     const result = await pool.(q,[booking_id])
+
+//     return result
+
+// }
+export async function validateBooking(bookingId){
+    console.log("bookingId ",bookingId, new Date().toISOString().slice(0, 19).replace('T', ' '))
+    const result = await pool.query(`call ValidateBooking(${bookingId});`);
+    console.log(result[0])
+}
 
 
 export async function createGuestUser( flight, passengerDetails){

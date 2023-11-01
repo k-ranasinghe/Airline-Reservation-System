@@ -1,7 +1,7 @@
 import express from "express";
 
-
-import { createBooking, createGuestUser, createPassenger, createPayment, getAirportLocation, getAriports, getBookingById, getBussinessSeatsFromDB, getEconomySeatsFromDB, getFlightsFromDB, getFlightsWithPricesFromDB, getPlatinumSeatsFromDB, updateBooking } from "../../air-backend/database.js";
+import scheduler from "node-schedule";
+import { createBooking, createGuestUser, createPassenger, createPayment, getAirportLocation, getAriports, getBookingById, getBussinessSeatsFromDB, getEconomySeatsFromDB, getFlightsFromDB, getFlightsWithPricesFromDB, getPlatinumSeatsFromDB, updateBooking, validateBooking } from "../../air-backend/database.js";
 import requireAuth from "../utils/authentication.js";
 import main from "../mailer.js";
 var router = express.Router();
@@ -70,6 +70,12 @@ router.post('/bookTicket', async (req, res) => {
     const booking_id = await createBooking(req.body.flight, passenger_id, req.body.seat, 0);
     console.log("booking", booking_id);
     const booking = await getBookingById(booking_id);
+const date = new Date().setMinutes(new Date().getMinutes() + 1);
+
+const job = scheduler.scheduleJob(date, function(){
+  validateBooking(booking_id);
+});
+    // const shedule= await scheduleTimer(booking_id);
 
     res.send({ "booking_id": booking, "guest_id": geust_id });
 

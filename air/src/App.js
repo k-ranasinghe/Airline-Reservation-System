@@ -11,6 +11,10 @@ import ReportGeneration from './components/ReportGeneration';
 import SignIn from './components/LoginPage';
 import SignUp from './components/SignUpPage';
 import FlightStatus from './components/FlightStatus';
+import MyComponent from './components/test';
+import MyComponent1 from './components/test1';
+
+import AdminPage from './components/admin';
 
 
 export default function App() {
@@ -28,10 +32,11 @@ export default function App() {
         <Route path="/loginPage" element={<SignIn/>}/>
         <Route path="/signUpPage" element={<SignUp/>}/>
         <Route path="/flightStatus" element={<FlightStatus/>}/>
+        <Route path="/admin" element={<AdminPage/>}/>
+        <Route path="/test" element={<MyComponent/>}/>
+        <Route path="/test1" element={<MyComponent1/>}/>
 
-      
-         
-    
+
       </Routes>
     </BrowserRouter>
     </LocalizationProvider>

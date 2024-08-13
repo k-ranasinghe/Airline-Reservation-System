@@ -89,6 +89,8 @@ export default function FlightStatus() {
                 delayDetails: delayDetails,
             }).then((response) => {
                 console.log("response", response);
+                console.log("Response received", response);
+                window.location.reload();
 
             })
         } catch {
@@ -168,7 +170,7 @@ export default function FlightStatus() {
                     <Toolbar>
 
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            B Airlines
+                            B Airways
                         </Typography>
 
                         <Button onClick={() => {
@@ -211,15 +213,6 @@ export default function FlightStatus() {
                     backgroundPositionY: 'center',
                 }}>
 
-                {/* <div>hello</div> */}
-                {/* <div>
-                    <TextField
-                        id="outlined-basic"
-                        label="Outlined"
-                        variant="outlined"
-                    />
-
-                </div> */}
                 <div>
                     {showForm ? (
                         <div>
@@ -234,7 +227,7 @@ export default function FlightStatus() {
                                 />
                                 <TextField
                                     name="delayTime"
-                                    label="Delay Time"
+                                    label="Delay Time (hh:mm:ss)"
                                     fullWidth
                                     value={delayDetails.delayTime}
                                     onChange={handleChange}
@@ -251,9 +244,7 @@ export default function FlightStatus() {
                                 type="submit"
                                 onClick={() => {
                                     saveDelay();
-                                    navigate('/flightStatus',
 
-                                    )
                                 }}
 
                             >Submit</button>
@@ -275,52 +266,3 @@ export default function FlightStatus() {
     )
 }
 
-// const FlightStatusTable = ({ data }) => {
-//     return (
-//         <Table>
-//             <TableHead>
-//                 <TableRow>
-//                     <TableCell>Flight Number</TableCell>
-//                     <TableCell>Delay Time</TableCell>
-//                     <TableCell>Arrival</TableCell>
-//                 </TableRow>
-//             </TableHead>
-//             <TableBody>
-//                 {data.map((row) => (
-//                     <TableRow key={row.FlightID}>
-//                         <TableCell>{row.FlightNumber}</TableCell>
-//                         <TableCell>{row.DelayTime}</TableCell>
-//                         <TableCell>{row.isArrival ? 'Yes' : 'No'}</TableCell>
-//                     </TableRow>
-//                 ))}
-//             </TableBody>
-//         </Table>
-//     );
-// };
-
-// const FlightStatus = () => {
-//     const [currentDate, setCurrentDate] = useState(new Date());
-//     const [data, setData] = useState([]);
-
-//     useEffect(() => {
-//         const fetchData = async () => {
-//             const response = await axios.get('/flightStatus', {
-//                 params: {
-//                     currentDate,
-//                 },
-//             });
-
-//             setData(response.data);
-//         };
-
-//         fetchData();
-//     }, [currentDate]);
-
-//     return (
-//         <div>
-//             <FlightStatusTable data={data} />
-//         </div>
-//     );
-// };
-
-// export default FlightStatus;

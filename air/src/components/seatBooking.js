@@ -162,7 +162,7 @@ export default function SeatBooking() {
           <Toolbar>
 
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              B Airlines
+              B Airways
             </Typography>
 
             <Button onClick={() => {
@@ -171,7 +171,7 @@ export default function SeatBooking() {
 
             <Button onClick={() => {
               navigate("/reportGeneration")
-            }} color="inherit" > {!isAdmin() ? "Admin" : ""} </Button>
+            }} color="inherit" > {isAdmin() ? "Admin" : ""} </Button>
             <Button onClick={() => {
               navigate("/loginPage")
             }}
@@ -349,7 +349,7 @@ export default function SeatBooking() {
               }}>
 
 
-              Book and Proceedd to Review
+              Book and Proceed to Review
             </Button>
           </>
         </Paper>

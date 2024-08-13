@@ -15,6 +15,7 @@ router.get('/', async (req, res) => {
 router.post('/addFlightDelay', async (req, res) => {
     console.log("request", req.body);
     const result = await addFlightDelay(req.body);
+    res.send(result[0]);
 });
 
 export default router;

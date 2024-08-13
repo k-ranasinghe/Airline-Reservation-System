@@ -1,5 +1,14 @@
 {
   "dependencies": {
-    "mysql": "^2.18.1"
+    "bcrypt": "^5.1.1",
+    "chart.js": "^4.4.1",
+    "cookie-parser": "^1.4.6",
+    "export": "^0.1.337",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "node-schedule": "^2.1.1",
+    "nodemailer": "^6.9.7",
+    "react-chartjs-2": "^5.2.0",
+    "react-vis": "^1.12.1"
   }
 }

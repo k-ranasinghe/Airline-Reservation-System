@@ -3,7 +3,6 @@ import router1 from './routes/booking.js';
 import router2 from './routes/signUp.js';
 import router3 from './routes/flightStatus.js';
 import cookieParser from "cookie-parser";
-import cors from 'cors';
 
 import router from './routes/admin.js';
 
@@ -17,11 +16,11 @@ import {
 } from './database.js';
 
 const app = express();
+
 const port = 5000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 app.use(express.json());
 
-app.use(cors());
 
 app.use('/booking', router1);
 app.use('/signUp', router2);

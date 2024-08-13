@@ -103,7 +103,7 @@ const [isAutoFill,setIsAutoFill]=useState(false)
           <Toolbar>
 
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              B Airlines
+              B Airways
             </Typography>
 
             <Button onClick={() => {

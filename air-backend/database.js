@@ -37,6 +37,7 @@ export async function getFlightsFromDB (from,to,departureDate){
     return result[0];
 }
 
+
 export async function getFlightsWithPricesFromDB (from,to,departureDate){
     // console.log(new Date(departureDate).toISOString().slice(0,10))
     // console.log(from,to,departureDate)
@@ -71,6 +72,17 @@ export async function getAirportLocation(origin,desitination){
     return result[0];
 }
 
+export async function getSeatpricefromDB(flightID){
+    const result =await pool.query('select * from price where FlightId=?',[flightID])
+    console.log("queried seat prices are", result[0])
+    return result[0];
+}
+export async function getdiscountfromDB(seatType){
+    console.log("seat type is", seatType);
+    const result = await pool.query('select Discount from usertype where UserType=?',[seatType]);
+    console.log("discount is this", result[0]);
+    return result[0];
+}
 
 
 export async function bookTicket(flight,passengerDetails,seat){
@@ -130,6 +142,16 @@ export async function createGuestUser( flight, passengerDetails){
 }
 
 
+export async function book(   is_guest  ,  userId  ,FirstName , LastName ,  Nationality , PassportNumber  , DateOfBirth  , ContactNumber1 , ContactNumber2 , EmailAddress  ,  FlightId  ,  seat_id ,  PaymentStatus  ){
+    // console.log( "flight", flight)
+    console.log( "147", [is_guest  ,  userId  ,FirstName , LastName ,  Nationality , PassportNumber  , DateOfBirth  , ContactNumber1 , ContactNumber2 , EmailAddress  ,  FlightId  ,  seat_id ,  PaymentStatus ])
+    const result=await pool.query('call booking( ?,?,?,?,?,?,?,?,?,?,?,?,? )',[is_guest  ,  userId  ,FirstName , LastName ,  Nationality , PassportNumber  , DateOfBirth  , ContactNumber1 , ContactNumber2 , EmailAddress  ,  FlightId  ,  seat_id ,  PaymentStatus ])
+console.log(  "result 149",result[0])
+return result[0][0];
+}
+
+
+
 export async function createBooking (flight,passenger_id,seat,paymentStatus){
     console.log("seat",seat)
 
@@ -142,6 +164,7 @@ export async function createBooking (flight,passenger_id,seat,paymentStatus){
 }
 
 export async function createPayment (booking_id,PassengerID ){
+    console.log( "booking_id", booking_id)
     console.log( "date", new Date().toISOString().slice(0, 19).replace('T', ' '))
     const payment=await pool.query('UPDATE UserBookingCount SET bookingCount = bookingCount + 1 WHERE UserID =  ( select UserID from  Passenger where PassengerID=?);',[PassengerID])
     const result =await pool.query('insert into Payment (BookingID ,TimeStamp,PassengerID) values ( "?" ,?,"?");',[booking_id, new Date().toISOString().slice(0, 19).replace('T', ' '),PassengerID])
@@ -164,7 +187,7 @@ export async function updateBooking(booking_id){
 // flightinfo 
 export async function getFlightData0 (flightnumber){
     console.log(flightnumber)
-    const result =await pool.query('SELECT flightid, aircraftid, Origin, Destination, DepartureDateTime, ArrivalDateTime FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? limit 1', [flightnumber])   
+    const result =await pool.query('SELECT flightid, aircraftid, Origin, Destination, DepartureDateTime, ArrivalDateTime FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? and DepartureDateTime > now() limit 1', [flightnumber])   
     console.log(result[0])
     return result[0];
 }
@@ -172,7 +195,7 @@ export async function getFlightData0 (flightnumber){
 // flightdata for passenger age > 18
 export async function getFlightData1 (flightnumber){
     console.log(flightnumber)
-    const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth < DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? and DepartureDateTime > now() limit 1);', [flightnumber])   
+    const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth < DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight WHERE flightnumber like ? AND DepartureDateTime > now() limit 1);', [flightnumber, flightnumber])   
     console.log(result[0])
     return result[0];
 }
@@ -180,14 +203,14 @@ export async function getFlightData1 (flightnumber){
 // flightdata for passenger age < 18
 export async function getFlightData2 (flightnumber){
     console.log(flightnumber)
-    const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth > DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight JOIN route ON (flight.flightnumber = route.flightnumber) WHERE flight.flightnumber like ? and DepartureDateTime > now() limit 1);', [flightnumber]) 
+    const result =await pool.query('select @rownum:=@rownum+1 AS ID, seatid, PassengerID AS passengerid, firstname, lastname, passportnumber, dateofbirth, contactnumber1, ContactNumber2 from FlightPassengers, (SELECT @rownum:=0) r where DateOfBirth > DATE_SUB(NOW(), INTERVAL 18 YEAR) and flightid = (SELECT flightid FROM flight WHERE flightnumber like ? AND DepartureDateTime > now() limit 1);', [flightnumber, flightnumber]) 
     console.log(result[0])
     return result[0];
 }
 
 export async function getDestinationData (Destination, fromDate, toDate){
     console.log(Destination, fromDate, toDate)
-    const result =await pool.query('SELECT booking.flightid as flightid, flightnumber, aircraftid, COUNT(*) as passengers, ArrivalDateTime FROM booking join flight on (flight.flightid = booking.flightid) WHERE booking.flightid IN (SELECT flight.flightid FROM flight JOIN route ON flight.flightnumber = route.flightnumber WHERE route.destination LIKE ? AND flight.ArrivalDateTime BETWEEN ? AND ?) GROUP BY flightid', [Destination, fromDate+'%', toDate+'%'])    
+    const result =await pool.query('SELECT flight.flightid as flightid, flightnumber, aircraftid, COALESCE(COUNT(booking.passengerid), 0) as passengers, ArrivalDateTime FROM flight LEFT JOIN booking ON flight.flightid = booking.flightid WHERE flight.flightid IN (SELECT flight.flightid FROM flight JOIN route ON flight.flightnumber = route.flightnumber WHERE route.destination LIKE ? AND flight.ArrivalDateTime BETWEEN ? and ?) GROUP BY flightid, flightnumber, aircraftid, ArrivalDateTime ORDER BY passengers DESC', [Destination, fromDate+'%', toDate+'%'])    
     console.log(result[0])
     return result[0];
 }
@@ -249,27 +272,19 @@ export async function getRouteTotal (origin, Destination){
 }
 
 export async function getModelRevenue (){
-    const result =await pool.query('SELECT m.Model AS Model, COUNT(DISTINCT a.AircraftID) AS FleetSize, COUNT(DISTINCT f.FlightID) AS TotalFlights, ROUND(SUM(p.PlatinumPrice * m.PlatinumSeats + p.BusinessPrice * m.BusinessSeats + p.EconomyPrice * m.EconomySeats) / 1000000, 4) AS Revenue FROM Model m LEFT JOIN Aircraft a ON m.Model = a.Model LEFT JOIN Flight f ON a.AircraftID = f.AircraftID LEFT JOIN Price p ON f.FlightID = p.FlightID GROUP BY m.Model')    
+    const result =await pool.query('SELECT m.Model AS Model, COUNT(DISTINCT a.AircraftID) AS FleetSize, COUNT(DISTINCT f.FlightID) AS TotalFlights, ROUND(SUM(subquery.Revenue) / 1000000, 4) AS Revenue FROM Model m LEFT JOIN Aircraft a ON m.Model = a.Model LEFT JOIN Flight f ON a.AircraftID = f.AircraftID LEFT JOIN (SELECT f.FlightID,SUM(CASE WHEN b.PaymentStatus = 1 THEN (p.PlatinumPrice * (SELECT COUNT(DISTINCT s.SeatID) FROM Seat s WHERE s.FlightID = f.FlightID AND s.TravelClass = "Platinum") + p.BusinessPrice * (SELECT COUNT(DISTINCT s.SeatID) FROM Seat s WHERE s.FlightID = f.FlightID AND s.TravelClass = "Business") + p.EconomyPrice * (SELECT COUNT(DISTINCT s.SeatID) FROM Seat s WHERE s.FlightID = f.FlightID AND s.TravelClass = "Economy")) ELSE 0 END) AS Revenue FROM Flight f LEFT JOIN Booking b ON f.FlightID = b.FlightID LEFT JOIN Price p ON f.FlightID = p.FlightID GROUP BY f.FlightID) AS subquery ON f.FlightID = subquery.FlightID WHERE ArrivalDateTime < NOW() GROUP BY m.Model')    
     console.log(result[0])
     return result[0];
 }
 
 export async function getTotalRevenue (){
-    const result =await pool.query('SELECT SUM(NumberOfAircrafts) AS TotalFleetSize, SUM(NumberOfFlights) AS TotalFlights, ROUND(SUM(TotalRevenueInMillions), 4) AS TotalRevenue FROM ( SELECT m.Model AS Model, ROUND(SUM(p.PlatinumPrice * m.PlatinumSeats + p.BusinessPrice * m.BusinessSeats + p.EconomyPrice * m.EconomySeats) / 1000000, 4) AS TotalRevenueInMillions, COUNT(DISTINCT a.AircraftID) AS NumberOfAircrafts, COUNT(DISTINCT f.FlightID) AS NumberOfFlights FROM Model m LEFT JOIN Aircraft a ON m.Model = a.Model LEFT JOIN Flight f ON a.AircraftID = f.AircraftID LEFT JOIN Price p ON f.FlightID = p.FlightID GROUP BY m.Model) AS Subquery')    
+    const result =await pool.query('SELECT COUNT(DISTINCT subquery.AircraftID) AS TotalFleetSize, COUNT(DISTINCT subquery.FlightID) AS TotalFlights, ROUND(SUM(subquery.Revenue) / 1000000, 4) AS TotalRevenue FROM (SELECT f.FlightID, f.ArrivalDateTime, f.AircraftID, SUM(CASE WHEN b.PaymentStatus = 1 THEN (p.PlatinumPrice * (SELECT COUNT(DISTINCT s.SeatID) FROM Seat s WHERE s.FlightID = f.FlightID AND s.TravelClass = "Platinum") + p.BusinessPrice * (SELECT COUNT(DISTINCT s.SeatID) FROM Seat s WHERE s.FlightID = f.FlightID AND s.TravelClass = "Business") + p.EconomyPrice * (SELECT COUNT(DISTINCT s.SeatID) FROM Seat s WHERE s.FlightID = f.FlightID AND s.TravelClass = "Economy")) ELSE 0 END) AS Revenue FROM Flight f LEFT JOIN Booking b ON f.FlightID = b.FlightID LEFT JOIN Price p ON f.FlightID = p.FlightID GROUP BY f.FlightID) AS subquery WHERE subquery.ArrivalDateTime < NOW()')    
     console.log(result[0])
     return result[0];
 }
 
     
-// const result1=await getAibusList();
-// console.log(result1);
-// const result2=await getAibusById("Bog-737-1");
-// console.log(result2);
-// const result3=await createAibus(3,'A380');
-// console.log(result3);
 
-// getFlightsWithPricesFromDB('DEL','CGK','2023-09-29');
-// getSeatsFromDB(525)
 export default pool;
 
 

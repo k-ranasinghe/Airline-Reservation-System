@@ -405,7 +405,7 @@ export default function ReportGeneration() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              B Airlines
+              B Airways
             </Typography>
             <Typography style={{ marginLeft: 500 }} variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Welcome {localStorage.getItem("userName") != '' ? localStorage.getItem("userName") : ""}
@@ -465,7 +465,7 @@ export default function ReportGeneration() {
                 <Tab label="Flight Analysis" {...a11yProps(0)} />
                 <Tab label="Destination Analysis" {...a11yProps(1)} />
                 <Tab label="Booking Analysis" {...a11yProps(2)} />
-                <Tab label="Flight Data" {...a11yProps(3)} />
+                <Tab label="Route Analysis" {...a11yProps(3)} />
                 <Tab label="Revenue Analysis" {...a11yProps(4)} />
               </Tabs>
             </Box>
@@ -695,7 +695,7 @@ export default function ReportGeneration() {
             backgroundPositionY: 'center',
           }}
         >
-          <Paper elevation={3}
+          <Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -757,7 +757,7 @@ export default function ReportGeneration() {
             backgroundPositionY: 'center',
           }}
         >
-          <Paper elevation={3}
+          <Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -776,7 +776,7 @@ export default function ReportGeneration() {
                 rows={data1_1.length > 0 ? data1_1 : []}
                 columns={columns1_1}
                 getRowId={(row) => row.ID}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 100, 150, 0.7)' }}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 100, 150, 0.7)' }}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -788,9 +788,9 @@ export default function ReportGeneration() {
                 }}
                 initialState={{
 
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
+                  // pagination: {
+                  //   paginationModel: { page: 0, pageSize: 5 },
+                  // },
                 }}
 
                 pageSizeOptions={[5, 10]}
@@ -813,7 +813,7 @@ export default function ReportGeneration() {
             backgroundPositionY: 'center',
           }}
         >
-          <Paper elevation={3}
+          <Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -834,7 +834,7 @@ export default function ReportGeneration() {
                 rows={data1_2.length > 0 ? data1_2 : []}
                 columns={columns1_1}
                 getRowId={(row) => row.ID}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 150, 150, 0.7)' }}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(30, 150, 150, 0.7)' }}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -846,9 +846,9 @@ export default function ReportGeneration() {
                 }}
                 initialState={{
 
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
+                  // pagination: {
+                  //   paginationModel: { page: 0, pageSize: 5 },
+                  // },
                 }}
 
                 pageSizeOptions={[5, 10]}
@@ -857,21 +857,21 @@ export default function ReportGeneration() {
         </Box>
         : null}
 
-      {value === 1 && data2_0.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '0vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-          <Paper elevation={3}
+      {value === 1 && data2_0.length>0 ?                
+                <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '20px',
+                  minHeight: '0vh',
+                  // backgroundImage: `url(${img})`,
+                  backgroundSize: 'cover',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPositionY: 'center',
+                }}
+              >
+              <Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -892,7 +892,7 @@ export default function ReportGeneration() {
                 rows={data2_0.length > 0 ? data2_0 : []}
                 columns={columns2_0}
                 getRowId={(row) => row.flightid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(160, 40, 120, 0.5)' }}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(160, 40, 120, 0.5)' }}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -904,33 +904,33 @@ export default function ReportGeneration() {
                 }}
                 initialState={{
 
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
+                  // pagination: {
+                  //   paginationModel: { page: 0, pageSize: 5 },
+                  // },
                 }}
 
                 pageSizeOptions={[5, 10]}
 
               />
-            </div></>     </Paper>
-        </Box> : null}
-      {value === 1 && data2_0.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '100vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-          <Paper elevation={3}
+         </div></>     </Paper>
+        </Box>  :null} 
+      {value === 1 && data2_0.length>0 ?    
+       <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '20px',
+      minHeight: '100vh',
+      // backgroundImage: `url(${img})`,
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      backgroundPositionY: 'center',
+    }}
+  >
+                 <Paper elevation={0}
 
-            style={{ marginTop: 0 }}
+            style={{ marginTop: 50 }}
           >
 
 
@@ -953,22 +953,22 @@ export default function ReportGeneration() {
         </Box>
         : null}
 
-      {value === 2 && data3_1.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '0vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-
-          <Paper elevation={3}
+          {value === 2 && data3_1.length>0 ?   
+            <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '20px',
+              minHeight: '0vh',
+              // backgroundImage: `url(${img})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPositionY: 'center',
+            }}
+          >             
+              
+              <Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -990,7 +990,7 @@ export default function ReportGeneration() {
                 rows={data3_1.length > 0 ? data3_1 : []}
                 columns={columns3_0}
                 getRowId={(row) => row.passengerid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(130, 120, 20, 0.5)' }}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(130, 120, 20, 0.5)' }}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -1002,32 +1002,32 @@ export default function ReportGeneration() {
                 }}
                 initialState={{
 
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
+                  // pagination: {
+                  //   paginationModel: { page: 0, pageSize: 5 },
+                  // },
                 }}
 
                 pageSizeOptions={[5, 10]}
 
               /></div></>
-          </Paper>
-        </Box>
-        : null}
-      {value === 2 && data3_2.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '0vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-          <Paper elevation={3}
+              </Paper>
+              </Box>
+          :null} 
+          {value === 2 && data3_2.length>0 ?                
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '0vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+<Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -1049,7 +1049,7 @@ export default function ReportGeneration() {
                 rows={data3_2.length > 0 ? data3_2 : []}
                 columns={columns3_0}
                 getRowId={(row) => row.passengerid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(80, 100, 20, 0.7)' }}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(80, 100, 20, 0.7)' }}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -1061,9 +1061,9 @@ export default function ReportGeneration() {
                 }}
                 initialState={{
 
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
+                  // pagination: {
+                  //   paginationModel: { page: 0, pageSize: 5 },
+                  // },
                 }}
 
                 pageSizeOptions={[5, 10]}
@@ -1072,22 +1072,22 @@ export default function ReportGeneration() {
             </div></>
           </Paper>
         </Box>
-        : null}
-      {value === 2 && data3_3.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '100vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-          <Paper elevation={3}
+        :null}
+        {value === 2 && data3_3.length>0 ?                
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '100vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+<Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -1109,7 +1109,7 @@ export default function ReportGeneration() {
                 rows={data3_3.length > 0 ? data3_3 : []}
                 columns={columns3_0}
                 getRowId={(row) => row.passengerid}
-                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(120, 150, 70, 0.8)' }}
+                style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(120, 150, 70, 0.8)' }}
                 onRowClick={(e) => {
 
                   console.log(e.row);
@@ -1121,9 +1121,9 @@ export default function ReportGeneration() {
                 }}
                 initialState={{
 
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
+                  // pagination: {
+                  //   paginationModel: { page: 0, pageSize: 5 },
+                  // },
                 }}
 
                 pageSizeOptions={[5, 10]}
@@ -1132,25 +1132,25 @@ export default function ReportGeneration() {
             </div></>
           </Paper>
         </Box>
-        : null}
-      {value === 2 && data3_4.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '10vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-          <Paper elevation={3}
+        :null}
+        {value === 2 && data3_4.length>0 ?                
+  <Box
+  sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '20px',
+    minHeight: '10vh',
+    // backgroundImage: `url(${img})`,
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPositionY: 'center',
+  }}
+>
+<Paper elevation={0}
 
-            style={{ marginTop: 0 }}
-          >
+style={{ marginTop: -100 }}
+>
 
 
             <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
@@ -1162,7 +1162,7 @@ export default function ReportGeneration() {
                 letterSpacing: '.05rem',
                 color: 'grey',
                 textDecoration: 'none',
-              }}><div style={{ marginTop: -100, marginLeft: '-270px', marginRight: 'auto', width: 'fit-content' }}
+              }}><div style={{ marginTop: -100, marginLeft: '-70px', marginRight: 'auto', width: 'fit-content' }}
               >SUMMARY</div>
                 <div style={{ marginBottom: 30, marginLeft: '-40px', marginRight: 'auto', width: 'fit-content', color: 'rgba(100, 100, 20, 0.8)' }}
                 >GOLD</div>
@@ -1179,9 +1179,9 @@ export default function ReportGeneration() {
         </Box>
         : null}
 
-      {value === 3 && data4_1.length > 0 ?
-
-        <Paper elevation={3}
+    {value === 3 && data4_1.length>0 ?                
+        
+        <Paper elevation={0}
 
           style={{ marginTop: 0 }}
         >
@@ -1202,7 +1202,7 @@ export default function ReportGeneration() {
               rows={data4_1.length > 0 ? data4_1 : []}
               columns={columns4_1}
               getRowId={(row) => row.flightid}
-              style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', fontSize: '25px', fontWeight: 'bold', color: 'rgba(50, 95, 30, 0.7)' }}
+              style={{ border: 20, marginLeft: 'auto', marginRight: 'auto', width: 'fit-content', maxHeight: '400px', fontSize: '25px', fontWeight: 'bold', color: 'rgba(50, 95, 30, 0.7)' }}
               onRowClick={(e) => {
 
                 console.log(e.row);
@@ -1214,9 +1214,9 @@ export default function ReportGeneration() {
               }}
               initialState={{
 
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
+                // pagination: {
+                //   paginationModel: { page: 0, pageSize: 5 },
+                // },
               }}
 
               pageSizeOptions={[5, 10]}
@@ -1226,36 +1226,44 @@ export default function ReportGeneration() {
         : null}
       {value === 3 && data4_2.length > 0 ?
 
-        <Paper elevation={3}
+<Paper elevation={0}
 
-          style={{ marginTop: 0 }}
-        >
+style={{ marginTop: 50 }}
+>
 
 
-          <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
-            <Typography variant="h4" sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Calibri',
-              fontWeight: 'bold',
-              letterSpacing: '.05rem',
-              color: 'grey',
-              textDecoration: 'none',
-            }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
-            >Flights Number</div>
-              <div style={{ marginTop: 150, marginLeft: '-330px', marginRight: 'auto', width: 'fit-content' }}
-              >Duration</div></Typography>
-            <div style={{ marginTop: -150, marginLeft: 110, marginRight: 'auto', width: 'fit-content', fontSize: '50px', color: 'rgba(30, 30, 150, 0.9)' }}>{data4_2[0].flightnumber}</div>
-            <div style={{ marginTop: 80, marginLeft: 70, marginRight: 'auto', width: 'fit-content', fontSize: '50px', color: 'rgba(30, 30, 150, 0.8)' }}>{data4_2[0].duration}</div>
-          </div></>  </Paper>
-        : null}
+<><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
+          <Typography variant="h4"  sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'Calibri',
+                  fontWeight: 'bold',
+                  letterSpacing: '.05rem',
+                  color: 'grey',
+                  textDecoration: 'none',
+                }}><div style={{ marginBottom: 30, marginLeft: '5px', marginRight: 'auto', width: 'fit-content' }}
+                >Flights Number</div></Typography>
+                <Typography variant="h4"  sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'Calibri',
+                  fontWeight: 'bold',
+                  letterSpacing: '.05rem',
+                  color: 'grey',
+                  textDecoration: 'none',
+                }}><div style={{ marginTop: 70, marginLeft: 10, marginRight: 'auto', width: 'fit-content' }}
+                >Duration</div></Typography>
+                <div style={{ marginTop: -150, marginLeft: 110, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.9)'}}>{data4_2[0].flightnumber}</div>
+             <div style={{ marginTop: 80, marginLeft: 70, marginRight: 'auto', width: 'fit-content' , fontSize: '50px', color: 'rgba(30, 30, 150, 0.8)'}}>{data4_2[0].duration}</div>
+      </div></>  </Paper>
+        :null}
 
       {value === 3 && data4_2.length > 0 ?
 
-        <Paper elevation={3}
+<Paper elevation={0}
 
-          style={{ marginTop: 0 }}
-        >
+style={{ marginTop: 50 }}
+>
 
 
           <><div style={{ alignSelf: 'center', marginLeft: 30, justifyContent: 'center' }}>
@@ -1273,21 +1281,21 @@ export default function ReportGeneration() {
           </div></>   </Paper>
         : null}
 
-      {value === 4 && data5_1.length > 0 ?
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            padding: '20px',
-            minHeight: '70vh',
-            // backgroundImage: `url(${img})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            backgroundPositionY: 'center',
-          }}
-        >
-          <Paper elevation={3}
+    {value === 4 && data5_1.length>0 ?                
+         <Box
+         sx={{
+           display: 'flex',
+           flexDirection: 'column',
+           alignItems: 'center',
+           padding: '20px',
+           minHeight: '70vh',
+           // backgroundImage: `url(${img})`,
+           backgroundSize: 'cover',
+           backgroundRepeat: 'no-repeat',
+           backgroundPositionY: 'center',
+         }}
+       >
+       <Paper elevation={0}
 
             style={{ marginTop: 0 }}
           >
@@ -1341,9 +1349,9 @@ export default function ReportGeneration() {
           }}
         >
 
-          <Paper elevation={3}
+          <Paper elevation={0}
 
-            style={{ marginTop: 0 }}
+            style={{ marginTop: -100 }}
           >
 
 

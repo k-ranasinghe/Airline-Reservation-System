@@ -1,14 +1,14 @@
 import express from "express";
 
 import scheduler from "node-schedule";
-import { createBooking, createGuestUser, createPassenger, createPayment, getAirportLocation, getAriports, getBookingById, getBussinessSeatsFromDB, getEconomySeatsFromDB, getFlightsFromDB, getFlightsWithPricesFromDB, getPlatinumSeatsFromDB, updateBooking, validateBooking } from "../../air-backend/database.js";
+import { book, createBooking, createGuestUser, createPassenger, createPayment, getAirportLocation, getAriports, getBookingById, getBussinessSeatsFromDB, getEconomySeatsFromDB, getFlightsFromDB, getFlightsWithPricesFromDB, getPlatinumSeatsFromDB, getSeatpricefromDB, getdiscountfromDB, updateBooking, validateBooking } from "../../air-backend/database.js";
 import requireAuth from "../utils/authentication.js";
 import main from "../mailer.js";
 var router = express.Router();
 
 
 
-// router.get("*",requireAuth)
+router.get("*",requireAuth)
 router.get("/test/cookie", (req, res) => {
     console.log("reqest", req)
     res.cookie("new-user", false);
@@ -50,9 +50,16 @@ router.get('/airports', async (req, res) => {
 }
 );
 router.post('/bookTicket', async (req, res) => {
-    console.log("request isGuest", req.body.isGuest);
+
+
+    let passengerDetails=req.body.passengerDetails
+    let flight=req.body.flight
+    const dateofBirth = new Date(passengerDetails.DateOfBirth);
+
+    // const booking =  await book(  req.body.isGuest, req.body.userID,passengerDetails.FirstName,passengerDetails.LastName,passengerDetails.Nationality,passengerDetails.PassportNumber,dateofBirth,passengerDetails.ContactNumber1, passengerDetails.ContactNumber2,passengerDetails.EmailAddress,flight.FlightID,req.body.seat,0)
+    console.log("request isGuest", req.body.isGuest, req.body.userID,passengerDetails.FirstName,passengerDetails.LastName,passengerDetails.Nationality,passengerDetails.PassportNumber,dateofBirth,passengerDetails.ContactNumber1, passengerDetails.ContactNumber2,passengerDetails.EmailAddress,flight.FlightID,req.body.seat,0);
     let passenger_id = null
-    let geust_id = null
+    let guest_id = null
     if (req.body.isGuest) {
         const geust_id = await createGuestUser(req.body.flight, req.body.passengerDetails);
         console.log("guest", geust_id);
@@ -73,17 +80,20 @@ router.post('/bookTicket', async (req, res) => {
 const date = new Date().setMinutes(new Date().getMinutes() + 1);
 
 const job = scheduler.scheduleJob(date, function(){
-  validateBooking(booking_id);
+  validateBooking(booking[0].BookingID);
 });
     // const shedule= await scheduleTimer(booking_id);
-
-    res.send({ "booking_id": booking, "guest_id": geust_id });
+console.log("booking", booking)
+    res.send({ "booking_id": booking, "guest_id": guest_id });
 
     // const Passenger = await createPassenger(req.query.passengerDetails);
 }
 )
 router.post('/createPayment', async (req, res) => {
-    console.log("request", req.body);
+
+
+    console.log("request 93", req.body);
+    console.log("body", req.body)
 
 
     const result = await updateBooking(req.body.bookingId);
@@ -98,5 +108,30 @@ router.post('/createPayment', async (req, res) => {
 }
 
 );
+
+//a function to get price details from database
+router.get('/getPriceDetails', async(req, res) => {
+    let seat_price = 0;
+    console.log("price request", req.query);
+    const discount_percentage = await getdiscountfromDB(req.query.passenUserType);
+    const price = await getSeatpricefromDB(req.query.flightId);
+
+    if (req.query.class === "Economy") {
+        seat_price = price[0].EconomyPrice;
+    }
+    else if(req.query.class === "Business"){
+        seat_price = price[0].BusinessPrice;
+    }
+    else if(req.query.class === "Platinum"){
+        seat_price = price[0].PlatinumPrice;
+
+    }
+    console.log("price", seat_price, "discount", discount_percentage);
+    const discount_value = seat_price *(discount_percentage.length>0? discount_percentage[0].Discount:0);
+    const final_price = seat_price - discount_value;
+    console.log("price", final_price, "discounted value", discount_value);
+    res.send({ "price": final_price, "discount": discount_value });
+});
+
 
 export default router;

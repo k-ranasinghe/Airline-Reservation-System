@@ -19,6 +19,14 @@ export  function isGuest(){
     
 }
 
+export function getUserType(){
+    if(localStorage.getItem("userDetails")){
+        let userDetails= JSON.parse(localStorage.getItem("userDetails"));
+        return userDetails.UserType
+    }
+     return null;
+}
+
 export  function logout(){
     localStorage.removeItem("passengerDetails")
     localStorage.removeItem("userDetails")

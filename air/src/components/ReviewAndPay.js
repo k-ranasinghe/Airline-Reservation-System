@@ -17,7 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { DataGrid, GridActionsCellItem, GridSaveAltIcon } from "@mui/x-data-grid";
 import Backdrop from '@mui/material/Backdrop';
 import axios from "axios";
-import isAdmin, { isGuest, logout } from "../utils/utils";
+import isAdmin, { getUserType, isGuest, logout } from "../utils/utils";
 import { green } from '@mui/material/colors';
 export default function ReviewAndPay() {
 
@@ -40,7 +40,6 @@ export default function ReviewAndPay() {
   const [destination, setDestination] = useState({});
 const [loading,setLoading]=useState(false)
 
-
   function getAirportLocation(origin, desitination) {
     axios.get("/booking/aiportLocation", {
       params: {
@@ -54,10 +53,35 @@ const [loading,setLoading]=useState(false)
 
     })
   }
+
+
+  function getpriceDetails(flight, travelerclass) {
+      console.log("flight in getpriceDetails", flight);
+      axios.get('/booking/getPriceDetails',{
+        params: {
+          passenUserType:getUserType()==null?"Guest":getUserType() ,
+          flightId: flight.FlightID,
+          class: travelerclass
+        }
+      }).then((response) => {
+        console.log("price", response);
+        const { price, discount } = response.data;
+        setSeat([
+          {
+            seatNO: location.state.bookedSeat,
+            travelClass: location.state.travelClass,
+            Discount: discount,
+            Price: price,
+            id: 1
+          }
+        ]);
+      });
+
+  }
   function createTicket() {
 
 
-    console.log(location.state.bookingDetails[0])
+    console.log( "booking", location.state.bookingDetails)
     axios.post("/booking/createPayment", {
       bookingId: location.state.bookingDetails[0].BookingID,
       passengerID: location.state.bookingDetails[0].PassengerID,
@@ -83,7 +107,7 @@ const [loading,setLoading]=useState(false)
     getAirportLocation(location.state.flight.Origin, location.state.flight.Destination);
   }, [])
   useEffect(() => {
-    console.log(location.state)
+    console.log( "sate", location.state)
 
     setFlight([{ id: 1, ...location.state.flight }])
     setPassengerDetails([{ id: 1, ...location.state.passengerDetails }])
@@ -91,7 +115,7 @@ const [loading,setLoading]=useState(false)
       emailAddress: location.state.passengerDetails.emailAddress,
       contactNumber: location.state.passengerDetails.contactNumber
     });
-    setSeat([{ seatNO: location.state.bookedSeat, travelClass: location.state.travelClass, id: 1 }])
+    getpriceDetails(location.state.flight, location.state.travelClass );
     setDetails([{
       id: "1",
       desitination: location.state.flight.desitination,
@@ -116,6 +140,7 @@ const [loading,setLoading]=useState(false)
     boxShadow: 24,
     p: 4,
   };
+
 
   const passengerColumn = [
     { field: 'id:', headerName: '', width: 70 },
@@ -155,7 +180,9 @@ const [loading,setLoading]=useState(false)
 
 
     { field: 'travelClass', headerName: 'Travel Class', width: 200 },
-    { field: 'seatNO', headerName: 'Seat no', width: 130 }
+    { field: 'seatNO', headerName: 'Seat no', width: 130 },
+    { field: 'Discount', headerName: 'Discount (USD)', width: 130 },
+    { field: 'Price', headerName: 'Price(USD)', width: 130 }
 
 
 
@@ -172,22 +199,6 @@ const [loading,setLoading]=useState(false)
     { field: 'arrival', headerName: 'Arrival Time', width: 130 },
     { field: 'passengerName', headerName: 'Passenger Name', width: 130 }
 
-
-    // {
-    //   field: 'departure',
-    //   headerName: 'Age',
-    //   type: 'number',
-    //   width: 90,
-    // },
-    // {
-    //   field: 'fullName',
-    //   headerName: 'Full name',
-    //   description: 'This column has a value getter and is not sortable.',
-    //   sortable: false,
-    //   width: 160,
-    //   valueGetter: (params) =>
-    //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    // },
   ];
 
   const row = [{
@@ -222,7 +233,7 @@ const [loading,setLoading]=useState(false)
           <Toolbar>
 
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              B Airlines
+              B Airways
             </Typography>
 
             <Button onClick={() => {
@@ -310,14 +321,6 @@ const [loading,setLoading]=useState(false)
                   disableRowSelectionOnClick
                   disableSelectionOnClick
                   hideFooter
-
-
-
-
-
-
-
-
 
                 />
 

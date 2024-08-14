@@ -42,6 +42,7 @@ consists of 5 sections as shown in the images below.
 - Route Analysis can be used to view passenger statistics and flight data for a given route
 - Revenue Analysis can be used to view Revenue data for different Aircraft types
 <br>
+
 ![image](https://github.com/user-attachments/assets/7016a1f1-4fb9-4f36-93a9-ef7b166ac399)
 
 ![image](https://github.com/user-attachments/assets/febd6b1f-ef36-4255-89d0-81a19c183f17)

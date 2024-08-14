@@ -12,6 +12,12 @@
 
 ![image](https://github.com/user-attachments/assets/fccefacd-b0ed-4c61-9752-ab2e43d9fd75)
 
+![image](https://github.com/user-attachments/assets/7016a1f1-4fb9-4f36-93a9-ef7b166ac399)
+
+![image](https://github.com/user-attachments/assets/febd6b1f-ef36-4255-89d0-81a19c183f17)
+
+![image](https://github.com/user-attachments/assets/88ef7f3c-51d1-4fd4-9f5f-0c6d412e3f0f)
+
 
 **Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
 

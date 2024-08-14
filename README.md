@@ -6,6 +6,8 @@ required for booking ticket is integrated to the system. An Admin panel was also
 system for Data Analytics purposes which is discussed below. A large focus was given to the database
 of the system as a part of the module focus. BCNF(Boyce-Codd Normal Form) was followed for optimal
 performance. Measures against SQL injections such Stored Procedures and Input Validation were used.
+Given below is the class diagram of the MySQL database. <br>
+![Airline Reservation System](https://github.com/user-attachments/assets/cca94cd1-3cc9-4826-8275-8317b42b9a2c)
 
 ## User Login
 ![image](https://github.com/user-attachments/assets/1ec9d4d7-ae92-4f33-8c7c-fd3ed6d19c3b)
@@ -39,6 +41,7 @@ consists of 5 sections as shown in the images below.
 - Booking Analysis can be used to view booking trends for a given date range
 - Route Analysis can be used to view passenger statistics and flight data for a given route
 - Revenue Analysis can be used to view Revenue data for different Aircraft types
+<br>
 ![image](https://github.com/user-attachments/assets/7016a1f1-4fb9-4f36-93a9-ef7b166ac399)
 
 ![image](https://github.com/user-attachments/assets/febd6b1f-ef36-4255-89d0-81a19c183f17)

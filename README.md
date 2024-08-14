@@ -7,7 +7,7 @@ system for Data Analytics purposes which is discussed below. A large focus was g
 of the system as a part of the module focus. BCNF(Boyce-Codd Normal Form) was followed for optimal
 performance. Measures against SQL injections such Stored Procedures and Input Validation were used.
 Given below is the class diagram of the MySQL database. <br>
-![Airline Reservation System](https://github.com/user-attachments/assets/cca94cd1-3cc9-4826-8275-8317b42b9a2c)
+![image](https://github.com/user-attachments/assets/a2d253e6-9314-40eb-954b-69b5dc1e2cbd)
 
 ## User Login
 ![image](https://github.com/user-attachments/assets/1ec9d4d7-ae92-4f33-8c7c-fd3ed6d19c3b)

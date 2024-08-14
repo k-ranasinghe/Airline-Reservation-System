@@ -6,7 +6,7 @@ required for booking ticket is integrated to the system. An Admin panel was also
 system for Data Analytics purposes which is discussed below. A large focus was given to the database
 of the system as a part of the module focus. BCNF(Boyce-Codd Normal Form) was followed for optimal
 performance. Measures against SQL injections such Stored Procedures and Input Validation were used.
-Given below is the class diagram of the MySQL database. <br>
+Given below is the class diagram of the MySQL database. <br><br>
 ![image](https://github.com/user-attachments/assets/a2d253e6-9314-40eb-954b-69b5dc1e2cbd)
 
 ## User Login

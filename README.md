@@ -4,6 +4,95 @@
 
 This project was developed as part of the Semester 3 Database Systems Module. It involved the design and implementation of a full-stack application integrated with a MySQL database to manage an airline reservation system for B Airways, a subsidiary of Virgin Airlines. The system includes a user interface for booking flights and an admin panel for data analytics. The primary focus was on creating an optimized and secure database that follows the Boyce-Codd Normal Form (BCNF) for improved performance. Key security measures, such as Stored Procedures and Input Validation, were implemented to protect against SQL injection attacks.
 
+## Getting Started
+
+This section will guide you through setting up the Airline Reservation System on your local machine for development and testing purposes.
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed on your local machine:
+
+- **Node.js**: [Download and install Node.js](https://nodejs.org/) (includes npm).
+- **MySQL**: [Download and install MySQL](https://www.mysql.com/downloads/).
+- **Git**: [Download and install Git](https://git-scm.com/).
+- **npm**: Node.js package manager (comes with Node.js).
+
+### Installation
+
+1. **Clone the Repository**
+
+   Clone the project repository to your local machine using the following command:
+
+   ```bash
+   git clone https://github.com/k-ranasinghe/airline-reservation-system.git
+   ```
+
+2. **Navigate to the Project Directory**
+
+   Change your directory to the project folder:
+
+   ```bash
+   cd airline-reservation-system
+   ```
+
+3. **Install Backend Dependencies**
+
+   Navigate to the backend directory and install the necessary dependencies using npm:
+
+   ```bash
+   cd air-backend
+   npm install
+   ```
+
+4. **Install Frontend Dependencies**
+
+   Navigate to the frontend directory and install the necessary dependencies using npm:
+
+   ```bash
+   cd ../air
+   npm install
+   ```
+
+5. **Set Up MySQL Database**
+
+   Log in to your MySQL server using the command:
+
+   ```bash
+   mysql -u root -p
+   ```
+
+   Create a new database for the project:
+
+   ```bash
+   CREATE DATABASE airline;
+   ```
+
+   Import the initial schema and data into the newly created database:
+
+   ```bash
+   mysql -u root -p airline < ../DatabaseExport.sql
+   ```
+
+5. **Start the Backend Server**
+
+   Navigate to the backend directory and start the Express server:
+
+   ```bash
+   cd air-backend
+   npm run devStart
+   ```
+
+5. **Start the Frontend Development Server**
+
+   In a new terminal window, navigate to the frontend directory and start the React development server:
+
+   ```bash
+   cd ../air
+   npm start
+   ```
+
+If all the above processes are completed without any issues, the web application will open in your default browser on `http://localhost:3000`
+
 ## System Functionality
 
 The Airline Reservation System was built to cater to B Airways' expanding operations, which now cover multiple destinations across Southeast Asia and South Asia. The system supports all the necessary components for booking flights, including user registration, flight search, seat selection, and booking confirmation. Additionally, an admin panel provides various analytics capabilities to assist in decision-making and operational management.
